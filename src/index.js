@@ -1,17 +1,16 @@
-var assign = require('lodash.assign');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+import webpack from 'webpack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-var env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development';
 
-var defs = {
+let defs = {
   'process.env': {
     NODE_ENV: JSON.stringify(env)
   }
 };
 
 function getLoaders (paths) {
-  var loaders = {
+  let loaders = {
     json:   {
       test:    /\.json$/,
       loaders: ['json']
@@ -35,7 +34,7 @@ function getLoaders (paths) {
 
   // Production overrides
   if (env === 'production') {
-    loaders = assign(loaders, {
+    loaders = Object.assign(loaders, {
       sass: {
         test:   /\.scss$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader?includePaths[]=' + paths.sass)
@@ -79,12 +78,14 @@ function getPlugins () {
 /**
  * Return a Webpack config
  *
- * @param wpOptions
+ * @param wpOptions {{
+ *
+ * }}
  * @param paths
  * @returns {*}
  */
 module.exports = function (wpOptions, paths) {
-  return assign(wpOptions, {
+  return Object.assign(wpOptions, {
     module: {
       loaders: getLoaders(paths)
     },
