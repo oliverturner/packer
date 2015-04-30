@@ -1,5 +1,5 @@
 {
-  "name": "webpacker",
+  "name": "feei-webpacker",
   "version": "1.0.0",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
   "main": "index.js",
@@ -12,13 +12,15 @@
   },
   "keywords": [
     "webpack",
-    "\"hot",
-    "reload\""
+    "hot reload"
   ],
   "author": "Oliver Turner, FEEI",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
   },
-  "homepage": "https://github.com/codedsignal/feei-webpacker#readme"
+  "homepage": "https://github.com/codedsignal/feei-webpacker#readme",
+  "dependencies": {
+    "find-root": "^0.1.1"
+  }
 }
