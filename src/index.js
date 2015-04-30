@@ -76,6 +76,13 @@ function getPlugins () {
 
 // Export
 //-----------------------------------------------
+/**
+ * Return a Webpack config
+ *
+ * @param wpOptions
+ * @param paths
+ * @returns {*}
+ */
 module.exports = function (wpOptions, paths) {
   return assign(wpOptions, {
     module: {
