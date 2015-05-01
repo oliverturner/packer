@@ -1,7 +1,7 @@
 {
   "name": "@oliverturner/feei-webpacker",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
-  "version": "1.0.0",
+  "version": "1.0.15",
   "author": "Oliver Turner, FEEI",
   "bugs": {
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
@@ -13,7 +13,9 @@
   },
   "devDependencies": {
     "gulp": "^3.8.11",
-    "gulp-babel": "^5.1.0"
+    "gulp-babel": "^5.1.0",
+    "gulp-bump": "^0.3.0",
+    "gulp-git": "^1.2.1"
   },
   "homepage": "https://github.com/codedsignal/feei-webpacker#readme",
   "keywords": [
@@ -43,6 +45,7 @@
   },
   "scripts": {
     "test": "eslint ./src",
+    "publish": "gulp publish",
     "start": "gulp"
   }
 }

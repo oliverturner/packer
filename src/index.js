@@ -3,6 +3,8 @@ import autoprefixer from 'autoprefixer-core';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const env = process.env.NODE_ENV || 'development';
+const isDev = env === 'development';
+const isProd = env === 'production';
 
 let defs = {
   'process.env': {
@@ -38,7 +40,7 @@ function getLoaders (paths) {
   };
 
   // Production overrides
-  if (env === 'production') {
+  if (isProd) {
     loaders = Object.assign(loaders, {
       sass: {
         test:   /\.scss$/,
@@ -78,7 +80,7 @@ function getPlugins () {
     new webpack.optimize.DedupePlugin()
   ];
 
-  return (env === 'production')
+  return (isProd)
     ? defaults.concat(production)
     : defaults.concat(development);
 }
@@ -87,14 +89,35 @@ function getPlugins () {
 //-----------------------------------------------
 /**
  * Return a Webpack config
+ * options.entry can be passed a file, a directory or an array of entry points
  *
  * @param options {{
- *
+ *   entry:  string|[]
+ *   output: {
+ *     publicPath: string
+ *     path:       string
+ *     filename:   string
+ *   }
  * }}
- * @param paths {{}}
+ * @param paths {{
+ *   sass: string
+ * }}
  * @returns {*}
  */
 module.exports = function (options, paths) {
+  options = Object.assign({
+    entry:  'web_modules',
+    output: {
+      publicPath: 'http://localhost:3001/js',
+      path:       'public/js',
+      filename:   '[name].js'
+    }
+  }, options);
+
+  paths = Object.assign({
+    sass: 'src/sass'
+  }, paths);
+
   return Object.assign({
     module: {
       loaders: getLoaders(paths)

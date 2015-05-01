@@ -17,6 +17,8 @@ var _ExtractTextPlugin = require('extract-text-webpack-plugin');
 var _ExtractTextPlugin2 = _interopRequireDefault(_ExtractTextPlugin);
 
 var env = process.env.NODE_ENV || 'development';
+var isDev = env === 'development';
+var isProd = env === 'production';
 
 var defs = {
   'process.env': {
@@ -53,7 +55,7 @@ function getLoaders(paths) {
   };
 
   // Production overrides
-  if (env === 'production') {
+  if (isProd) {
     loaders = _extends(loaders, {
       sass: {
         test: /\.scss$/,
@@ -84,21 +86,42 @@ function getPlugins() {
     compress: { warnings: false }
   }), new _webpack2['default'].optimize.OccurenceOrderPlugin(), new _webpack2['default'].optimize.DedupePlugin()];
 
-  return env === 'production' ? defaults.concat(production) : defaults.concat(development);
+  return isProd ? defaults.concat(production) : defaults.concat(development);
 }
 
 // Export
 //-----------------------------------------------
 /**
  * Return a Webpack config
+ * options.entry can be passed a file, a directory or an array of entry points
  *
  * @param options {{
- *
+ *   entry:  string|[]
+ *   output: {
+ *     publicPath: string
+ *     path:       string
+ *     filename:   string
+ *   }
  * }}
- * @param paths {{}}
+ * @param paths {{
+ *   sass: string
+ * }}
  * @returns {*}
  */
 module.exports = function (options, paths) {
+  options = _extends({
+    entry: 'web_modules',
+    output: {
+      publicPath: 'http://localhost:3001/js',
+      path: 'public/js',
+      filename: '[name].js'
+    }
+  }, options);
+
+  paths = _extends({
+    sass: 'src/sass'
+  }, paths);
+
   return _extends({
     module: {
       loaders: getLoaders(paths)
