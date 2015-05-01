@@ -43,6 +43,11 @@ function getLoaders (paths) {
       sass: {
         test:   /\.scss$/,
         loader: ExtractTextPlugin.extract(sassLoaders)
+      },
+      jsx: {
+        test:    /\.js|x$/,
+        exclude: /node_modules/,
+        loaders: ['babel-loader']
       }
     });
   }
@@ -83,14 +88,14 @@ function getPlugins () {
 /**
  * Return a Webpack config
  *
- * @param wpOptions {{
+ * @param options {{
  *
  * }}
  * @param paths {{}}
  * @returns {*}
  */
-module.exports = function (wpOptions, paths) {
-  return Object.assign(wpOptions, {
+module.exports = function (options, paths) {
+  return Object.assign({
     module: {
       loaders: getLoaders(paths)
     },
@@ -104,5 +109,5 @@ module.exports = function (wpOptions, paths) {
     postcss: {
       defaults: [autoprefixer]
     }
-  });
+  }, options);
 };

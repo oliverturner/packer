@@ -1,5 +1,5 @@
 {
-  "name": "feei-webpacker",
+  "name": "@oliverturner/feei-webpacker",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
   "version": "1.0.0",
   "author": "Oliver Turner, FEEI",
@@ -42,6 +42,7 @@
     "url": "git+https://github.com/codedsignal/feei-webpacker.git"
   },
   "scripts": {
-    "test": "eslint ./src"
+    "test": "eslint ./src",
+    "start": "gulp"
   }
 }

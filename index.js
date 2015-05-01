@@ -8,6 +8,10 @@ var _webpack = require('webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
 
+var _autoprefixer = require('autoprefixer-core');
+
+var _autoprefixer2 = _interopRequireDefault(_autoprefixer);
+
 var _ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var _ExtractTextPlugin2 = _interopRequireDefault(_ExtractTextPlugin);
@@ -21,7 +25,12 @@ var defs = {
 };
 
 function getLoaders(paths) {
-  var loaders = {
+  var loaders = undefined,
+      sassLoaders = undefined;
+
+  sassLoaders = ['style', 'css', 'postcss', 'sass?includePaths[]=' + paths.sass];
+
+  loaders = {
     json: {
       test: /\.json$/,
       loaders: ['json']
@@ -34,7 +43,7 @@ function getLoaders(paths) {
     },
     sass: {
       test: /\.scss$/,
-      loaders: ['style', 'css', 'sass?includePaths[]=' + paths.sass]
+      loaders: sassLoaders
     },
     jsx: {
       test: /\.js|x$/,
@@ -48,7 +57,12 @@ function getLoaders(paths) {
     loaders = _extends(loaders, {
       sass: {
         test: /\.scss$/,
-        loader: _ExtractTextPlugin2['default'].extract('style-loader', 'css-loader!sass-loader?includePaths[]=' + paths.sass)
+        loader: _ExtractTextPlugin2['default'].extract(sassLoaders)
+      },
+      jsx: {
+        test: /\.js|x$/,
+        exclude: /node_modules/,
+        loaders: ['babel-loader']
       }
     });
   }
@@ -57,7 +71,9 @@ function getLoaders(paths) {
 }
 
 function getPlugins() {
-  var defaults, development, production;
+  var defaults = undefined,
+      development = undefined,
+      production = undefined;
 
   defaults = [new _webpack2['default'].optimize.CommonsChunkPlugin('common.js'), new _webpack2['default'].DefinePlugin(defs), new _webpack2['default'].NoErrorsPlugin(), new _ExtractTextPlugin2['default']('[name].css')];
 
@@ -76,14 +92,14 @@ function getPlugins() {
 /**
  * Return a Webpack config
  *
- * @param wpOptions {{
+ * @param options {{
  *
  * }}
- * @param paths
+ * @param paths {{}}
  * @returns {*}
  */
-module.exports = function (wpOptions, paths) {
-  return _extends(wpOptions, {
+module.exports = function (options, paths) {
+  return _extends({
     module: {
       loaders: getLoaders(paths)
     },
@@ -92,6 +108,10 @@ module.exports = function (wpOptions, paths) {
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']
+    },
+
+    postcss: {
+      defaults: [_autoprefixer2['default']]
     }
-  });
+  }, options);
 };
