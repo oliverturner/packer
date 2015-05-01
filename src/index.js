@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import autoprefixer from 'autoprefixer-core';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const env = process.env.NODE_ENV || 'development';
@@ -10,7 +11,11 @@ let defs = {
 };
 
 function getLoaders (paths) {
-  let loaders = {
+  let loaders, sassLoaders;
+
+  sassLoaders = ['style', 'css', 'postcss', 'sass?includePaths[]=' + paths.sass];
+
+  loaders = {
     json:   {
       test:    /\.json$/,
       loaders: ['json']
@@ -23,7 +28,7 @@ function getLoaders (paths) {
     },
     sass:   {
       test:    /\.scss$/,
-      loaders: ['style', 'css', 'sass?includePaths[]=' + paths.sass]
+      loaders: sassLoaders
     },
     jsx:    {
       test:    /\.js|x$/,
@@ -37,7 +42,7 @@ function getLoaders (paths) {
     loaders = Object.assign(loaders, {
       sass: {
         test:   /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader?includePaths[]=' + paths.sass)
+        loader: ExtractTextPlugin.extract(sassLoaders)
       }
     });
   }
@@ -46,7 +51,7 @@ function getLoaders (paths) {
 }
 
 function getPlugins () {
-  var defaults, development, production;
+  let defaults, development, production;
 
   defaults = [
     new webpack.optimize.CommonsChunkPlugin('common.js'),
@@ -81,7 +86,7 @@ function getPlugins () {
  * @param wpOptions {{
  *
  * }}
- * @param paths
+ * @param paths {{}}
  * @returns {*}
  */
 module.exports = function (wpOptions, paths) {
@@ -94,6 +99,10 @@ module.exports = function (wpOptions, paths) {
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']
+    },
+
+    postcss: {
+      defaults: [autoprefixer]
     }
   });
 };

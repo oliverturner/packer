@@ -3,6 +3,6 @@ var babel = require('gulp-babel');
 
 gulp.task('default', function () {
   return gulp.src('src/index.js')
-    .pipe(babel({}))
+    .pipe(babel({plugins: ['object-assign']}))
     .pipe(gulp.dest('./'));
 });

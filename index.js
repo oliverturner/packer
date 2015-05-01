@@ -2,6 +2,8 @@
 
 var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _webpack = require('webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
@@ -43,7 +45,7 @@ function getLoaders(paths) {
 
   // Production overrides
   if (env === 'production') {
-    loaders = Object.assign(loaders, {
+    loaders = _extends(loaders, {
       sass: {
         test: /\.scss$/,
         loader: _ExtractTextPlugin2['default'].extract('style-loader', 'css-loader!sass-loader?includePaths[]=' + paths.sass)
@@ -81,7 +83,7 @@ function getPlugins() {
  * @returns {*}
  */
 module.exports = function (wpOptions, paths) {
-  return Object.assign(wpOptions, {
+  return _extends(wpOptions, {
     module: {
       loaders: getLoaders(paths)
     },

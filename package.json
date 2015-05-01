@@ -1,45 +1,47 @@
 {
   "name": "feei-webpacker",
-  "version": "1.0.0",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/codedsignal/feei-webpacker.git"
-  },
-  "keywords": [
-    "webpack",
-    "hot reload"
-  ],
+  "version": "1.0.0",
   "author": "Oliver Turner, FEEI",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
   },
-  "homepage": "https://github.com/codedsignal/feei-webpacker#readme",
   "dependencies": {
     "babel": "^5.1.13",
+    "babel-plugin-object-assign": "^1.0.1",
     "find-root": "^0.1.1"
   },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.1.0"
+  },
+  "homepage": "https://github.com/codedsignal/feei-webpacker#readme",
+  "keywords": [
+    "hot reload",
+    "webpack"
+  ],
+  "license": "ISC",
+  "main": "index.js",
   "peerDependencies": {
-    "autoprefixer-loader": "^1.2.0",
+    "autoprefixer-core": "^5.1.11",
     "babel-core": "^5.1.13",
     "babel-loader": "^5.0.0",
     "css-loader": "^0.12.0",
     "expose-loader": "^0.6.0",
     "extract-text-webpack-plugin": "^0.7.0",
     "node-sass": "^2.1.1",
+    "postcss-loader": "^0.4.1",
     "react": "^0.13.2",
     "react-hot-loader": "^1.2.5",
     "sass-loader": "^0.6.0",
     "style-loader": "^0.12.1",
     "webpack": "^1.8.11"
   },
-  "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-babel": "^5.1.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codedsignal/feei-webpacker.git"
+  },
+  "scripts": {
+    "test": "eslint ./src"
   }
 }

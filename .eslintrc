@@ -7,9 +7,7 @@
   "globals": {
     "crypto": true,
     "escape": false,
-    "unescape": false,
-    "jest": true,
-    "__WPACK__": true
+    "unescape": false
   },
   "ecmaFeatures": {
     "arrowFunctions": true,
@@ -19,6 +17,7 @@
     "forOf": true,
     "generators": true,
     "jsx": true,
+    "modules": true,
     "objectLiteralComputedProperties": true,
     "objectLiteralDuplicateProperties": false,
     "objectLiteralShorthandMethods": true,
@@ -145,8 +144,8 @@
     "no-unreachable": 2,
     "no-unused-expressions": 0,
     "no-unused-vars": [2, {"vars": "all", "args": "none"}],
-    "no-use-before-define": 0,
-    "no-var": 0,
+    "no-use-before-define": 2,
+    "no-var": 1,
     "no-void": 0,
     "no-warning-comments": [
       0,
@@ -175,7 +174,7 @@
     "use-isnan": 2,
     "valid-jsdoc": 0,
     "valid-typeof": 2,
-    "vars-on-top": 0,
+    "vars-on-top": 1,
     "wrap-iife": [2, "any"],
     "wrap-regex": 0,
     "yoda": [2, "never"],
