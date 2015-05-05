@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var babel = require('gulp-babel');
 var bump = require('gulp-bump');
 var git = require('gulp-git');
+var data = require('gulp-data');
 var spawn = require('child_process').spawn;
 
 var src = 'src/*.js';
@@ -24,22 +25,18 @@ gulp.task('bump', ['compile'], function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('tag', ['bump'], function () {
+gulp.task('publish', ['bump'], function (done) {
   var pkg, v, msg;
 
   pkg = require('./package.json');
   v   = 'v' + pkg.version;
   msg = 'Release ' + v;
 
-  return gulp.src('./')
-    .pipe(git.commit(msg))
-    //.pipe(git.tag(v, msg))
-    //.pipe(git.push('origin', 'master', {args: '--tags'}, onError))
-    .pipe(gulp.dest('./'));
-});
+  git.tag(v, msg, onError);
 
-gulp.task('publish', ['tag'], function (done) {
-  spawn('npm', ['publish'], { stdio: 'inherit' }).on('close', done);
+  git.push('origin', 'master', {args: '--tags'}, onError);
+
+  done();
 });
 
 gulp.task('default', ['compile'], function () {

@@ -102,7 +102,21 @@ function getPlugins () {
  * @param paths {{
  *   sass: string
  * }}
- * @returns {*}
+ * 
+ * @returns {{
+ *  entry:  string|[]
+ *  output: {
+ *     publicPath: string
+ *     path:       string
+ *     filename:   string
+ *   },
+ *   module: {
+ *     loaders: []
+ *   },
+ *   plugins: [],
+ *   resolve: {},
+ *   postcss: {}
+ * }}
  */
 module.exports = function (options, paths) {
   options = Object.assign({
