@@ -16,9 +16,14 @@ var _ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var _ExtractTextPlugin2 = _interopRequireDefault(_ExtractTextPlugin);
 
+var _findRoot = require('find-root');
+
+var _findRoot2 = _interopRequireDefault(_findRoot);
+
 var env = process.env.NODE_ENV || 'development';
 var isDev = env === 'development';
 var isProd = env === 'production';
+var projRoot = _findRoot2['default'](process.env.PWD);
 
 var defs = {
   'process.env': {
@@ -26,6 +31,12 @@ var defs = {
   }
 };
 
+/**
+ * Return an array of configured loaders
+ *
+ * @param paths
+ * @returns []
+ */
 function getLoaders(paths) {
   var loaders = undefined,
       sassLoaders = undefined;
@@ -69,7 +80,11 @@ function getLoaders(paths) {
     });
   }
 
-  return loaders;
+  return Object.keys(loaders).reduce(function (ret, key) {
+    ret.push(loaders[key]);
+
+    return ret;
+  }, []);
 }
 
 function getPlugins() {
@@ -96,6 +111,7 @@ function getPlugins() {
  * options.entry can be passed a file, a directory or an array of entry points
  *
  * @param options {{
+ *   docRoot: string,
  *   entry:  string|[]
  *   output: {
  *     publicPath: string
@@ -106,14 +122,29 @@ function getPlugins() {
  * @param paths {{
  *   sass: string
  * }}
- * @returns {*}
+ *
+ * @returns {{
+ *  entry:  string|[]
+ *  output: {
+ *     publicPath: string
+ *     path:       string
+ *     filename:   string
+ *   },
+ *   module: {
+ *     loaders: []
+ *   },
+ *   plugins: [],
+ *   resolve: {},
+ *   postcss: {}
+ * }}
  */
 module.exports = function (options, paths) {
+  // Override sensible defaults
   options = _extends({
-    entry: 'web_modules',
+    entry: '' + projRoot + '/web_modules',
     output: {
       publicPath: 'http://localhost:3001/js',
-      path: 'public/js',
+      path: '' + options.docRoot + '/js',
       filename: '[name].js'
     }
   }, options);

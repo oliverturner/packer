@@ -33,9 +33,9 @@ function getLoaders (paths) {
       loaders: sassLoaders
     },
     jsx:    {
-      test:    /\.js|x$/,
+      test:    /\.jsx?$/,
       exclude: /node_modules/,
-      loaders: ['react-hot', 'babel-loader']
+      loaders: ['react-hot', 'babel']
     }
   };
 
@@ -47,14 +47,18 @@ function getLoaders (paths) {
         loader: ExtractTextPlugin.extract(sassLoaders)
       },
       jsx: {
-        test:    /\.js|x$/,
+        test:    /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['babel-loader']
+        loaders: ['babel']
       }
     });
   }
 
-  return loaders;
+  return Object.keys(loaders).reduce((ret, key) => {
+    ret.push(loaders[key]);
+
+    return ret;
+  }, []);
 }
 
 function getPlugins () {
@@ -63,8 +67,7 @@ function getPlugins () {
   defaults = [
     new webpack.optimize.CommonsChunkPlugin('common.js'),
     new webpack.DefinePlugin(defs),
-    new webpack.NoErrorsPlugin(),
-    new ExtractTextPlugin('[name].css')
+    new webpack.NoErrorsPlugin()
   ];
 
   development = [
@@ -77,7 +80,8 @@ function getPlugins () {
       compress: {warnings: false}
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin()
+    new webpack.optimize.DedupePlugin(),
+    new ExtractTextPlugin('[name].css')
   ];
 
   return (isProd)
@@ -100,9 +104,10 @@ function getPlugins () {
  *   }
  * }}
  * @param paths {{
- *   sass: string
+ *   docRoot: string,
+ *   sass:    string
  * }}
- * 
+ *
  * @returns {{
  *  entry:  string|[]
  *  output: {
@@ -119,11 +124,12 @@ function getPlugins () {
  * }}
  */
 module.exports = function (options, paths) {
+  // Override sensible defaults
   options = Object.assign({
     entry:  'web_modules',
     output: {
       publicPath: 'http://localhost:3001/js',
-      path:       'public/js',
+      path:       `${paths.docRoot}/js`,
       filename:   '[name].js'
     }
   }, options);
