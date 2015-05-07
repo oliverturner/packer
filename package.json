@@ -1,14 +1,14 @@
 {
   "name": "@oliverturner/feei-webpacker",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
-  "version": "1.0.34",
+  "version": "1.0.36",
   "author": "Oliver Turner, FEEI",
   "bugs": {
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
   },
   "dependencies": {
-    "babel": "^5.2.6",
-    "babel-plugin-object-assign": "^1.0.1",
+    "babel": "^5.2.16",
+    "babel-plugin-object-assign": "^1.1.0",
     "find-root": "^0.1.1"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
   "main": "index.js",
   "peerDependencies": {
     "autoprefixer-core": "^5.1.11",
-    "babel-core": "^5.1.13",
+    "babel-core": "^5.2.16",
     "babel-loader": "^5.0.0",
     "css-loader": "^0.12.0",
     "expose-loader": "^0.6.0",

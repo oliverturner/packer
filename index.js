@@ -1,29 +1,24 @@
 'use strict';
 
-var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _webpack = require('webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
 
-var _autoprefixer = require('autoprefixer-core');
+var _autoprefixerCore = require('autoprefixer-core');
 
-var _autoprefixer2 = _interopRequireDefault(_autoprefixer);
+var _autoprefixerCore2 = _interopRequireDefault(_autoprefixerCore);
 
-var _ExtractTextPlugin = require('extract-text-webpack-plugin');
+var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
-var _ExtractTextPlugin2 = _interopRequireDefault(_ExtractTextPlugin);
-
-var _findRoot = require('find-root');
-
-var _findRoot2 = _interopRequireDefault(_findRoot);
+var _extractTextWebpackPlugin2 = _interopRequireDefault(_extractTextWebpackPlugin);
 
 var env = process.env.NODE_ENV || 'development';
 var isDev = env === 'development';
 var isProd = env === 'production';
-var projRoot = _findRoot2['default'](process.env.PWD);
 
 var defs = {
   'process.env': {
@@ -31,12 +26,6 @@ var defs = {
   }
 };
 
-/**
- * Return an array of configured loaders
- *
- * @param paths
- * @returns []
- */
 function getLoaders(paths) {
   var loaders = undefined,
       sassLoaders = undefined;
@@ -59,9 +48,9 @@ function getLoaders(paths) {
       loaders: sassLoaders
     },
     jsx: {
-      test: /\.js|x$/,
+      test: /\.jsx?$/,
       exclude: /node_modules/,
-      loaders: ['react-hot', 'babel-loader']
+      loaders: ['react-hot', 'babel']
     }
   };
 
@@ -70,12 +59,12 @@ function getLoaders(paths) {
     loaders = _extends(loaders, {
       sass: {
         test: /\.scss$/,
-        loader: _ExtractTextPlugin2['default'].extract(sassLoaders)
+        loader: _extractTextWebpackPlugin2['default'].extract(sassLoaders)
       },
       jsx: {
-        test: /\.js|x$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['babel-loader']
+        loaders: ['babel']
       }
     });
   }
@@ -92,14 +81,14 @@ function getPlugins() {
       development = undefined,
       production = undefined;
 
-  defaults = [new _webpack2['default'].optimize.CommonsChunkPlugin('common.js'), new _webpack2['default'].DefinePlugin(defs), new _webpack2['default'].NoErrorsPlugin(), new _ExtractTextPlugin2['default']('[name].css')];
+  defaults = [new _webpack2['default'].optimize.CommonsChunkPlugin('common.js'), new _webpack2['default'].DefinePlugin(defs), new _webpack2['default'].NoErrorsPlugin()];
 
   development = [new _webpack2['default'].HotModuleReplacementPlugin()];
 
   production = [new _webpack2['default'].optimize.UglifyJsPlugin({
     output: { comments: false },
     compress: { warnings: false }
-  }), new _webpack2['default'].optimize.OccurenceOrderPlugin(), new _webpack2['default'].optimize.DedupePlugin()];
+  }), new _webpack2['default'].optimize.OccurenceOrderPlugin(), new _webpack2['default'].optimize.DedupePlugin(), new _extractTextWebpackPlugin2['default']('[name].css')];
 
   return isProd ? defaults.concat(production) : defaults.concat(development);
 }
@@ -111,7 +100,6 @@ function getPlugins() {
  * options.entry can be passed a file, a directory or an array of entry points
  *
  * @param options {{
- *   docRoot: string,
  *   entry:  string|[]
  *   output: {
  *     publicPath: string
@@ -120,7 +108,8 @@ function getPlugins() {
  *   }
  * }}
  * @param paths {{
- *   sass: string
+ *   docRoot: string,
+ *   sass:    string
  * }}
  *
  * @returns {{
@@ -141,10 +130,10 @@ function getPlugins() {
 module.exports = function (options, paths) {
   // Override sensible defaults
   options = _extends({
-    entry: '' + projRoot + '/web_modules',
+    entry: 'web_modules',
     output: {
       publicPath: 'http://localhost:3001/js',
-      path: '' + options.docRoot + '/js',
+      path: '' + paths.docRoot + '/js',
       filename: '[name].js'
     }
   }, options);
@@ -165,7 +154,7 @@ module.exports = function (options, paths) {
     },
 
     postcss: {
-      defaults: [_autoprefixer2['default']]
+      defaults: [_autoprefixerCore2['default']]
     }
   }, options);
 };
