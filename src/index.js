@@ -59,11 +59,11 @@ function getLoaders (paths) {
   }, []);
 }
 
-function getPlugins () {
+function getPlugins (paths) {
   let defaults, development, production;
 
   defaults = [
-    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    new webpack.optimize.CommonsChunkPlugin(`${paths.js}/common.js`),
     new webpack.DefinePlugin(defs),
     new webpack.NoErrorsPlugin()
   ];
@@ -79,7 +79,7 @@ function getPlugins () {
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
-    new ExtractTextPlugin('[name].css')
+    new ExtractTextPlugin('styles.css')
   ];
 
   return (isProd)
@@ -122,15 +122,16 @@ function getPlugins () {
  * }}
  */
 module.exports = function (options, paths) {
-  // Override sensible defaults
-  options = Object.assign({
+  let defaults = {
     entry:  'web_modules',
     output: {
-      publicPath: 'http://localhost:3001/js',
-      path:       `${paths.docRoot}/js`,
-      filename:   '[name].js'
+      publicPath: 'http://localhost:3001',
+      path:       'public',
+      filename:   `js/[name].js`
     }
-  }, options);
+  }
+
+  options = Object.assign(defaults, options);
 
   paths = Object.assign({
     sass: 'src/sass'
@@ -141,7 +142,7 @@ module.exports = function (options, paths) {
       loaders: getLoaders(paths)
     },
 
-    plugins: getPlugins(),
+    plugins: getPlugins(paths),
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']
