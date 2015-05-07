@@ -74,19 +74,19 @@ function getLoaders(paths) {
   }, []);
 }
 
-function getPlugins() {
+function getPlugins(paths) {
   var defaults = undefined,
       development = undefined,
       production = undefined;
 
-  defaults = [new _webpack2['default'].optimize.CommonsChunkPlugin('common.js'), new _webpack2['default'].DefinePlugin(defs), new _webpack2['default'].NoErrorsPlugin()];
+  defaults = [new _webpack2['default'].optimize.CommonsChunkPlugin('' + paths.js + '/common.js'), new _webpack2['default'].DefinePlugin(defs), new _webpack2['default'].NoErrorsPlugin()];
 
   development = [new _webpack2['default'].HotModuleReplacementPlugin()];
 
   production = [new _webpack2['default'].optimize.UglifyJsPlugin({
     output: { comments: false },
     compress: { warnings: false }
-  }), new _webpack2['default'].optimize.OccurenceOrderPlugin(), new _webpack2['default'].optimize.DedupePlugin(), new _extractTextWebpackPlugin2['default']('[name].css')];
+  }), new _webpack2['default'].optimize.OccurenceOrderPlugin(), new _webpack2['default'].optimize.DedupePlugin(), new _extractTextWebpackPlugin2['default']('styles.css')];
 
   return isProd ? defaults.concat(production) : defaults.concat(development);
 }
@@ -126,15 +126,16 @@ function getPlugins() {
  * }}
  */
 module.exports = function (options, paths) {
-  // Override sensible defaults
-  options = _extends({
+  var defaults = {
     entry: 'web_modules',
     output: {
-      publicPath: 'http://localhost:3001/js',
-      path: '' + paths.docRoot + '/js',
-      filename: '[name].js'
+      publicPath: 'http://localhost:3001',
+      path: 'public',
+      filename: 'js/[name].js'
     }
-  }, options);
+  };
+
+  options = _extends(defaults, options);
 
   paths = _extends({
     sass: 'src/sass'
@@ -145,7 +146,7 @@ module.exports = function (options, paths) {
       loaders: getLoaders(paths)
     },
 
-    plugins: getPlugins(),
+    plugins: getPlugins(paths),
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']
