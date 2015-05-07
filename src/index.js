@@ -23,10 +23,8 @@ function getLoaders (paths) {
       loaders: ['json']
     },
     expose: {
-      react: {
-        test:   require.resolve('react'),
-        loader: 'expose?React'
-      }
+      test:   require.resolve('react'),
+      loader: 'expose?React'
     },
     sass:   {
       test:    /\.scss$/,
