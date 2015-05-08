@@ -46,8 +46,8 @@
   },
   "scripts": {
     "test": "eslint ./src",
-    "docco": "docco src/**/*.js",
-    "prepublish": "npm test && npm run docco && gulp publish",
+    "docs": "docco src/**/*.js",
+    "prepublish": "npm test && npm run docs && gulp publish",
     "start": "gulp"
   }
 }
