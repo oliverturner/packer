@@ -1,6 +1,9 @@
+import path from 'path';
 import webpack from 'webpack';
 import autoprefixer from 'autoprefixer-core';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+
+import extractEntries from 'utils/extractEntries';
 
 const env = process.env.NODE_ENV || 'development';
 const isDev = env === 'development';
@@ -44,7 +47,7 @@ function getLoaders (paths) {
         test:   /\.scss$/,
         loader: ExtractTextPlugin.extract(sassLoaders)
       },
-      jsx: {
+      jsx:  {
         test:    /\.jsx?$/,
         exclude: /node_modules/,
         loaders: ['babel']
@@ -91,8 +94,9 @@ function getPlugins (paths) {
 //-----------------------------------------------
 /**
  * Return a Webpack config
- * options.entry can be passed a file, a directory or an array of entry points
  *
+ * entry:     file, directory or array of entry points
+ * entryType: how to process the value for `entry`
  * @param options {{
  *   entry:  string|[]
  *   output: {
@@ -101,9 +105,14 @@ function getPlugins (paths) {
  *     filename:   string
  *   }
  * }}
- * @param paths {{
- *   docRoot: string,
- *   sass:    string
+ *
+ * srcs:  absolute paths to jsx, scss, etc
+ * paths: absolute paths to destination dirs
+ * uels:  paths to assets relative to webRoot
+ * @param files {{
+ *   srcs:  {},
+ *   paths: {},
+ *   urls:  {}
  * }}
  *
  * @returns {{
@@ -121,7 +130,7 @@ function getPlugins (paths) {
  *   postcss: {}
  * }}
  */
-module.exports = function (options, paths) {
+function WebPacker (options, files) {
   let defaults = {
     entry:  'web_modules',
     output: {
@@ -129,20 +138,16 @@ module.exports = function (options, paths) {
       path:       'public',
       filename:   `js/[name].js`
     }
-  }
+  };
 
   options = Object.assign(defaults, options);
 
-  paths = Object.assign({
-    sass: 'src/sass'
-  }, paths);
-
   return Object.assign({
     module: {
-      loaders: getLoaders(paths)
+      loaders: getLoaders(files.paths)
     },
 
-    plugins: getPlugins(paths),
+    plugins: getPlugins(files.paths),
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']
@@ -152,4 +157,8 @@ module.exports = function (options, paths) {
       defaults: [autoprefixer]
     }
   }, options);
-};
+}
+
+export default WebPacker;
+
+export { extractEntries };
