@@ -5,7 +5,7 @@ var git = require('gulp-git');
 var data = require('gulp-data');
 var spawn = require('child_process').spawn;
 
-var src = 'src/*.js';
+var src = 'src/**/*.js';
 
 function onError (err) {
   if (err) {
@@ -16,7 +16,7 @@ function onError (err) {
 gulp.task('compile', function () {
   return gulp.src(src)
     .pipe(babel({plugins: ['object-assign']}))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('bump', ['compile'], function () {

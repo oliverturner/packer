@@ -1,8 +1,16 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
 
 var _webpack = require('webpack');
 
@@ -15,6 +23,10 @@ var _autoprefixerCore2 = _interopRequireDefault(_autoprefixerCore);
 var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 var _extractTextWebpackPlugin2 = _interopRequireDefault(_extractTextWebpackPlugin);
+
+var _utilsExtractEntries = require('utils/extractEntries');
+
+var _utilsExtractEntries2 = _interopRequireDefault(_utilsExtractEntries);
 
 var env = process.env.NODE_ENV || 'development';
 var isDev = env === 'development';
@@ -95,8 +107,9 @@ function getPlugins(paths) {
 //-----------------------------------------------
 /**
  * Return a Webpack config
- * options.entry can be passed a file, a directory or an array of entry points
  *
+ * entry:     file, directory or array of entry points
+ * entryType: how to process the value for `entry`
  * @param options {{
  *   entry:  string|[]
  *   output: {
@@ -105,9 +118,14 @@ function getPlugins(paths) {
  *     filename:   string
  *   }
  * }}
- * @param paths {{
- *   docRoot: string,
- *   sass:    string
+ *
+ * srcs:  absolute paths to jsx, scss, etc
+ * paths: absolute paths to destination dirs
+ * uels:  paths to assets relative to webRoot
+ * @param files {{
+ *   srcs:  {},
+ *   paths: {},
+ *   urls:  {}
  * }}
  *
  * @returns {{
@@ -125,7 +143,7 @@ function getPlugins(paths) {
  *   postcss: {}
  * }}
  */
-module.exports = function (options, paths) {
+function WebPacker(options, files) {
   var defaults = {
     entry: 'web_modules',
     output: {
@@ -137,16 +155,12 @@ module.exports = function (options, paths) {
 
   options = _extends(defaults, options);
 
-  paths = _extends({
-    sass: 'src/sass'
-  }, paths);
-
   return _extends({
     module: {
-      loaders: getLoaders(paths)
+      loaders: getLoaders(files.paths)
     },
 
-    plugins: getPlugins(paths),
+    plugins: getPlugins(files.paths),
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']
@@ -156,4 +170,7 @@ module.exports = function (options, paths) {
       defaults: [_autoprefixerCore2['default']]
     }
   }, options);
-};
+}
+
+exports['default'] = WebPacker;
+exports.extractEntries = _utilsExtractEntries2['default'];
