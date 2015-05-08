@@ -8,9 +8,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
+// Return a Webpack config
 
 var _webpack = require('webpack');
 
@@ -24,12 +22,11 @@ var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 var _extractTextWebpackPlugin2 = _interopRequireDefault(_extractTextWebpackPlugin);
 
-var _utilsExtractEntries = require('utils/extractEntries');
+var _utilsExtractEntries = require('./utils/extractEntries');
 
 var _utilsExtractEntries2 = _interopRequireDefault(_utilsExtractEntries);
 
 var env = process.env.NODE_ENV || 'development';
-var isDev = env === 'development';
 var isProd = env === 'production';
 
 var defs = {
@@ -105,11 +102,14 @@ function getPlugins(paths) {
 
 // Export
 //-----------------------------------------------
+// Options:
+// * entry:     file, directory or array of entry points
+//
+// Files:
+// * srcs:  absolute paths to jsx, scss, etc
+// * paths: absolute paths to destination dirs
+// * urls:  paths to assets relative to webRoot
 /**
- * Return a Webpack config
- *
- * entry:     file, directory or array of entry points
- * entryType: how to process the value for `entry`
  * @param options {{
  *   entry:  string|[]
  *   output: {
@@ -118,10 +118,6 @@ function getPlugins(paths) {
  *     filename:   string
  *   }
  * }}
- *
- * srcs:  absolute paths to jsx, scss, etc
- * paths: absolute paths to destination dirs
- * uels:  paths to assets relative to webRoot
  * @param files {{
  *   srcs:  {},
  *   paths: {},
@@ -144,17 +140,6 @@ function getPlugins(paths) {
  * }}
  */
 function WebPacker(options, files) {
-  var defaults = {
-    entry: 'web_modules',
-    output: {
-      publicPath: 'http://localhost:3001',
-      path: 'public',
-      filename: 'js/[name].js'
-    }
-  };
-
-  options = _extends(defaults, options);
-
   return _extends({
     module: {
       loaders: getLoaders(files.paths)

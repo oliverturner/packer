@@ -1,12 +1,12 @@
-import path from 'path';
+// Return a Webpack config
+
 import webpack from 'webpack';
 import autoprefixer from 'autoprefixer-core';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import extractEntries from 'utils/extractEntries';
+import extractEntries from './utils/extractEntries';
 
 const env = process.env.NODE_ENV || 'development';
-const isDev = env === 'development';
 const isProd = env === 'production';
 
 let defs = {
@@ -92,11 +92,14 @@ function getPlugins (paths) {
 
 // Export
 //-----------------------------------------------
+// Options:
+// * entry:     file, directory or array of entry points
+//
+// Files:
+// * srcs:  absolute paths to jsx, scss, etc
+// * paths: absolute paths to destination dirs
+// * urls:  paths to assets relative to webRoot
 /**
- * Return a Webpack config
- *
- * entry:     file, directory or array of entry points
- * entryType: how to process the value for `entry`
  * @param options {{
  *   entry:  string|[]
  *   output: {
@@ -105,10 +108,6 @@ function getPlugins (paths) {
  *     filename:   string
  *   }
  * }}
- *
- * srcs:  absolute paths to jsx, scss, etc
- * paths: absolute paths to destination dirs
- * uels:  paths to assets relative to webRoot
  * @param files {{
  *   srcs:  {},
  *   paths: {},
@@ -131,17 +130,6 @@ function getPlugins (paths) {
  * }}
  */
 function WebPacker (options, files) {
-  let defaults = {
-    entry:  'web_modules',
-    output: {
-      publicPath: 'http://localhost:3001',
-      path:       'public',
-      filename:   `js/[name].js`
-    }
-  };
-
-  options = Object.assign(defaults, options);
-
   return Object.assign({
     module: {
       loaders: getLoaders(files.paths)
