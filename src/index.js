@@ -15,7 +15,7 @@ let defs = {
   }
 };
 
-function getExtractLoader(ret, loader) {
+function getExtractLoader (ret, loader) {
   let parts, module, suffix;
 
   parts = loader.split('?');

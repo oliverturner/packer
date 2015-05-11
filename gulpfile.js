@@ -34,6 +34,9 @@ gulp.task('publish', ['bump'], function (done) {
 
   git.tag(v, msg, onError);
 
+  // TODO: fix!!!
+  //git.commit();
+
   git.push('origin', 'master', {args: '--tags'}, onError);
 
   done();
