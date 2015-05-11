@@ -22,9 +22,9 @@ var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 var _extractTextWebpackPlugin2 = _interopRequireDefault(_extractTextWebpackPlugin);
 
-var _utilsExtractEntries = require('./utils/extractEntries');
+var _utilsPackEntries = require('./utils/packEntries');
 
-var _utilsExtractEntries2 = _interopRequireDefault(_utilsExtractEntries);
+var _utilsPackEntries2 = _interopRequireDefault(_utilsPackEntries);
 
 var env = process.env.NODE_ENV || 'development';
 var isProd = env === 'production';
@@ -37,7 +37,8 @@ var defs = {
 
 function getLoaders(paths) {
   var loaders = undefined,
-      sassLoaders = undefined;
+      sassLoaders = undefined,
+      extractLoaders = undefined;
 
   sassLoaders = ['style', 'css', 'postcss', 'sass?includePaths[]=' + paths.sass];
 
@@ -66,7 +67,9 @@ function getLoaders(paths) {
     loaders = _extends(loaders, {
       sass: {
         test: /\.scss$/,
-        loader: _extractTextWebpackPlugin2['default'].extract(sassLoaders)
+        loader: _extractTextWebpackPlugin2['default'].extract(loaders.sass)
+        //loader: ExtractTextPlugin.extract(sassLoaders)
+        //loader: ExtractTextPlugin.extract('style-loader', 'css-loader', 'sass-loader?includePaths[]=' + paths.sass)
       },
       jsx: {
         test: /\.jsx?$/,
@@ -83,19 +86,16 @@ function getLoaders(paths) {
   }, []);
 }
 
-function getPlugins(paths) {
+function getPlugins(urls) {
   var defaults = undefined,
       development = undefined,
       production = undefined;
 
-  defaults = [new _webpack2['default'].optimize.CommonsChunkPlugin('' + paths.js + '/common.js'), new _webpack2['default'].DefinePlugin(defs), new _webpack2['default'].NoErrorsPlugin()];
+  defaults = [];
 
   development = [new _webpack2['default'].HotModuleReplacementPlugin()];
 
-  production = [new _webpack2['default'].optimize.UglifyJsPlugin({
-    output: { comments: false },
-    compress: { warnings: false }
-  }), new _webpack2['default'].optimize.OccurenceOrderPlugin(), new _webpack2['default'].optimize.DedupePlugin(), new _extractTextWebpackPlugin2['default']('styles.css')];
+  production = [new _extractTextWebpackPlugin2['default']('' + urls.css + '/styles.css', { allChunks: true })];
 
   return isProd ? defaults.concat(production) : defaults.concat(development);
 }
@@ -145,7 +145,7 @@ function WebPacker(options, files) {
       loaders: getLoaders(files.paths)
     },
 
-    plugins: getPlugins(files.paths),
+    plugins: getPlugins(files.urls),
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']
@@ -158,4 +158,17 @@ function WebPacker(options, files) {
 }
 
 exports['default'] = WebPacker;
-exports.extractEntries = _utilsExtractEntries2['default'];
+exports.packEntries = _utilsPackEntries2['default'];
+
+//new webpack.optimize.CommonsChunkPlugin('common', `${urls.js}/common.js`),
+//new webpack.DefinePlugin(defs),
+//new webpack.NoErrorsPlugin()
+
+//new webpack.optimize.CommonsChunkPlugin('common', `${urls.js}/common.js`),
+
+//new webpack.optimize.UglifyJsPlugin({
+//  output:   {comments: false},
+//  compress: {warnings: false}
+//}),
+//new webpack.optimize.OccurenceOrderPlugin(),
+//new webpack.optimize.DedupePlugin()

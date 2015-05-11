@@ -5,14 +5,12 @@
 import fs from 'fs';
 
 /**
- * @param {bool}   isDev
- * @param {string} host
  * @param {string} appDir
  * @param {string} [file]
+ * @param {string} [host]
  * @returns {*}
  */
-function extract (isDev, host, appDir, file = 'entry.jsx') {
-
+function extract (appDir, host = null, file = 'entry.jsx') {
   // In development mode an additional 'dev' entry point is injected
   // (includes hot code loading and development server code)
   let extras = {
@@ -55,7 +53,7 @@ function extract (isDev, host, appDir, file = 'entry.jsx') {
     }
 
     return ret;
-  }, isDev ? extras : {});
+  }, host ? extras : {});
 }
 
 export default extract;

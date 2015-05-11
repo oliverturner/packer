@@ -4,7 +4,7 @@ import webpack from 'webpack';
 import autoprefixer from 'autoprefixer-core';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import extractEntries from './utils/extractEntries';
+import packEntries from './utils/packEntries';
 
 const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
@@ -16,7 +16,7 @@ let defs = {
 };
 
 function getLoaders (paths) {
-  let loaders, sassLoaders;
+  let loaders, sassLoaders, extractLoaders;
 
   sassLoaders = ['style', 'css', 'postcss', 'sass?includePaths[]=' + paths.sass];
 
@@ -45,7 +45,9 @@ function getLoaders (paths) {
     loaders = Object.assign(loaders, {
       sass: {
         test:   /\.scss$/,
-        loader: ExtractTextPlugin.extract(sassLoaders)
+        loader: ExtractTextPlugin.extract(loaders.sass)
+        //loader: ExtractTextPlugin.extract(sassLoaders)
+        //loader: ExtractTextPlugin.extract('style-loader', 'css-loader', 'sass-loader?includePaths[]=' + paths.sass)
       },
       jsx:  {
         test:    /\.jsx?$/,
@@ -62,13 +64,13 @@ function getLoaders (paths) {
   }, []);
 }
 
-function getPlugins (paths) {
+function getPlugins (urls) {
   let defaults, development, production;
 
   defaults = [
-    new webpack.optimize.CommonsChunkPlugin(`${paths.js}/common.js`),
-    new webpack.DefinePlugin(defs),
-    new webpack.NoErrorsPlugin()
+    //new webpack.optimize.CommonsChunkPlugin('common', `${urls.js}/common.js`),
+    //new webpack.DefinePlugin(defs),
+    //new webpack.NoErrorsPlugin()
   ];
 
   development = [
@@ -76,13 +78,15 @@ function getPlugins (paths) {
   ];
 
   production = [
-    new webpack.optimize.UglifyJsPlugin({
-      output:   {comments: false},
-      compress: {warnings: false}
-    }),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
-    new ExtractTextPlugin('styles.css')
+    new ExtractTextPlugin(`${urls.css}/styles.css`, { allChunks: true }),
+    //new webpack.optimize.CommonsChunkPlugin('common', `${urls.js}/common.js`),
+
+    //new webpack.optimize.UglifyJsPlugin({
+    //  output:   {comments: false},
+    //  compress: {warnings: false}
+    //}),
+    //new webpack.optimize.OccurenceOrderPlugin(),
+    //new webpack.optimize.DedupePlugin()
   ];
 
   return (isProd)
@@ -135,7 +139,7 @@ function WebPacker (options, files) {
       loaders: getLoaders(files.paths)
     },
 
-    plugins: getPlugins(files.paths),
+    plugins: getPlugins(files.urls),
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']
@@ -149,4 +153,4 @@ function WebPacker (options, files) {
 
 export default WebPacker;
 
-export { extractEntries };
+export { packEntries };

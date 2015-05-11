@@ -7,3 +7,4 @@ lib-cov
 coverage
 
 /docs
+/examples/out

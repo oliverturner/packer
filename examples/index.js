@@ -1,12 +1,31 @@
+var webpack = require('webpack');
+
 var WebPacker = require('../dist').default;
-var extractEntries = require('../dist/utils/extractEntries');
+var packEntries = require('../dist/utils/packEntries');
+
+var isDev = process.env.NODE_ENV === 'development';
+var host = isDev ? 'http://localhost:3001' : null;
 
 var refs = {
-  paths: {sass: './sass'}
+  paths: {
+    sass: __dirname + '/src/sass',
+    js:   __dirname + '/src/apps'
+  },
+  urls:  {
+    js:  'scripts',
+    css: 'styles'
+  }
 };
 
 var config = new WebPacker({
-  entry: extractEntries(true, 'http://localhost:3001', __dirname + '/apps')
+  entry: packEntries(refs.paths.js, host),
+  output: {
+    path:       __dirname + '/out',
+    publicPath: '/' + refs.urls.js + '/',
+    filename:   refs.urls.js + '/[name].js'
+  }
 }, refs);
 
 console.log(JSON.stringify(config, null, 2));
+
+module.exports = config;
