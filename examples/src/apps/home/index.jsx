@@ -1,4 +1,4 @@
-require('../../sass/index.scss');
+require('./index.scss');
 
 module.exports = function () {
   console.log('home');

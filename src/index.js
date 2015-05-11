@@ -15,10 +15,29 @@ let defs = {
   }
 };
 
+function getExtractLoader(ret, loader) {
+  let parts, module, suffix;
+
+  parts = loader.split('?');
+  module = parts[0];
+  suffix = parts[1] || '';
+
+  switch (loader) {
+    case 'style':
+      break;
+
+    default:
+      ret.push(module + '-loader?' + suffix);
+      break;
+  }
+  return ret;
+}
+
 function getLoaders (paths) {
   let loaders, sassLoaders, extractLoaders;
 
   sassLoaders = ['style', 'css', 'postcss', 'sass?includePaths[]=' + paths.sass];
+  extractLoaders = sassLoaders.reduce(getExtractLoader, []).join('!');
 
   loaders = {
     json:   {
@@ -45,9 +64,7 @@ function getLoaders (paths) {
     loaders = Object.assign(loaders, {
       sass: {
         test:   /\.scss$/,
-        loader: ExtractTextPlugin.extract(loaders.sass)
-        //loader: ExtractTextPlugin.extract(sassLoaders)
-        //loader: ExtractTextPlugin.extract('style-loader', 'css-loader', 'sass-loader?includePaths[]=' + paths.sass)
+        loader: ExtractTextPlugin.extract(extractLoaders)
       },
       jsx:  {
         test:    /\.jsx?$/,
@@ -68,25 +85,26 @@ function getPlugins (urls) {
   let defaults, development, production;
 
   defaults = [
-    //new webpack.optimize.CommonsChunkPlugin('common', `${urls.js}/common.js`),
-    //new webpack.DefinePlugin(defs),
-    //new webpack.NoErrorsPlugin()
+    new webpack.DefinePlugin(defs),
+    new webpack.NoErrorsPlugin()
   ];
 
   development = [
+    new webpack.optimize.CommonsChunkPlugin('commons', `${urls.js}/commons.js`),
     new webpack.HotModuleReplacementPlugin()
   ];
 
   production = [
-    new ExtractTextPlugin(`${urls.css}/styles.css`, { allChunks: true }),
-    //new webpack.optimize.CommonsChunkPlugin('common', `${urls.js}/common.js`),
+    new ExtractTextPlugin(`${urls.css}/[name].css`, {
+      allChunks: true
+    }),
 
-    //new webpack.optimize.UglifyJsPlugin({
-    //  output:   {comments: false},
-    //  compress: {warnings: false}
-    //}),
-    //new webpack.optimize.OccurenceOrderPlugin(),
-    //new webpack.optimize.DedupePlugin()
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      output:   {comments: false},
+      compress: {warnings: false}
+    })
   ];
 
   return (isProd)
@@ -134,6 +152,24 @@ function getPlugins (urls) {
  * }}
  */
 function WebPacker (options, files) {
+  let defaultOutputs = {
+    path:          null,
+    publicPath:    '/' + files.urls.js + '/',
+    filename:      files.urls.js + '/[name].js',
+    chunkFilename: files.urls.js + '/[id].js'
+  };
+
+  // Fill any required values for `output` with defaults if omitted
+  options.output = Object.keys(defaultOutputs).reduce((output, key) => {
+    output[key] = output[key] || defaultOutputs[key];
+
+    if (output[key] === null) {
+      throw new Error(`output.${key} may not be omitted`);
+    }
+
+    return output;
+  }, options.output);
+
   return Object.assign({
     module: {
       loaders: getLoaders(files.paths)

@@ -1,5 +1,3 @@
-var webpack = require('webpack');
-
 var WebPacker = require('../dist').default;
 var packEntries = require('../dist/utils/packEntries');
 
@@ -18,14 +16,10 @@ var refs = {
 };
 
 var config = new WebPacker({
-  entry: packEntries(refs.paths.js, host),
+  entry:  packEntries(refs.paths.js, host),
   output: {
-    path:       __dirname + '/out',
-    publicPath: '/' + refs.urls.js + '/',
-    filename:   refs.urls.js + '/[name].js'
+    path: __dirname + '/out'
   }
 }, refs);
-
-console.log(JSON.stringify(config, null, 2));
 
 module.exports = config;

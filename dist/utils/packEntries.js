@@ -24,11 +24,16 @@ function extract(appDir) {
   var host = arguments[1] === undefined ? null : arguments[1];
   var file = arguments[2] === undefined ? 'entry.jsx' : arguments[2];
 
+  // Create a `commons` entry for code shared by components
+  var extras = {
+    commons: []
+  };
+
   // In development mode an additional 'dev' entry point is injected
   // (includes hot code loading and development server code)
-  var extras = {
-    dev: ['webpack-dev-server/client?' + host, 'webpack/hot/dev-server']
-  };
+  if (host) {
+    extras.dev = ['webpack-dev-server/client?' + host, 'webpack/hot/dev-server'];
+  }
 
   // Loop through child modules of appDir to create an object used by Webpack as
   // entrypoints keyed by folder name:
@@ -44,9 +49,10 @@ function extract(appDir) {
   // becomes...
   //```
   // {
-  //   about: apps/about/entry.jsx,
-  //   home:  apps/home/entry.jsx,
-  //   dev:   [ // Omitted in production
+  //   commons: [],
+  //   about:   apps/about/entry.jsx,
+  //   home:    apps/home/entry.jsx,
+  //   dev:     [ // Omitted in production
   //     'webpack-dev-server/client?' + host,
   //     'webpack/hot/dev-server'
   //   ],
@@ -64,7 +70,7 @@ function extract(appDir) {
     }
 
     return ret;
-  }, host ? extras : {});
+  }, extras);
 }
 
 exports['default'] = extract;
