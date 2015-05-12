@@ -1,5 +1,5 @@
-var WebPacker = require('../dist').default;
-var packEntries = require('../dist/utils/packEntries');
+var WebPacker = require('../../dist').default;
+var packEntries = require('../../dist/utils/packEntries');
 
 var isDev = process.env.NODE_ENV === 'development';
 var host = isDev ? 'http://localhost:3001' : null;
@@ -16,10 +16,12 @@ var refs = {
 };
 
 var config = new WebPacker({
-  entry:  packEntries(refs.paths.js, host),
+  entry:  __dirname + '/src/apps',
   output: {
     path: __dirname + '/out'
   }
 }, refs);
+
+console.log(JSON.stringify(config, null, 2));
 
 module.exports = config;

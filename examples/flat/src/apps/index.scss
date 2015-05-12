@@ -1,0 +1,6 @@
+@import 'imports.scss';
+@import 'main.scss';
+
+.home {
+  color: map_get($tints, brand);
+}

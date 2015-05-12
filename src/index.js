@@ -15,29 +15,31 @@ let defs = {
   }
 };
 
-function getExtractLoader (ret, loader) {
-  let parts, module, suffix;
+function getPostLoader (loader) {
+  let parts, module, suffix, splitter;
 
-  parts = loader.split('?');
-  module = parts[0];
-  suffix = parts[1] || '';
+  parts    = loader.split('?');
+  module   = parts[0];
+  suffix   = parts[1] || '';
+  splitter = suffix.length ? '?' : '';
 
-  switch (loader) {
-    case 'style':
-      break;
-
-    default:
-      ret.push(module + '-loader?' + suffix);
-      break;
-  }
-  return ret;
+  return `${module}-loader${splitter}${suffix}`;
 }
 
+// Return an array of loaders for the various file types
+// In production we remove the ReactHotLoader and Sass plugins
+/**
+ * @param paths {{
+ *   sass: string
+ * }}
+ * @returns {Array}
+ */
 function getLoaders (paths) {
-  let loaders, sassLoaders, extractLoaders;
+  let loaders, postLoaders, sassLoaders, extractLoaders;
 
-  sassLoaders = ['style', 'css', 'postcss', 'sass?includePaths[]=' + paths.sass];
-  extractLoaders = sassLoaders.reduce(getExtractLoader, []).join('!');
+  postLoaders    = ['css', 'postcss', 'sass?includePaths[]=' + paths.sass];
+  sassLoaders    = ['style'].concat(postLoaders);
+  extractLoaders = postLoaders.map(getPostLoader).join('!');
 
   loaders = {
     json:   {
@@ -64,7 +66,7 @@ function getLoaders (paths) {
     loaders = Object.assign(loaders, {
       sass: {
         test:   /\.scss$/,
-        loader: ExtractTextPlugin.extract(extractLoaders)
+        loader: ExtractTextPlugin.extract('style-loader', extractLoaders)
       },
       jsx:  {
         test:    /\.jsx?$/,
@@ -74,15 +76,13 @@ function getLoaders (paths) {
     });
   }
 
-  return Object.keys(loaders).reduce((ret, key) => {
-    ret.push(loaders[key]);
-
-    return ret;
-  }, []);
+  return Object.keys(loaders).map(key => loaders[key]);
 }
 
 function getPlugins (urls) {
-  let defaults, development, production;
+  let defaults, development, production, commonsChunk;
+
+  commonsChunk = new webpack.optimize.CommonsChunkPlugin('commons', `${urls.js}/commons.js`);
 
   defaults = [
     new webpack.DefinePlugin(defs),
@@ -90,17 +90,17 @@ function getPlugins (urls) {
   ];
 
   development = [
-    new webpack.optimize.CommonsChunkPlugin('commons', `${urls.js}/commons.js`),
+    commonsChunk,
     new webpack.HotModuleReplacementPlugin()
   ];
 
   production = [
+    commonsChunk,
     new ExtractTextPlugin(`${urls.css}/[name].css`, {
       allChunks: true
     }),
-
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
+    //new webpack.optimize.OccurenceOrderPlugin(),
+    //new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       output:   {comments: false},
       compress: {warnings: false}
@@ -125,9 +125,10 @@ function getPlugins (urls) {
  * @param options {{
  *   entry:  string|[]
  *   output: {
- *     publicPath: string
- *     path:       string
- *     filename:   string
+ *     path:          string
+ *     publicPath:    string
+ *     filename:      string
+ *     chunkFilename: string
  *   }
  * }}
  * @param files {{
@@ -156,18 +157,18 @@ function WebPacker (options, files) {
     path:          null,
     publicPath:    '/' + files.urls.js + '/',
     filename:      files.urls.js + '/[name].js',
-    chunkFilename: files.urls.js + '/[id].js'
+    chunkFilename: files.urls.js + '/[name].js'
   };
 
   // Fill any required values for `output` with defaults if omitted
-  options.output = Object.keys(defaultOutputs).reduce((output, key) => {
-    output[key] = output[key] || defaultOutputs[key];
+  options.output = Object.keys(defaultOutputs).reduce((outputs, key) => {
+    outputs[key] = outputs[key] || defaultOutputs[key];
 
-    if (output[key] === null) {
+    if (outputs[key] === null) {
       throw new Error(`output.${key} may not be omitted`);
     }
 
-    return output;
+    return outputs;
   }, options.output);
 
   return Object.assign({

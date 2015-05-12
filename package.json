@@ -1,26 +1,22 @@
 {
   "name": "@oliverturner/feei-webpacker",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
-  "version": "1.0.45",
+  "version": "1.0.50",
   "author": "Oliver Turner, FEEI",
   "bugs": {
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
   },
   "dependencies": {
-    "babel": "^5.2.16",
+    "babel": "^5.2.17",
     "babel-plugin-object-assign": "^1.1.0",
     "find-root": "^0.1.1"
   },
   "devDependencies": {
-    "css-loader": "^0.12.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",
     "gulp-bump": "^0.3.0",
     "gulp-data": "^1.2.0",
-    "gulp-git": "^1.2.1",
-    "postcss-loader": "^0.4.3",
-    "sass-loader": "^0.6.0",
-    "style-loader": "^0.12.2"
+    "gulp-git": "^1.2.3"
   },
   "homepage": "https://github.com/codedsignal/feei-webpacker#readme",
   "keywords": [
@@ -36,12 +32,11 @@
     "css-loader": "^0.12.0",
     "expose-loader": "^0.6.0",
     "extract-text-webpack-plugin": "^0.7.0",
-    "node-sass": "^2.1.1",
-    "postcss-loader": "^0.4.1",
+    "postcss-loader": "^0.4.3",
     "react": "^0.13.2",
     "react-hot-loader": "^1.2.5",
-    "sass-loader": "^0.6.0",
-    "style-loader": "^0.12.1",
+    "sass-loader": "jtangelder/sass-loader",
+    "style-loader": "^0.12.2",
     "webpack": "^1.8.11"
   },
   "repository": {
@@ -49,9 +44,9 @@
     "url": "git+https://github.com/codedsignal/feei-webpacker.git"
   },
   "scripts": {
-    "test": "eslint ./src",
     "docs": "docco src/**/*.js",
     "prepublish": "npm test && npm run docs && gulp publish",
-    "start": "gulp"
+    "start": "gulp",
+    "test": "eslint ./src"
   }
 }

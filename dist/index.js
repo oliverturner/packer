@@ -35,33 +35,37 @@ var defs = {
   }
 };
 
-function getExtractLoader(ret, loader) {
+function getPostLoader(loader) {
   var parts = undefined,
       module = undefined,
-      suffix = undefined;
+      suffix = undefined,
+      splitter = undefined;
 
   parts = loader.split('?');
   module = parts[0];
   suffix = parts[1] || '';
+  splitter = suffix.length ? '?' : '';
 
-  switch (loader) {
-    case 'style':
-      break;
-
-    default:
-      ret.push(module + '-loader?' + suffix);
-      break;
-  }
-  return ret;
+  return '' + module + '-loader' + splitter + '' + suffix;
 }
 
+// Return an array of loaders for the various file types
+// In production we remove the ReactHotLoader and Sass plugins
+/**
+ * @param paths {{
+ *   sass: string
+ * }}
+ * @returns {Array}
+ */
 function getLoaders(paths) {
   var loaders = undefined,
+      postLoaders = undefined,
       sassLoaders = undefined,
       extractLoaders = undefined;
 
-  sassLoaders = ['style', 'css', 'postcss', 'sass?includePaths[]=' + paths.sass];
-  extractLoaders = sassLoaders.reduce(getExtractLoader, []).join('!');
+  postLoaders = ['css', 'postcss', 'sass?includePaths[]=' + paths.sass];
+  sassLoaders = ['style'].concat(postLoaders);
+  extractLoaders = postLoaders.map(getPostLoader).join('!');
 
   loaders = {
     json: {
@@ -88,7 +92,7 @@ function getLoaders(paths) {
     loaders = _extends(loaders, {
       sass: {
         test: /\.scss$/,
-        loader: _extractTextWebpackPlugin2['default'].extract(extractLoaders)
+        loader: _extractTextWebpackPlugin2['default'].extract('style-loader', extractLoaders)
       },
       jsx: {
         test: /\.jsx?$/,
@@ -98,25 +102,29 @@ function getLoaders(paths) {
     });
   }
 
-  return Object.keys(loaders).reduce(function (ret, key) {
-    ret.push(loaders[key]);
-
-    return ret;
-  }, []);
+  return Object.keys(loaders).map(function (key) {
+    return loaders[key];
+  });
 }
 
 function getPlugins(urls) {
   var defaults = undefined,
       development = undefined,
-      production = undefined;
+      production = undefined,
+      commonsChunk = undefined;
+
+  commonsChunk = new _webpack2['default'].optimize.CommonsChunkPlugin('commons', '' + urls.js + '/commons.js');
 
   defaults = [new _webpack2['default'].DefinePlugin(defs), new _webpack2['default'].NoErrorsPlugin()];
 
-  development = [new _webpack2['default'].optimize.CommonsChunkPlugin('commons', '' + urls.js + '/commons.js'), new _webpack2['default'].HotModuleReplacementPlugin()];
+  development = [commonsChunk, new _webpack2['default'].HotModuleReplacementPlugin()];
 
-  production = [new _extractTextWebpackPlugin2['default']('' + urls.css + '/[name].css', {
+  production = [commonsChunk, new _extractTextWebpackPlugin2['default']('' + urls.css + '/[name].css', {
     allChunks: true
-  }), new _webpack2['default'].optimize.OccurenceOrderPlugin(), new _webpack2['default'].optimize.DedupePlugin(), new _webpack2['default'].optimize.UglifyJsPlugin({
+  }),
+  //new webpack.optimize.OccurenceOrderPlugin(),
+  //new webpack.optimize.DedupePlugin(),
+  new _webpack2['default'].optimize.UglifyJsPlugin({
     output: { comments: false },
     compress: { warnings: false }
   })];
@@ -137,9 +145,10 @@ function getPlugins(urls) {
  * @param options {{
  *   entry:  string|[]
  *   output: {
- *     publicPath: string
- *     path:       string
- *     filename:   string
+ *     path:          string
+ *     publicPath:    string
+ *     filename:      string
+ *     chunkFilename: string
  *   }
  * }}
  * @param files {{
@@ -168,18 +177,18 @@ function WebPacker(options, files) {
     path: null,
     publicPath: '/' + files.urls.js + '/',
     filename: files.urls.js + '/[name].js',
-    chunkFilename: files.urls.js + '/[id].js'
+    chunkFilename: files.urls.js + '/[name].js'
   };
 
   // Fill any required values for `output` with defaults if omitted
-  options.output = Object.keys(defaultOutputs).reduce(function (output, key) {
-    output[key] = output[key] || defaultOutputs[key];
+  options.output = Object.keys(defaultOutputs).reduce(function (outputs, key) {
+    outputs[key] = outputs[key] || defaultOutputs[key];
 
-    if (output[key] === null) {
+    if (outputs[key] === null) {
       throw new Error('output.' + key + ' may not be omitted');
     }
 
-    return output;
+    return outputs;
   }, options.output);
 
   return _extends({

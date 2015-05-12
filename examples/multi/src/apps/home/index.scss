@@ -1,0 +1,6 @@
+@import 'imports';
+@import 'main';
+
+.home {
+  color: map_get($tints, brand);
+}
