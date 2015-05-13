@@ -1,9 +1,9 @@
-function getDevServer (port, addr = 'localhost') {
+function getDevServer (port, host = 'localhost') {
   let url;
 
-  url  = `http://${addr}:${port}`;
+  url  = `http://${host}:${port}`;
 
-  return {addr, port, url};
+  return {host, port, url};
 }
 
 export default getDevServer;
