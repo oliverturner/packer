@@ -4,13 +4,13 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 function getDevServer(port) {
-  var addr = arguments[1] === undefined ? 'localhost' : arguments[1];
+  var host = arguments[1] === undefined ? 'localhost' : arguments[1];
 
   var url = undefined;
 
-  url = 'http://' + addr + ':' + port;
+  url = 'http://' + host + ':' + port;
 
-  return { addr: addr, port: port, url: url };
+  return { host: host, port: port, url: url };
 }
 
 exports['default'] = getDevServer;
