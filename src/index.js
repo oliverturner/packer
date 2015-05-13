@@ -4,7 +4,8 @@ import webpack from 'webpack';
 import autoprefixer from 'autoprefixer-core';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import packEntries from './utils/packEntries';
+import getEntries from './utils/getEntries';
+import getDevServer from './utils/getDevServer';
 
 const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
@@ -190,4 +191,4 @@ function WebPacker (options, files) {
 
 export default WebPacker;
 
-export { packEntries };
+export { getEntries, getDevServer };
