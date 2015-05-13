@@ -3,7 +3,7 @@ function getDevServer (port, addr = 'localhost') {
 
   url  = `http://${addr}:${port}`;
 
-  return {addr, port, url}
+  return {addr, port, url};
 }
 
 export default getDevServer;

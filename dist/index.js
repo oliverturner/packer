@@ -22,9 +22,13 @@ var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 var _extractTextWebpackPlugin2 = _interopRequireDefault(_extractTextWebpackPlugin);
 
-var _utilsPackEntries = require('./utils/packEntries');
+var _utilsGetEntries = require('./utils/getEntries');
 
-var _utilsPackEntries2 = _interopRequireDefault(_utilsPackEntries);
+var _utilsGetEntries2 = _interopRequireDefault(_utilsGetEntries);
+
+var _utilsGetDevServer = require('./utils/getDevServer');
+
+var _utilsGetDevServer2 = _interopRequireDefault(_utilsGetDevServer);
 
 var env = process.env.NODE_ENV || 'development';
 var isProd = env === 'production';
@@ -209,4 +213,5 @@ function WebPacker(options, files) {
 }
 
 exports['default'] = WebPacker;
-exports.packEntries = _utilsPackEntries2['default'];
+exports.getEntries = _utilsGetEntries2['default'];
+exports.getDevServer = _utilsGetDevServer2['default'];
