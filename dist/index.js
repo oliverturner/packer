@@ -1,3 +1,5 @@
+// Return a Webpack config
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -7,8 +9,6 @@ Object.defineProperty(exports, '__esModule', {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-// Return a Webpack config
 
 var _webpack = require('webpack');
 
@@ -63,7 +63,7 @@ function getLoaders(paths) {
       sassLoaders = undefined,
       extractLoaders = undefined;
 
-  postLoaders = ['css', 'postcss', 'sass?includePaths[]=' + paths.sass];
+  postLoaders = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + paths.sass];
   sassLoaders = ['style'].concat(postLoaders);
   extractLoaders = postLoaders.map(getPostLoader).join('!');
 

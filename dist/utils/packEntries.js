@@ -1,3 +1,7 @@
+// Auto-configures entrypoints for multi-page apps
+//
+// In conjunction with the CommonsChunkPlugin produces optimal filesizes
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5,10 +9,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-// Auto-configures entrypoints for multi-page apps
-//
-// In conjunction with the CommonsChunkPlugin produces optimal filesizes
 
 var _fs = require('fs');
 

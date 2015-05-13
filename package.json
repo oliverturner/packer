@@ -1,22 +1,34 @@
 {
   "name": "@oliverturner/feei-webpacker",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
-  "version": "1.0.50",
+  "version": "1.0.52",
   "author": "Oliver Turner, FEEI",
   "bugs": {
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
   },
   "dependencies": {
-    "babel": "^5.2.17",
+    "babel": "^5.3.1",
     "babel-plugin-object-assign": "^1.1.0",
     "find-root": "^0.1.1"
   },
   "devDependencies": {
+    "@oliverturner/sass-loader": "^1.0.1",
+    "autoprefixer-core": "^5.1.11",
+    "babel-core": "^5.3.1",
+    "babel-loader": "^5.0.0",
+    "css-loader": "^0.12.0",
+    "expose-loader": "^0.6.0",
+    "extract-text-webpack-plugin": "^0.8.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",
     "gulp-bump": "^0.3.0",
     "gulp-data": "^1.2.0",
-    "gulp-git": "^1.2.3"
+    "gulp-git": "^1.2.3",
+    "node-sass": "^3.0.0",
+    "postcss-loader": "^0.4.3",
+    "react-hot-loader": "^1.2.7",
+    "style-loader": "^0.12.2",
+    "webpack": "^1.9.5"
   },
   "homepage": "https://github.com/codedsignal/feei-webpacker#readme",
   "keywords": [
@@ -27,17 +39,15 @@
   "main": "dist/index.js",
   "peerDependencies": {
     "autoprefixer-core": "^5.1.11",
-    "babel-core": "^5.2.16",
+    "babel-core": "^5.3.1",
     "babel-loader": "^5.0.0",
     "css-loader": "^0.12.0",
     "expose-loader": "^0.6.0",
-    "extract-text-webpack-plugin": "^0.7.0",
+    "extract-text-webpack-plugin": "^0.8.0",
     "postcss-loader": "^0.4.3",
-    "react": "^0.13.2",
-    "react-hot-loader": "^1.2.5",
-    "sass-loader": "jtangelder/sass-loader",
+    "react-hot-loader": "^1.2.7",
     "style-loader": "^0.12.2",
-    "webpack": "^1.8.11"
+    "webpack": "^1.9.5"
   },
   "repository": {
     "type": "git",
@@ -45,8 +55,10 @@
   },
   "scripts": {
     "docs": "docco src/**/*.js",
-    "prepublish": "npm test && npm run docs && gulp publish",
+    "old-prepublish": "npm test && npm run docs && gulp publish",
+    "prepublish": "npm test && npm run docs",
     "start": "gulp",
-    "test": "eslint ./src"
+    "test": "eslint ./src",
+    "patch-release": "npm version patch && npm publish && git push --follow-tags"
   }
 }

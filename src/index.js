@@ -37,7 +37,7 @@ function getPostLoader (loader) {
 function getLoaders (paths) {
   let loaders, postLoaders, sassLoaders, extractLoaders;
 
-  postLoaders    = ['css', 'postcss', 'sass?includePaths[]=' + paths.sass];
+  postLoaders    = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + paths.sass];
   sassLoaders    = ['style'].concat(postLoaders);
   extractLoaders = postLoaders.map(getPostLoader).join('!');
 
