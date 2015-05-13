@@ -12,9 +12,7 @@ import fs from 'fs';
  */
 function extract (appDir, host = null, file = 'entry.jsx') {
   // Create a `commons` entry for code shared by components
-  let extras = {
-    commons: []
-  };
+  let extras = {};
 
   // In development mode an additional 'dev' entry point is injected
   // (includes hot code loading and development server code)
@@ -39,7 +37,6 @@ function extract (appDir, host = null, file = 'entry.jsx') {
   // becomes...
   //```
   // {
-  //   commons: [],
   //   about:   apps/about/entry.jsx,
   //   home:    apps/home/entry.jsx,
   //   dev:     [ // Omitted in production

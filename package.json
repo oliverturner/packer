@@ -21,7 +21,7 @@
     "extract-text-webpack-plugin": "^0.8.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",
-    "node-sass": "^3.0.0",
+    "node-sass": "^3.1.0",
     "postcss-loader": "^0.4.3",
     "react-hot-loader": "^1.2.7",
     "style-loader": "^0.12.2",
@@ -52,13 +52,13 @@
   },
   "scripts": {
     "docs": "docco src/**/*.js",
-    "prepublish": "npm run build && npm test && npm run docs",
+    "prepublish": "npm run build && npm test",
     "git-commit": "git add -A . && git commit -a -m 'publish update'",
     "git-push": "git push && git checkout master",
     "git-deploy": "npm run git-commit && npm run git-push",
     "patch-release": "npm run git-deploy && npm version patch && npm publish && git push --follow-tags",
+    "build": "gulp build && npm run docs",
     "test": "eslint ./src",
-    "build": "gulp build",
     "start": "gulp"
   }
 }

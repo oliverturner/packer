@@ -5,7 +5,7 @@ var src = 'src/**/*.js';
 
 gulp.task('build', function () {
   return gulp.src(src)
-    //.pipe(babel({plugins: ['object-assign']}))
+    .pipe(babel())
     .pipe(gulp.dest('./dist'));
 });
 
