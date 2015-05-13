@@ -21,9 +21,6 @@
     "extract-text-webpack-plugin": "^0.8.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",
-    "gulp-bump": "^0.3.0",
-    "gulp-data": "^1.2.0",
-    "gulp-git": "^1.2.3",
     "node-sass": "^3.0.0",
     "postcss-loader": "^0.4.3",
     "react-hot-loader": "^1.2.7",
@@ -55,10 +52,13 @@
   },
   "scripts": {
     "docs": "docco src/**/*.js",
-    "old-prepublish": "npm test && npm run docs && gulp publish",
-    "prepublish": "npm test && npm run docs",
-    "start": "gulp",
+    "prepublish": "npm run build && npm test && npm run docs",
+    "git-commit": "git add -A . && git commit -a -m 'publish update'",
+    "git-push": "git push && git checkout master",
+    "git-deploy": "npm run git-commit && npm run git-push",
+    "patch-release": "npm run git-deploy && npm version patch && npm publish && git push --follow-tags",
     "test": "eslint ./src",
-    "patch-release": "npm version patch && npm publish && git push --follow-tags"
+    "build": "gulp build",
+    "start": "gulp"
   }
 }

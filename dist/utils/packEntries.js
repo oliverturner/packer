@@ -2,17 +2,7 @@
 //
 // In conjunction with the CommonsChunkPlugin produces optimal filesizes
 
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _fs = require('fs');
-
-var _fs2 = _interopRequireDefault(_fs);
+import fs from 'fs';
 
 /**
  * @param {string} appDir
@@ -20,19 +10,19 @@ var _fs2 = _interopRequireDefault(_fs);
  * @param {string} [host]
  * @returns {*}
  */
-function extract(appDir) {
-  var host = arguments[1] === undefined ? null : arguments[1];
-  var file = arguments[2] === undefined ? 'entry.jsx' : arguments[2];
-
+function extract (appDir, host = null, file = 'entry.jsx') {
   // Create a `commons` entry for code shared by components
-  var extras = {
+  let extras = {
     commons: []
   };
 
   // In development mode an additional 'dev' entry point is injected
   // (includes hot code loading and development server code)
   if (host) {
-    extras.dev = ['webpack-dev-server/client?' + host, 'webpack/hot/dev-server'];
+    extras.dev = [
+      'webpack-dev-server/client?' + host,
+      'webpack/hot/dev-server'
+    ];
   }
 
   // Loop through child modules of appDir to create an object used by Webpack as
@@ -58,20 +48,18 @@ function extract(appDir) {
   //   ],
   // }
   //```
-  return _fs2['default'].readdirSync(appDir).reduce(function (ret, key) {
-    var dir = undefined,
-        stat = undefined;
+  return fs.readdirSync(appDir).reduce((ret, key) => {
+    let dir, stat;
 
-    dir = '' + appDir + '/' + key;
-    stat = _fs2['default'].statSync(dir);
+    dir  = `${appDir}/${key}`;
+    stat = fs.statSync(dir);
 
     if (stat.isDirectory()) {
-      ret[key] = '' + dir + '/' + file;
+      ret[key] = `${dir}/${file}`;
     }
 
     return ret;
   }, extras);
 }
 
-exports['default'] = extract;
-module.exports = exports['default'];
+export default extract;
