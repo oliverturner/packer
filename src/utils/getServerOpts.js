@@ -1,4 +1,4 @@
-import {Map} from 'immutable'
+import {Map} from 'immutable';
 
 const requiredKeys = ['host', 'port'];
 
@@ -22,7 +22,7 @@ function getServerOpts (options) {
     }
   });
 
-  options = options.set('url', `http://${options.host}:${options.port}`);
+  options = options.set('url', `http://${options.get('host')}:${options.get('port')}`);
 
   return options;
 }

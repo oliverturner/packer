@@ -22,6 +22,12 @@ var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 var _extractTextWebpackPlugin2 = _interopRequireDefault(_extractTextWebpackPlugin);
 
+var _utilsGetLoader = require('./utils/getLoader');
+
+var _utilsGetLoader2 = _interopRequireDefault(_utilsGetLoader);
+
+// Exported utils
+
 var _utilsGetEntries = require('./utils/getEntries');
 
 var _utilsGetEntries2 = _interopRequireDefault(_utilsGetEntries);
@@ -39,20 +45,6 @@ var defs = {
   }
 };
 
-function getPostLoader(loader) {
-  var parts = undefined,
-      module = undefined,
-      suffix = undefined,
-      splitter = undefined;
-
-  parts = loader.split('?');
-  module = parts[0];
-  suffix = parts[1] || '';
-  splitter = suffix.length ? '?' : '';
-
-  return '' + module + '-loader' + splitter + '' + suffix;
-}
-
 // Return an array of loaders for the various file types
 // In production we remove the ReactHotLoader and Sass plugins
 /**
@@ -63,13 +55,10 @@ function getPostLoader(loader) {
  */
 function getLoaders(paths) {
   var loaders = undefined,
-      postLoaders = undefined,
-      sassLoaders = undefined,
-      extractLoaders = undefined;
+      sassLoaders = undefined;
 
-  postLoaders = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + paths.sass];
-  sassLoaders = ['style'].concat(postLoaders);
-  extractLoaders = postLoaders.map(getPostLoader).join('!');
+  sassLoaders = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + paths.sass];
+  sassLoaders = sassLoaders.map(_utilsGetLoader2['default']).join('!');
 
   loaders = {
     json: {
@@ -82,7 +71,7 @@ function getLoaders(paths) {
     },
     sass: {
       test: /\.scss$/,
-      loaders: sassLoaders
+      loader: sassLoaders
     },
     jsx: {
       test: /\.jsx?$/,
@@ -96,7 +85,7 @@ function getLoaders(paths) {
     loaders = _extends(loaders, {
       sass: {
         test: /\.scss$/,
-        loader: _extractTextWebpackPlugin2['default'].extract('style-loader', extractLoaders)
+        loader: _extractTextWebpackPlugin2['default'].extract('style-loader', sassLoaders)
       },
       jsx: {
         test: /\.jsx?$/,

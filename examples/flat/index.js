@@ -1,7 +1,17 @@
-var WebPacker = require('../../dist').default;
+var Immutable = require('immutable');
 
-var isDev = process.env.NODE_ENV === 'development';
-var host = isDev ? 'http://localhost:3001' : null;
+var WebPacker = require('../../dist').default;
+var getServerOpts = require('../../dist/utils/getServerOpts');
+
+var isDev     = process.env.NODE_ENV !== 'production';
+
+var server = getServerOpts(Immutable.Map({
+  host: 'localhost',
+  port: 3001
+}));
+
+var entryHost  = isDev ? server.get('url') : null;
+var publicPath = isDev ? server.get('url') + '/' : '/';
 
 var refs = {
   srcs: {
@@ -17,7 +27,8 @@ var refs = {
 var config = new WebPacker({
   entry:  refs.srcs.js,
   output: {
-    path: __dirname + '/out'
+    path:       __dirname + '/out',
+    publicPath: publicPath
   }
 }, refs);
 

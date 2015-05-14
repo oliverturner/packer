@@ -4,6 +4,9 @@ import webpack from 'webpack';
 import autoprefixer from 'autoprefixer-core';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
+import getLoader from './utils/getLoader';
+
+// Exported utils
 import getEntries from './utils/getEntries';
 import getServerOpts from './utils/getServerOpts';
 
@@ -16,17 +19,6 @@ let defs = {
   }
 };
 
-function getPostLoader (loader) {
-  let parts, module, suffix, splitter;
-
-  parts    = loader.split('?');
-  module   = parts[0];
-  suffix   = parts[1] || '';
-  splitter = suffix.length ? '?' : '';
-
-  return `${module}-loader${splitter}${suffix}`;
-}
-
 // Return an array of loaders for the various file types
 // In production we remove the ReactHotLoader and Sass plugins
 /**
@@ -36,11 +28,10 @@ function getPostLoader (loader) {
  * @returns {Array}
  */
 function getLoaders (paths) {
-  let loaders, postLoaders, sassLoaders, extractLoaders;
+  let loaders, sassLoaders;
 
-  postLoaders    = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + paths.sass];
-  sassLoaders    = ['style'].concat(postLoaders);
-  extractLoaders = postLoaders.map(getPostLoader).join('!');
+  sassLoaders = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + paths.sass];
+  sassLoaders = sassLoaders.map(getLoader).join('!');
 
   loaders = {
     json:   {
@@ -52,8 +43,8 @@ function getLoaders (paths) {
       loader: 'expose?React'
     },
     sass:   {
-      test:    /\.scss$/,
-      loaders: sassLoaders
+      test:   /\.scss$/,
+      loader: sassLoaders
     },
     jsx:    {
       test:    /\.jsx?$/,
@@ -67,7 +58,7 @@ function getLoaders (paths) {
     loaders = Object.assign(loaders, {
       sass: {
         test:   /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', extractLoaders)
+        loader: ExtractTextPlugin.extract('style-loader', sassLoaders)
       },
       jsx:  {
         test:    /\.jsx?$/,

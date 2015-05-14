@@ -1,8 +1,6 @@
 require('./index.scss');
 
 module.exports = function () {
-  console.log('index');
-
   // named chunk: alpha
   require.ensure(['a'], function (require) {
     require('a');

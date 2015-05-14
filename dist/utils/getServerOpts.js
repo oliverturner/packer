@@ -3,6 +3,9 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+var _immutable = require('immutable');
+
 var requiredKeys = ['host', 'port'];
 
 // `options` is an immutable map
@@ -15,13 +18,17 @@ var requiredKeys = ['host', 'port'];
  * }}
  */
 function getServerOpts(options) {
+  if (!_immutable.Map.isMap(options)) {
+    throw new Error('options must be an instance of Immutable Map');
+  }
+
   requiredKeys.forEach(function (key) {
     if (!options.get(key)) {
       throw new Error('Missing value for options.' + key);
     }
   });
 
-  options = options.set('url', 'http://' + options.host + ':' + options.port);
+  options = options.set('url', 'http://' + options.get('host') + ':' + options.get('port'));
 
   return options;
 }
