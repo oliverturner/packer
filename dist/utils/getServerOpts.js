@@ -1,28 +1,28 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var requiredKeys = [host, port];
+var requiredKeys = ['host', 'port'];
 
 /**
- * @param {} options {{
+ * @param options {{
  *   host: string,
  *   port: int
  *   url:  [string]
  * }}
  */
-
-exports["default"] = function (options) {
+function getServerOpts(options) {
   requiredKeys.forEach(function (key) {
     if (!options[key]) {
-      throw new Error("Missing value for options." + key);
+      throw new Error('Missing value for options.' + key);
     }
   });
 
-  options.url = "http://" + options.host + ":" + options.port;
+  options.url = 'http://' + options.host + ':' + options.port;
 
   return options;
-};
+}
 
-module.exports = exports["default"];
+exports['default'] = getServerOpts;
+module.exports = exports['default'];
