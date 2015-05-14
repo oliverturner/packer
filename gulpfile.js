@@ -4,17 +4,20 @@ var rimraf = require('rimraf');
 
 var src = 'src/**/*.js';
 
-gulp.task('clean', function (done) {
-  rimraf('./dist', done);
-});
-
-gulp.task('compile', function () {
+function compile () {
   return gulp.src(src)
     .pipe(babel())
     .pipe(gulp.dest('./dist'));
-});
+}
 
-gulp.task('build', ['clean']);
+gulp.task('compile', compile);
+
+gulp.task('build', function(done){
+  rimraf('./dist', function () {
+    compile();
+    done();
+  });
+});
 
 gulp.task('default', ['build'], function () {
   return gulp.watch([src], ['compile']);
