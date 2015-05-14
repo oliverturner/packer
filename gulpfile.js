@@ -12,7 +12,7 @@ function compile () {
 
 gulp.task('compile', compile);
 
-gulp.task('build', function(done){
+gulp.task('build', function (done) {
   rimraf('./dist', function () {
     compile();
     done();

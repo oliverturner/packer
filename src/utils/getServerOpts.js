@@ -1,20 +1,22 @@
-const requiredKeys = [host, port];
+const requiredKeys = ['host', 'port'];
 
 /**
- * @param {} options {{
+ * @param options {{
  *   host: string,
  *   port: int
  *   url:  [string]
  * }}
  */
-export default function (options) {
+function getServerOpts (options) {
   requiredKeys.forEach(key => {
-    if(!options[key]) {
+    if (!options[key]) {
       throw new Error(`Missing value for options.${key}`);
     }
   });
 
-  options.url  = `http://${options.host}:${options.port}`;
+  options.url = `http://${options.host}:${options.port}`;
 
   return options;
 }
+
+export default getServerOpts;
