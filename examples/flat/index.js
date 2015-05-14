@@ -1,11 +1,10 @@
 var WebPacker = require('../../dist').default;
-var packEntries = require('../../dist/utils/packEntries');
 
 var isDev = process.env.NODE_ENV === 'development';
 var host = isDev ? 'http://localhost:3001' : null;
 
 var refs = {
-  paths: {
+  srcs: {
     sass: __dirname + '/src/sass',
     js:   __dirname + '/src/apps'
   },
@@ -16,7 +15,7 @@ var refs = {
 };
 
 var config = new WebPacker({
-  entry:  __dirname + '/src/apps',
+  entry:  refs.srcs.js,
   output: {
     path: __dirname + '/out'
   }

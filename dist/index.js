@@ -26,9 +26,9 @@ var _utilsGetEntries = require('./utils/getEntries');
 
 var _utilsGetEntries2 = _interopRequireDefault(_utilsGetEntries);
 
-var _utilsGetDevServer = require('./utils/getDevServer');
+var _utilsGetServerOpts = require('./utils/getServerOpts');
 
-var _utilsGetDevServer2 = _interopRequireDefault(_utilsGetDevServer);
+var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
 
 var env = process.env.NODE_ENV || 'development';
 var isProd = env === 'production';
@@ -197,7 +197,7 @@ function WebPacker(options, files) {
 
   return _extends({
     module: {
-      loaders: getLoaders(files.paths)
+      loaders: getLoaders(files.srcs)
     },
 
     plugins: getPlugins(files.urls),
@@ -214,4 +214,4 @@ function WebPacker(options, files) {
 
 exports['default'] = WebPacker;
 exports.getEntries = _utilsGetEntries2['default'];
-exports.getDevServer = _utilsGetDevServer2['default'];
+exports.getServerOpts = _utilsGetServerOpts2['default'];

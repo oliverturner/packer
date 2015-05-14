@@ -5,7 +5,7 @@ import autoprefixer from 'autoprefixer-core';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 import getEntries from './utils/getEntries';
-import getDevServer from './utils/getDevServer';
+import getServerOpts from './utils/getServerOpts';
 
 const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
@@ -174,7 +174,7 @@ function WebPacker (options, files) {
 
   return Object.assign({
     module: {
-      loaders: getLoaders(files.paths)
+      loaders: getLoaders(files.srcs)
     },
 
     plugins: getPlugins(files.urls),
@@ -191,4 +191,4 @@ function WebPacker (options, files) {
 
 export default WebPacker;
 
-export { getEntries, getDevServer };
+export { getEntries, getServerOpts };
