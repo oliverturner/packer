@@ -1,4 +1,4 @@
-var WebPacker = require('../../dist').default;
+var WebPacker  = require('../../dist').default;
 var getEntries = require('../../dist/utils/getEntries');
 
 var isDev = process.env.NODE_ENV === 'development';
