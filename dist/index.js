@@ -1,4 +1,3 @@
-// Return a Webpack config
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -8,6 +7,10 @@ Object.defineProperty(exports, '__esModule', {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+// Return a Webpack config
 
 var _autoprefixerCore = require('autoprefixer-core');
 
@@ -20,6 +23,10 @@ var _utilsGetLoaders2 = _interopRequireDefault(_utilsGetLoaders);
 var _utilsGetPlugins = require('./utils/getPlugins');
 
 var _utilsGetPlugins2 = _interopRequireDefault(_utilsGetPlugins);
+
+var _utilsUpdateOutput = require('./utils/updateOutput');
+
+var _utilsUpdateOutput2 = _interopRequireDefault(_utilsUpdateOutput);
 
 // Exported utils
 
@@ -34,15 +41,23 @@ var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
 var env = process.env.NODE_ENV || 'development';
 var isProd = env === 'production';
 
+function validateOptions(options, requiredKeys) {
+  if (!options) {
+    throw new Error('options may not be omitted');
+  }
+
+  requiredKeys.map(function (key) {
+    if (!options[key]) throw new Error('options.' + key + ' may not be omitted');
+  });
+}
+
 // Export
 //-----------------------------------------------
 // Options:
 // * entry:     file, directory or array of entry points
 //
-// Files:
+// * jsUrl: path to JS files relative to webRoot
 // * srcs:  absolute paths to jsx, scss, etc
-// * paths: absolute paths to destination dirs
-// * urls:  paths to assets relative to webRoot
 /**
  * @param options {{
  *   entry:  string|[]
@@ -72,34 +87,16 @@ var isProd = env === 'production';
  *   postcss: {}
  * }}
  */
-function WebPacker(options, jsUrl, cssUrl, sassPath) {
-  var defaultOutputs = {
-    path: null,
-    publicPath: '/' + jsUrl + '/',
-    filename: jsUrl + '/[name].js',
-    chunkFilename: jsUrl + '/[name].js'
-  };
 
-  if (!options) {
-    throw new Error('options may not be omitted');
-  }
+var WebPacker = function WebPacker(options, jsUrl, cssUrl, sassPath) {
+  _classCallCheck(this, WebPacker);
 
-  if (!options.output) {
-    throw new Error('options.output may not be omitted');
-  }
+  validateOptions(options, ['entry', 'output']);
 
-  // Fill any required values for `output` with defaults if omitted
-  options.output = Object.keys(defaultOutputs).reduce(function (outputs, key) {
-    outputs[key] = outputs[key] || defaultOutputs[key];
+  // Fill any missing optional values for `output` with defaults
+  options.output = (0, _utilsUpdateOutput2['default'])(options.output, jsUrl);
 
-    if (outputs[key] === null) {
-      throw new Error('output.' + key + ' may not be omitted');
-    }
-
-    return outputs;
-  }, options.output);
-
-  return _extends({
+  this.options = _extends({
     module: {
       loaders: (0, _utilsGetLoaders2['default'])(isProd, sassPath)
     },
@@ -114,7 +111,9 @@ function WebPacker(options, jsUrl, cssUrl, sassPath) {
       defaults: [_autoprefixerCore2['default']]
     }
   }, options);
-}
+
+  return this.options;
+};
 
 exports['default'] = WebPacker;
 exports.getEntries = _utilsGetEntries2['default'];
