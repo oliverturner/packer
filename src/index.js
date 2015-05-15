@@ -1,10 +1,9 @@
 // Return a Webpack config
-
-import webpack from 'webpack';
 import autoprefixer from 'autoprefixer-core';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import getLoader from './utils/getLoader';
+import getLoaders from './utils/getLoaders';
+import getPlugins from './utils/getPlugins';
+import updateOutput from './utils/updateOutput';
 
 // Exported utils
 import getEntries from './utils/getEntries';
@@ -13,95 +12,14 @@ import getServerOpts from './utils/getServerOpts';
 const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
 
-let defs = {
-  'process.env': {
-    NODE_ENV: JSON.stringify(env)
-  }
-};
-
-// Return an array of loaders for the various file types
-// In production we remove the ReactHotLoader and Sass plugins
-/**
- * @param paths {{
- *   sass: string
- * }}
- * @returns {Array}
- */
-function getLoaders (paths) {
-  let loaders, sassLoaders;
-
-  sassLoaders = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + paths.sass];
-  sassLoaders = sassLoaders.map(getLoader).join('!');
-
-  loaders = {
-    json:   {
-      test:    /\.json$/,
-      loaders: ['json']
-    },
-    expose: {
-      test:   require.resolve('react'),
-      loader: 'expose?React'
-    },
-    sass:   {
-      test:   /\.scss$/,
-      loader: sassLoaders
-    },
-    jsx:    {
-      test:    /\.jsx?$/,
-      exclude: /node_modules/,
-      loaders: ['react-hot', 'babel']
-    }
-  };
-
-  // Production overrides
-  if (isProd) {
-    loaders = Object.assign(loaders, {
-      sass: {
-        test:   /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', sassLoaders)
-      },
-      jsx:  {
-        test:    /\.jsx?$/,
-        exclude: /node_modules/,
-        loaders: ['babel']
-      }
-    });
+function validateOptions (options, requiredKeys) {
+  if (!options) {
+    throw new Error('options may not be omitted');
   }
 
-  return Object.keys(loaders).map(key => loaders[key]);
-}
-
-function getPlugins (urls) {
-  let defaults, development, production, commonsChunk;
-
-  commonsChunk = new webpack.optimize.CommonsChunkPlugin('commons', `${urls.js}/commons.js`);
-
-  defaults = [
-    new webpack.DefinePlugin(defs),
-    new webpack.NoErrorsPlugin()
-  ];
-
-  development = [
-    commonsChunk,
-    new webpack.HotModuleReplacementPlugin()
-  ];
-
-  production = [
-    commonsChunk,
-    new ExtractTextPlugin(`${urls.css}/[name].css`, {
-      allChunks: true
-    }),
-    //new webpack.optimize.OccurenceOrderPlugin(),
-    //new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      output:   {comments: false},
-      compress: {warnings: false}
-    })
-  ];
-
-  return (isProd)
-    ? defaults.concat(production)
-    : defaults.concat(development);
+  requiredKeys.map(key => {
+    if (!options[key]) throw new Error(`options.${key} may not be omitted`);
+  });
 }
 
 // Export
@@ -109,10 +27,8 @@ function getPlugins (urls) {
 // Options:
 // * entry:     file, directory or array of entry points
 //
-// Files:
+// * jsUrl: path to JS files relative to webRoot
 // * srcs:  absolute paths to jsx, scss, etc
-// * paths: absolute paths to destination dirs
-// * urls:  paths to assets relative to webRoot
 /**
  * @param options {{
  *   entry:  string|[]
@@ -123,11 +39,9 @@ function getPlugins (urls) {
  *     chunkFilename: string
  *   }
  * }}
- * @param files {{
- *   srcs:  {},
- *   paths: {},
- *   urls:  {}
- * }}
+ * @param {string} jsUrl
+ * @param {string} cssUrl
+ * @param {string} sassPath
  *
  * @returns {{
  *  entry:  string|[]
@@ -144,40 +58,31 @@ function getPlugins (urls) {
  *   postcss: {}
  * }}
  */
-function WebPacker (options, files) {
-  let defaultOutputs = {
-    path:          null,
-    publicPath:    '/' + files.urls.js + '/',
-    filename:      files.urls.js + '/[name].js',
-    chunkFilename: files.urls.js + '/[name].js'
-  };
+class WebPacker {
+  constructor (options, jsUrl, cssUrl, sassPath) {
+    validateOptions(options, ['entry', 'output']);
 
-  // Fill any required values for `output` with defaults if omitted
-  options.output = Object.keys(defaultOutputs).reduce((outputs, key) => {
-    outputs[key] = outputs[key] || defaultOutputs[key];
+    // Fill any missing optional values for `output` with defaults
+    options.output = updateOutput(options.output, jsUrl);
 
-    if (outputs[key] === null) {
-      throw new Error(`output.${key} may not be omitted`);
-    }
+    this.options = Object.assign({
+      module: {
+        loaders: getLoaders(isProd, sassPath)
+      },
 
-    return outputs;
-  }, options.output);
+      plugins: getPlugins(isProd, jsUrl, cssUrl),
 
-  return Object.assign({
-    module: {
-      loaders: getLoaders(files.srcs)
-    },
+      resolve: {
+        extensions: ['', '.js', '.jsx', '.json']
+      },
 
-    plugins: getPlugins(files.urls),
+      postcss: {
+        defaults: [autoprefixer]
+      }
+    }, options);
 
-    resolve: {
-      extensions: ['', '.js', '.jsx', '.json']
-    },
-
-    postcss: {
-      defaults: [autoprefixer]
-    }
-  }, options);
+    return this.options;
+  }
 }
 
 export default WebPacker;

@@ -1,15 +1,15 @@
-import {Map} from 'immutable';
-
 const requiredKeys = ['host', 'port'];
 
 // `options` is an immutable map
 // See [ImmutableJS](https://facebook.github.io/immutable-js/) for details
 /**
- * @param options {{
+ * @param {Map} options {{
  *   host: string,
  *   port: int
  *   url:  [string]
  * }}
+ *
+ * @returns {Map}
  */
 function getServerOpts (options) {
   if (!Map.isMap(options)) {

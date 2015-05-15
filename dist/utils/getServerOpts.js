@@ -3,22 +3,21 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-var _immutable = require('immutable');
-
 var requiredKeys = ['host', 'port'];
 
 // `options` is an immutable map
 // See [ImmutableJS](https://facebook.github.io/immutable-js/) for details
 /**
- * @param options {{
+ * @param {Map} options {{
  *   host: string,
  *   port: int
  *   url:  [string]
  * }}
+ *
+ * @returns {Map}
  */
 function getServerOpts(options) {
-  if (!_immutable.Map.isMap(options)) {
+  if (!Map.isMap(options)) {
     throw new Error('options must be an instance of Immutable Map');
   }
 

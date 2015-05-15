@@ -1,5 +1,4 @@
 // Return a Webpack config
-
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -10,21 +9,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _webpack = require('webpack');
-
-var _webpack2 = _interopRequireDefault(_webpack);
-
 var _autoprefixerCore = require('autoprefixer-core');
 
 var _autoprefixerCore2 = _interopRequireDefault(_autoprefixerCore);
 
-var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
+var _utilsGetLoaders = require('./utils/getLoaders');
 
-var _extractTextWebpackPlugin2 = _interopRequireDefault(_extractTextWebpackPlugin);
+var _utilsGetLoaders2 = _interopRequireDefault(_utilsGetLoaders);
 
-var _utilsGetLoader = require('./utils/getLoader');
+var _utilsGetPlugins = require('./utils/getPlugins');
 
-var _utilsGetLoader2 = _interopRequireDefault(_utilsGetLoader);
+var _utilsGetPlugins2 = _interopRequireDefault(_utilsGetPlugins);
 
 // Exported utils
 
@@ -38,92 +33,6 @@ var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
 
 var env = process.env.NODE_ENV || 'development';
 var isProd = env === 'production';
-
-var defs = {
-  'process.env': {
-    NODE_ENV: JSON.stringify(env)
-  }
-};
-
-// Return an array of loaders for the various file types
-// In production we remove the ReactHotLoader and Sass plugins
-/**
- * @param paths {{
- *   sass: string
- * }}
- * @returns {Array}
- */
-function getLoaders(paths) {
-  var loaders = undefined,
-      sassLoaders = undefined;
-
-  sassLoaders = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + paths.sass];
-  sassLoaders = sassLoaders.map(_utilsGetLoader2['default']).join('!');
-
-  loaders = {
-    json: {
-      test: /\.json$/,
-      loaders: ['json']
-    },
-    expose: {
-      test: require.resolve('react'),
-      loader: 'expose?React'
-    },
-    sass: {
-      test: /\.scss$/,
-      loader: sassLoaders
-    },
-    jsx: {
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loaders: ['react-hot', 'babel']
-    }
-  };
-
-  // Production overrides
-  if (isProd) {
-    loaders = _extends(loaders, {
-      sass: {
-        test: /\.scss$/,
-        loader: _extractTextWebpackPlugin2['default'].extract('style-loader', sassLoaders)
-      },
-      jsx: {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loaders: ['babel']
-      }
-    });
-  }
-
-  return Object.keys(loaders).map(function (key) {
-    return loaders[key];
-  });
-}
-
-function getPlugins(urls) {
-  var defaults = undefined,
-      development = undefined,
-      production = undefined,
-      commonsChunk = undefined;
-
-  commonsChunk = new _webpack2['default'].optimize.CommonsChunkPlugin('commons', '' + urls.js + '/commons.js');
-
-  defaults = [new _webpack2['default'].DefinePlugin(defs), new _webpack2['default'].NoErrorsPlugin()];
-
-  development = [commonsChunk, new _webpack2['default'].HotModuleReplacementPlugin()];
-
-  production = [commonsChunk, new _extractTextWebpackPlugin2['default']('' + urls.css + '/[name].css', {
-    allChunks: true
-  }),
-  //new webpack.optimize.OccurenceOrderPlugin(),
-  //new webpack.optimize.DedupePlugin(),
-  new _webpack2['default'].optimize.UglifyJsPlugin({
-    output: { comments: false },
-    compress: { warnings: false }
-  })];
-
-  return isProd ? defaults.concat(production) : defaults.concat(development);
-}
 
 // Export
 //-----------------------------------------------
@@ -144,11 +53,9 @@ function getPlugins(urls) {
  *     chunkFilename: string
  *   }
  * }}
- * @param files {{
- *   srcs:  {},
- *   paths: {},
- *   urls:  {}
- * }}
+ * @param {string} jsUrl
+ * @param {string} cssUrl
+ * @param {string} sassPath
  *
  * @returns {{
  *  entry:  string|[]
@@ -165,13 +72,21 @@ function getPlugins(urls) {
  *   postcss: {}
  * }}
  */
-function WebPacker(options, files) {
+function WebPacker(options, jsUrl, cssUrl, sassPath) {
   var defaultOutputs = {
     path: null,
-    publicPath: '/' + files.urls.js + '/',
-    filename: files.urls.js + '/[name].js',
-    chunkFilename: files.urls.js + '/[name].js'
+    publicPath: '/' + jsUrl + '/',
+    filename: jsUrl + '/[name].js',
+    chunkFilename: jsUrl + '/[name].js'
   };
+
+  if (!options) {
+    throw new Error('options may not be omitted');
+  }
+
+  if (!options.output) {
+    throw new Error('options.output may not be omitted');
+  }
 
   // Fill any required values for `output` with defaults if omitted
   options.output = Object.keys(defaultOutputs).reduce(function (outputs, key) {
@@ -186,10 +101,10 @@ function WebPacker(options, files) {
 
   return _extends({
     module: {
-      loaders: getLoaders(files.srcs)
+      loaders: (0, _utilsGetLoaders2['default'])(isProd, sassPath)
     },
 
-    plugins: getPlugins(files.urls),
+    plugins: (0, _utilsGetPlugins2['default'])(isProd, jsUrl, cssUrl),
 
     resolve: {
       extensions: ['', '.js', '.jsx', '.json']

@@ -4,23 +4,22 @@ var getEntries = require('../../dist/utils/getEntries');
 var isDev = process.env.NODE_ENV === 'development';
 var host = isDev ? 'http://localhost:3001' : null;
 
-var refs = {
-  srcs: {
-    sass: __dirname + '/src/sass',
-    js:   __dirname + '/src/apps'
-  },
-  urls:  {
-    js:  'scripts',
-    css: 'styles'
-  }
+var srcs = {
+  sass: __dirname + '/src/sass',
+  js:   __dirname + '/src/apps'
+};
+
+var urls = {
+  js:  'scripts',
+  css: 'styles'
 };
 
 var config = new WebPacker({
-  entry:  getEntries(refs.srcs.js, host),
+  entry:  getEntries(srcs.js, host),
   output: {
     path: __dirname + '/out'
   }
-}, refs);
+}, urls.js, urls.css, srcs.sass);
 
 console.log(JSON.stringify(config, null, 2));
 
