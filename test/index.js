@@ -3,7 +3,8 @@ import { expect } from 'chai';
 import WebPacker from '../src';
 
 describe('WebPacker', () => {
-  describe('Enforced configuration', () => {
+
+  describe('Configuration', () => {
     describe('when missing options', () => {
       it('should throw an error', () => {
         expect(() => new WebPacker()).to.throw(Error);
@@ -37,6 +38,23 @@ describe('WebPacker', () => {
             path: null
           }
         })).to.throw(Error);
+      });
+    });
+  });
+
+  describe('Output', () => {
+    describe('Supplied with valid parameters', () => {
+      it('return an object with expected keys', () => {
+        let options = {
+          entry:  [],
+          output: {
+            path: './'
+          }
+        };
+
+        let config = new WebPacker(options, 'js', 'css', '../sass');
+
+        expect(config).to.include.keys('entry', 'output', 'module', 'plugins', 'resolve', 'postcss');
       });
     });
   });

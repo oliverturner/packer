@@ -1,4 +1,5 @@
 // Return a Webpack config
+import assert from 'assert';
 import autoprefixer from 'autoprefixer-core';
 
 import getLoaders from './utils/getLoaders';
@@ -11,16 +12,6 @@ import getServerOpts from './utils/getServerOpts';
 
 const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
-
-function validateOptions (options, requiredKeys) {
-  if (!options) {
-    throw new Error('options may not be omitted');
-  }
-
-  requiredKeys.map(key => {
-    if (!options[key]) throw new Error(`options.${key} may not be omitted`);
-  });
-}
 
 // Export
 //-----------------------------------------------
@@ -60,7 +51,9 @@ function validateOptions (options, requiredKeys) {
  */
 class WebPacker {
   constructor (options, jsUrl, cssUrl, sassPath) {
-    validateOptions(options, ['entry', 'output']);
+    assert(options, 'options may not be omitted');
+    assert(options.entry, `options.entry may not be omitted`);
+    assert(options.output, `options.output may not be omitted`);
 
     // Fill any missing optional values for `output` with defaults
     options.output = updateOutput(options.output, jsUrl);

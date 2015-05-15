@@ -55,7 +55,7 @@
     "url": "git+https://github.com/codedsignal/feei-webpacker.git"
   },
   "scripts": {
-    "docs": "docco src/**/*.js",
+    "docs": "docco src/*.js src/**/*.js",
     "git-commit": "git add -A . && git commit -a -m 'publish update'",
     "git-push": "git push && git checkout master",
     "git-deploy": "npm run git-commit && npm run git-push",
