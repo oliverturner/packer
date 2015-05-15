@@ -1,3 +1,6 @@
+import assert from 'assert';
+import { Map } from 'immutable';
+
 const requiredKeys = ['host', 'port'];
 
 // `options` is an immutable map
@@ -12,9 +15,7 @@ const requiredKeys = ['host', 'port'];
  * @returns {Map}
  */
 function getServerOpts (options) {
-  if (!Map.isMap(options)) {
-    throw new Error('options must be an instance of Immutable Map');
-  }
+  assert(Map.isMap(options), 'options must be an instance of Immutable Map');
 
   requiredKeys.forEach(key => {
     if (!options.get(key)) {

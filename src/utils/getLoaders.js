@@ -13,7 +13,7 @@ import getLoader from './getLoader';
 function getLoaders (isProd, sassPath) {
   let loaders, sassLoaders;
 
-  sassLoaders = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + sassPath];
+  sassLoaders = ['css', 'postcss', 'sass?includePaths[]=' + sassPath];
   sassLoaders = sassLoaders.map(getLoader).join('!');
 
   loaders = {

@@ -28,7 +28,7 @@ function getLoaders(isProd, sassPath) {
   var loaders = undefined,
       sassLoaders = undefined;
 
-  sassLoaders = ['css', 'postcss', '@oliverturner/sass?includePaths[]=' + sassPath];
+  sassLoaders = ['css', 'postcss', 'sass?includePaths[]=' + sassPath];
   sassLoaders = sassLoaders.map(_getLoader2['default']).join('!');
 
   loaders = {
