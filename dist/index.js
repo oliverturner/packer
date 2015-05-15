@@ -12,6 +12,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 // Return a Webpack config
 
+var _assert = require('assert');
+
+var _assert2 = _interopRequireDefault(_assert);
+
 var _autoprefixerCore = require('autoprefixer-core');
 
 var _autoprefixerCore2 = _interopRequireDefault(_autoprefixerCore);
@@ -40,16 +44,6 @@ var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
 
 var env = process.env.NODE_ENV || 'development';
 var isProd = env === 'production';
-
-function validateOptions(options, requiredKeys) {
-  if (!options) {
-    throw new Error('options may not be omitted');
-  }
-
-  requiredKeys.map(function (key) {
-    if (!options[key]) throw new Error('options.' + key + ' may not be omitted');
-  });
-}
 
 // Export
 //-----------------------------------------------
@@ -91,7 +85,9 @@ function validateOptions(options, requiredKeys) {
 var WebPacker = function WebPacker(options, jsUrl, cssUrl, sassPath) {
   _classCallCheck(this, WebPacker);
 
-  validateOptions(options, ['entry', 'output']);
+  (0, _assert2['default'])(options, 'options may not be omitted');
+  (0, _assert2['default'])(options.entry, 'options.entry may not be omitted');
+  (0, _assert2['default'])(options.output, 'options.output may not be omitted');
 
   // Fill any missing optional values for `output` with defaults
   options.output = (0, _utilsUpdateOutput2['default'])(options.output, jsUrl);
