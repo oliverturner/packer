@@ -10,13 +10,23 @@ function compile () {
     .pipe(gulp.dest('./dist'));
 }
 
-gulp.task('compile', compile);
+gulp.task('clean', function (done) {
+  rimraf('./docs', function (err) {
+    if (err) throw err;
+  });
 
-gulp.task('build', function (done) {
-  rimraf('./dist', function () {
-    compile();
+  rimraf('./dist', function (err) {
+    if (err) throw err;
+
     done();
   });
+});
+
+gulp.task('compile', compile);
+
+gulp.task('build', ['clean'], function (done) {
+  compile();
+  done();
 });
 
 gulp.task('default', ['build'], function () {
