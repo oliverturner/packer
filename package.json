@@ -61,7 +61,7 @@
     "git-deploy": "npm run git-commit && npm run git-push",
     "patch-release": "npm run build && npm run git-deploy && npm version patch && npm publish && git push --follow-tags",
     "build": "npm test && gulp build && npm run docs",
-    "test": "eslint ./src",
-    "start": "gulp"
+    "test": "eslint ./src && mocha",
+    "start": "mocha --watch --reporter dot"
   }
 }
