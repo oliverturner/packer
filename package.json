@@ -62,7 +62,7 @@
     "git-commit": "git add -A . && git commit -a -m 'publish update'",
     "git-push": "git push && git checkout master",
     "git-deploy": "npm run git-commit && npm run git-push",
-    "coverage": "npm run babel & isparta cover _mocha -- -R spec",
+    "coverage": "babel-node -r node_modules/.bin/isparta cover node_modules/.bin/_mocha -- --recursive ./test",
     "patch-release": "npm run build && npm run git-commit && npm version patch && npm publish && git push --follow-tags",
     "build": "npm test && gulp build && npm run docs",
     "test": "eslint ./src && mocha",
