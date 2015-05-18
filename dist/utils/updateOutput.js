@@ -1,8 +1,3 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 // Fill unsupplied values for output key
 /**
  * @param output {{
@@ -20,6 +15,11 @@ Object.defineProperty(exports, "__esModule", {
  *   chunkFilename: string
  * }}
  */
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 function updateOutput(output, jsUrl) {
   var defaultOutputs = {
     path: null,
