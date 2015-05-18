@@ -14,24 +14,23 @@ var _immutable = require('immutable');
 
 var requiredKeys = ['host', 'port'];
 
-// `options` is an immutable map
+// `options` is coverted to an immutable map
 // See [ImmutableJS](https://facebook.github.io/immutable-js/) for details
 /**
- * @param {Map} options {{
+ * @param {Map|{}} options {{
  *   host: string,
  *   port: int
- *   url:  [string]
  * }}
  *
  * @returns {Map}
  */
 function getServerOpts(options) {
-  (0, _assert2['default'])(_immutable.Map.isMap(options), 'options must be an instance of Immutable Map');
+  (0, _assert2['default'])(options, 'options must be supplied');
+
+  options = _immutable.Map.isMap(options) ? options : (0, _immutable.Map)(options);
 
   requiredKeys.forEach(function (key) {
-    if (!options.get(key)) {
-      throw new Error('Missing value for options.' + key);
-    }
+    return (0, _assert2['default'])(options.get(key), 'Missing value for options.' + key);
   });
 
   options = options.set('url', 'http://' + options.get('host') + ':' + options.get('port'));
