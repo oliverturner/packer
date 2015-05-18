@@ -5,13 +5,13 @@ import WebPacker from '../src';
 describe('WebPacker', () => {
 
   describe('Configuration', () => {
-    describe('when missing options', () => {
+    describe('missing options', () => {
       it('should throw an error', () => {
         expect(() => new WebPacker()).to.throw(Error);
       });
     });
 
-    describe('when options lacks a required key', () => {
+    describe('options lacks a required key', () => {
       it('should throw an error for empty', () => {
         expect(() => new WebPacker({})).to.throw(Error);
       });
@@ -23,7 +23,7 @@ describe('WebPacker', () => {
       });
     });
 
-    describe('when options.output lacks a required key', () => {
+    describe('options.output lacks a required key', () => {
       it('should throw an error for no keys', () => {
         expect(() => new WebPacker({
           entry:  [],
@@ -44,7 +44,7 @@ describe('WebPacker', () => {
 
   describe('Output', () => {
     describe('Supplied with valid parameters', () => {
-      it('return an object with expected keys', () => {
+      it('should return an object with expected keys', () => {
         let options = {
           entry:  [],
           output: {

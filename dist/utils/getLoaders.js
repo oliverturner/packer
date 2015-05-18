@@ -4,9 +4,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _immutable = require('immutable');
 
 var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
@@ -17,21 +17,22 @@ var _getLoader = require('./getLoader');
 var _getLoader2 = _interopRequireDefault(_getLoader);
 
 // Return an array of loaders for the various file types
-// In production we remove the ReactHotLoader and Sass plugins
+// In production
+// * Remove the ReactHotLoader
+// * Swap the sass-loader for ExtractTextPlugin to emit static CSS
 /**
  * @param {bool} isProd
  * @param {string} sassPath
  *
  * @returns {Array}
  */
-function getLoaders(isProd, sassPath) {
-  var loaders = undefined,
-      sassLoaders = undefined;
+function getLoaders() {
+  var isProd = arguments[0] === undefined ? false : arguments[0];
+  var sassPath = arguments[1] === undefined ? '' : arguments[1];
 
-  sassLoaders = ['css', 'postcss', 'sass?includePaths[]=' + sassPath];
-  sassLoaders = sassLoaders.map(_getLoader2['default']).join('!');
+  var sassLoaders = ['css', 'postcss', 'sass?includePaths[]=' + sassPath].map(_getLoader2['default']).join('!');
 
-  loaders = {
+  var loaders = (0, _immutable.Map)({
     json: {
       test: /\.json$/,
       loaders: ['json']
@@ -49,26 +50,28 @@ function getLoaders(isProd, sassPath) {
       exclude: /node_modules/,
       loaders: ['react-hot', 'babel']
     }
-  };
+  });
+
+  var prodLoaders = (0, _immutable.Map)({
+    sass: {
+      test: /\.scss$/,
+      loader: _extractTextWebpackPlugin2['default'].extract('style-loader', sassLoaders)
+    },
+    jsx: {
+      test: /\.jsx?$/,
+      exclude: /node_modules/,
+      loaders: ['babel']
+    }
+  });
 
   // Production overrides
+  // * sass: use ExtractTextPlugin to output static CSS
+  // * jsx:  drop react-hot-loader
   if (isProd) {
-    loaders = _extends(loaders, {
-      sass: {
-        test: /\.scss$/,
-        loader: _extractTextWebpackPlugin2['default'].extract('style-loader', sassLoaders)
-      },
-      jsx: {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loaders: ['babel']
-      }
-    });
+    loaders = loaders.merge(prodLoaders);
   }
 
-  return Object.keys(loaders).map(function (key) {
-    return loaders[key];
-  });
+  return loaders.toArray();
 }
 
 exports['default'] = getLoaders;
