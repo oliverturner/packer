@@ -25,7 +25,7 @@ describe('utils/getServerOpts', () => {
       expect(getServerOpts(options)).to.be.an.instanceOf(Map);
     });
 
-    it('Generates a required keys from options', () => {
+    it('Generates the required keys from options', () => {
       expect(getServerOpts(options).toJS()).to.have.all.keys('host', 'port', 'url');
     });
 

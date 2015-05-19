@@ -4,6 +4,10 @@ var rimraf = require('rimraf');
 
 var src = 'src/**/*.js';
 
+function onError (err) {
+  if (err) throw err;
+}
+
 function compile () {
   return gulp.src(src)
     .pipe(babel())
@@ -11,9 +15,8 @@ function compile () {
 }
 
 gulp.task('clean', function (done) {
-  rimraf('./docs', function (err) {
-    if (err) throw err;
-  });
+  rimraf('./docs', onError);
+  rimraf('./coverage', onError);
 
   rimraf('./dist', function (err) {
     if (err) throw err;
