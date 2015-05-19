@@ -1,14 +1,16 @@
-// Auto-configures entrypoints for multi-page apps
-//
-// In conjunction with the CommonsChunkPlugin produces optimal filesizes
-
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+// Auto-configures entrypoints for multi-page apps
+//
+// In conjunction with the CommonsChunkPlugin produces optimal filesizes
 
 var _assert = require('assert');
 
@@ -59,23 +61,30 @@ function getHotloaderPlugins(host) {
 //```
 /**
  * @param {string} appDir
- * @param {string} [file]
- * @param {string} [host]
+ * @param opts {{
+ *   [host]: string
+ *   [entry]: string
+ * }}
  * @returns {*}
  */
 function getEntriesMulti(appDir) {
-  var host = arguments[1] === undefined ? null : arguments[1];
-  var file = arguments[2] === undefined ? 'entry.jsx' : arguments[2];
+  var opts = arguments[1] === undefined ? {} : arguments[1];
 
   checkValidAppDir(appDir);
 
-  // Create a `commons` entry for code shared by components
+  var defaults = {
+    host: null,
+    entry: 'entry.jsx'
+  };
+
+  opts = _extends(defaults, opts);
+
   var extras = {};
 
   // In development mode an additional `dev` entry point is injected
   // (includes hot code loading and development server code)
-  if (host) {
-    extras.dev = getHotloaderPlugins(host);
+  if (opts.host) {
+    extras.dev = getHotloaderPlugins(opts.host);
   }
 
   return _fs2['default'].readdirSync(appDir).reduce(function (ret, key) {
@@ -86,30 +95,50 @@ function getEntriesMulti(appDir) {
     stat = _fs2['default'].statSync(dir);
 
     if (stat.isDirectory()) {
-      ret[key] = '' + dir + '/' + file;
+      ret[key] = '' + dir + '/' + opts.entry;
     }
 
     return ret;
   }, extras);
 }
 
+/**
+ *
+ * @param {string} appDir
+ * @param opts {{
+ *   [host]: string|null,
+ *   [ext]:  string,
+ *   [key]:  string
+ * }}
+ * @returns {{}}
+ */
 function getEntries(appDir) {
-  var host = arguments[1] === undefined ? null : arguments[1];
-  var ext = arguments[2] === undefined ? '.js' : arguments[2];
+  var opts = arguments[1] === undefined ? {} : arguments[1];
 
   checkValidAppDir(appDir);
 
+  var defaults = {
+    host: null,
+    ext: '.js',
+    key: 'main'
+  };
+
+  opts = _extends(defaults, opts);
+
+  var ret = {};
   var main = _fs2['default'].readdirSync(appDir).map(function (file) {
     return _path2['default'].join(appDir, file);
   }).filter(function (file) {
-    return _path2['default'].extname(file) === ext;
+    return _path2['default'].extname(file) === opts.ext;
   });
 
-  if (host) {
-    main = main.concat(getHotloaderPlugins(host));
+  if (opts.host) {
+    main = main.concat(getHotloaderPlugins(opts.host));
   }
 
-  return { main: main };
+  ret[opts.key] = main;
+
+  return ret;
 }
 
 exports.getHotloaderPlugins = getHotloaderPlugins;
