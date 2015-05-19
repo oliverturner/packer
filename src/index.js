@@ -7,7 +7,7 @@ import getPlugins from './utils/getPlugins';
 import updateOutput from './utils/updateOutput';
 
 // Exported utils
-import getEntries from './utils/getEntries';
+import {getEntries, getEntriesMulti} from './utils/getEntries';
 import getServerOpts from './utils/getServerOpts';
 
 const env = process.env.NODE_ENV || 'development';
@@ -49,7 +49,7 @@ const isProd = env === 'production';
  *   postcss: {}
  * }}
  */
-export default class WebPacker {
+class WebPacker {
   constructor (options, jsUrl, cssUrl, sassPath) {
     assert(options, 'options may not be omitted');
     assert(options.entry, `options.entry may not be omitted`);
@@ -78,4 +78,6 @@ export default class WebPacker {
   }
 }
 
-export { getEntries, getServerOpts };
+export default WebPacker;
+
+export { getEntries, getEntriesMulti, getServerOpts };

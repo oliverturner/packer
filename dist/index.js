@@ -36,8 +36,6 @@ var _utilsUpdateOutput2 = _interopRequireDefault(_utilsUpdateOutput);
 
 var _utilsGetEntries = require('./utils/getEntries');
 
-var _utilsGetEntries2 = _interopRequireDefault(_utilsGetEntries);
-
 var _utilsGetServerOpts = require('./utils/getServerOpts');
 
 var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
@@ -112,5 +110,6 @@ var WebPacker = function WebPacker(options, jsUrl, cssUrl, sassPath) {
 };
 
 exports['default'] = WebPacker;
-exports.getEntries = _utilsGetEntries2['default'];
+exports.getEntries = _utilsGetEntries.getEntries;
+exports.getEntriesMulti = _utilsGetEntries.getEntriesMulti;
 exports.getServerOpts = _utilsGetServerOpts2['default'];
