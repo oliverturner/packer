@@ -46,20 +46,28 @@ function getHotloaderPlugins (host) {
 //```
 /**
  * @param {string} appDir
- * @param {string} [file]
- * @param {string} [host]
+ * @param opts {{
+ *   [host]: string
+ *   [entry]: string
+ * }}
  * @returns {*}
  */
-function getEntriesMulti (appDir, host = null, file = 'entry.jsx') {
+function getEntriesMulti (appDir, opts = {}) {
   checkValidAppDir(appDir);
 
-  // Create a `commons` entry for code shared by components
+  let defaults = {
+    host:  null,
+    entry: 'entry.jsx'
+  };
+
+  opts = Object.assign(defaults, opts);
+
   let extras = {};
 
   // In development mode an additional `dev` entry point is injected
   // (includes hot code loading and development server code)
-  if (host) {
-    extras.dev = getHotloaderPlugins(host);
+  if (opts.host) {
+    extras.dev = getHotloaderPlugins(opts.host);
   }
 
   return fs.readdirSync(appDir).reduce((ret, key) => {
@@ -69,25 +77,46 @@ function getEntriesMulti (appDir, host = null, file = 'entry.jsx') {
     stat = fs.statSync(dir);
 
     if (stat.isDirectory()) {
-      ret[key] = `${dir}/${file}`;
+      ret[key] = `${dir}/${opts.entry}`;
     }
 
     return ret;
   }, extras);
 }
 
-function getEntriesSPA (appDir, host = null, ext = '.js') {
+/**
+ *
+ * @param {string} appDir
+ * @param opts {{
+ *   [host]: string|null,
+ *   [ext]:  string,
+ *   [key]:  string
+ * }}
+ * @returns {{}}
+ */
+function getEntries (appDir, opts = {}) {
   checkValidAppDir(appDir);
 
+  let defaults = {
+    host: null,
+    ext:  '.js',
+    key:  'main'
+  };
+
+  opts = Object.assign(defaults, opts);
+
+  let ret = {};
   let main = fs.readdirSync(appDir)
     .map(file => path.join(appDir, file))
-    .filter(file => path.extname(file) === ext);
+    .filter(file => path.extname(file) === opts.ext);
 
-  if (host) {
-    main = main.concat(getHotloaderPlugins(host));
+  if (opts.host) {
+    main = main.concat(getHotloaderPlugins(opts.host));
   }
 
-  return {main: main};
+  ret[opts.key] = main;
+
+  return ret;
 }
 
-export {getHotloaderPlugins, getEntriesMulti, getEntriesSPA};
+export {getHotloaderPlugins, getEntries, getEntriesMulti};

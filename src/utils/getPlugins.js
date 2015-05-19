@@ -8,7 +8,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
  * @param {string} cssUrl
  * @returns {Array.<T>}
  */
-function getPlugins (isProd, jsUrl, cssUrl) {
+export default function (isProd, jsUrl, cssUrl) {
   let defs = {
     'process.env': {
       NODE_ENV: JSON.stringify(isProd ? 'production' : 'development')
@@ -44,5 +44,3 @@ function getPlugins (isProd, jsUrl, cssUrl) {
     ? defaults.concat(production)
     : defaults.concat(development);
 }
-
-export default getPlugins;

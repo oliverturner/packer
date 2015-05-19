@@ -93,7 +93,7 @@ function getEntriesMulti(appDir) {
   }, extras);
 }
 
-function getEntriesSPA(appDir) {
+function getEntries(appDir) {
   var host = arguments[1] === undefined ? null : arguments[1];
   var ext = arguments[2] === undefined ? '.js' : arguments[2];
 
@@ -113,5 +113,5 @@ function getEntriesSPA(appDir) {
 }
 
 exports.getHotloaderPlugins = getHotloaderPlugins;
+exports.getEntries = getEntries;
 exports.getEntriesMulti = getEntriesMulti;
-exports.getEntriesSPA = getEntriesSPA;

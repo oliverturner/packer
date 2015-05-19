@@ -49,7 +49,7 @@ const isProd = env === 'production';
  *   postcss: {}
  * }}
  */
-class WebPacker {
+export default class WebPacker {
   constructor (options, jsUrl, cssUrl, sassPath) {
     assert(options, 'options may not be omitted');
     assert(options.entry, `options.entry may not be omitted`);
@@ -77,7 +77,5 @@ class WebPacker {
     return this.options;
   }
 }
-
-export default WebPacker;
 
 export { getEntries, getServerOpts };

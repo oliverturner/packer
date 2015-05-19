@@ -4,7 +4,7 @@ import mock from 'mock-fs';
 import {
   getHotloaderPlugins,
   getEntriesMulti,
-  getEntriesSPA
+  getEntries
   } from '../src/utils/getEntries';
 
 let host = 'http://localhost:4001';
@@ -21,6 +21,8 @@ describe('utils/getEntries', () => {
     });
   });
 
+  // Multiple entrypoints from directory contents
+  //-----------------------------------------------
   describe('getEntriesMulti', () => {
 
     // Includes .DS_Store as a non-directory child of fakeDir
@@ -71,7 +73,7 @@ describe('utils/getEntries', () => {
         });
 
         mock(fakeTree);
-        expect(getEntriesMulti(fakeRoot, host)).to.deep.equal(output);
+        expect(getEntriesMulti(fakeRoot, {host:host})).to.deep.equal(output);
         mock.restore();
       });
     });
@@ -102,13 +104,15 @@ describe('utils/getEntries', () => {
         };
 
         mock(customTree);
-        expect(getEntriesMulti(customRoot, null, customEntry)).to.deep.equal(customOutput);
+        expect(getEntriesMulti(customRoot, {entry:customEntry})).to.deep.equal(customOutput);
         mock.restore();
       });
     });
   });
 
-  describe('getEntriesSPA', () => {
+  // Bundled entrypoints
+  //-----------------------------------------------
+  describe('getEntries', () => {
     // Includes .DS_Store as a non-directory child of fakeDir
     const fakeTree = {
       'src/apps': {
@@ -133,7 +137,7 @@ describe('utils/getEntries', () => {
       it('Rejects invalid paths', () => {
         let badRoot = 'src/bogus';
         mock(fakeTree);
-        expect(() => getEntriesSPA(badRoot)).to.throw(Error);
+        expect(() => getEntries(badRoot)).to.throw(Error);
         mock.restore();
       });
     });
@@ -141,21 +145,62 @@ describe('utils/getEntries', () => {
     describe('No host specified', () => {
       it('Returns an object with a single key `main`', () => {
         mock(fakeTree);
-        expect(getEntriesSPA(fakeRoot)).to.deep.equal(baseOutput);
+        expect(getEntries(fakeRoot)).to.deep.equal(baseOutput);
         mock.restore();
       });
     });
 
     describe('Host specified', () => {
-      it('Returns an object with a single key `main`', () => {
+      it('Adds hot loader plugins when a host is specified', () => {
         mock(fakeTree);
 
-        let entries = getEntriesSPA(fakeRoot, host);
+        let entries = getEntries(fakeRoot, {host:host});
         let output  = JSON.parse(JSON.stringify(baseOutput));
 
         output.main = output.main.concat(getHotloaderPlugins(host));
 
         expect(entries).to.deep.equal(output);
+        mock.restore();
+      });
+    });
+
+    describe('Custom extension', () => {
+      it('Finds files', () => {
+        let customTree = {
+          'src/apps': {
+            '.DS_Store': 'stuff',
+            'page1.jsx': '',
+            'page2.jsx': '',
+            'page3.jsx': ''
+          }
+        };
+
+        let customOutput = {
+          main: [
+            'src/apps/page1.jsx',
+            'src/apps/page2.jsx',
+            'src/apps/page3.jsx'
+          ]
+        };
+
+        mock(customTree);
+        expect(getEntries(fakeRoot, {ext:'.jsx'})).to.deep.equal(customOutput);
+        mock.restore();
+      });
+    });
+
+    describe('Custom key', () => {
+      it('Outputs the correct key', () => {
+        let customOutput = {
+          foo: [
+            'src/apps/page1.js',
+            'src/apps/page2.js',
+            'src/apps/page3.js'
+          ]
+        };
+
+        mock(fakeTree);
+        expect(getEntries(fakeRoot, {key: 'foo'})).to.deep.equal(customOutput);
         mock.restore();
       });
     });

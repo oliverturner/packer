@@ -1,16 +1,16 @@
+var Immutable = require('immutable');
+
 var WebPacker = require('../../dist').default;
-var getEntries = require('../../dist/utils/getEntries').getEntries;
 var getServerOpts = require('../../dist/utils/getServerOpts');
 
 var isDev = process.env.NODE_ENV !== 'production';
 
-var server = getServerOpts({
+var server = getServerOpts(Immutable.Map({
   host: 'localhost',
   port: 3001
-});
+}));
 
-var serverUrl  = server.get('url');
-var publicPath = isDev ? serverUrl : '/';
+var publicPath = isDev ? server.get('url') + '/' : '/';
 
 var srcs = {
   sass: __dirname + '/src/sass',
@@ -23,7 +23,7 @@ var urls = {
 };
 
 var config = new WebPacker({
-  entry:  getEntries(srcs.js, serverUrl, '.jsx'),
+  entry:  srcs.js,
   output: {
     path:       __dirname + '/out',
     publicPath: publicPath
