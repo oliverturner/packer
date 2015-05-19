@@ -18,7 +18,7 @@ function getLoaders (isProd = false, sassPath = '') {
     'css',
     'postcss',
     'sass?includePaths[]=' + sassPath
-  ].map(getLoader).join('!');
+  ].map(getLoader);
 
   let loaders = Map({
     json:   {
@@ -31,7 +31,7 @@ function getLoaders (isProd = false, sassPath = '') {
     },
     sass:   {
       test:   /\.scss$/,
-      loader: sassLoaders
+      loader: ['style-loader'].concat(sassLoaders).join('!')
     },
     jsx:    {
       test:    /\.jsx?$/,
@@ -43,7 +43,7 @@ function getLoaders (isProd = false, sassPath = '') {
   let prodLoaders = Map({
     sass: {
       test:   /\.scss$/,
-      loader: ExtractTextPlugin.extract('style-loader', sassLoaders)
+      loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!'))
     },
     jsx:  {
       test:    /\.jsx?$/,

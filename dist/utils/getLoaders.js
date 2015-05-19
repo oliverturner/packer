@@ -30,7 +30,7 @@ function getLoaders() {
   var isProd = arguments[0] === undefined ? false : arguments[0];
   var sassPath = arguments[1] === undefined ? '' : arguments[1];
 
-  var sassLoaders = ['css', 'postcss', 'sass?includePaths[]=' + sassPath].map(_getLoader2['default']).join('!');
+  var sassLoaders = ['css', 'postcss', 'sass?includePaths[]=' + sassPath].map(_getLoader2['default']);
 
   var loaders = (0, _immutable.Map)({
     json: {
@@ -43,7 +43,7 @@ function getLoaders() {
     },
     sass: {
       test: /\.scss$/,
-      loader: sassLoaders
+      loader: ['style-loader'].concat(sassLoaders).join('!')
     },
     jsx: {
       test: /\.jsx?$/,
@@ -55,7 +55,7 @@ function getLoaders() {
   var prodLoaders = (0, _immutable.Map)({
     sass: {
       test: /\.scss$/,
-      loader: _extractTextWebpackPlugin2['default'].extract('style-loader', sassLoaders)
+      loader: _extractTextWebpackPlugin2['default'].extract('style-loader', sassLoaders.join('!'))
     },
     jsx: {
       test: /\.jsx?$/,
