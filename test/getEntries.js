@@ -2,24 +2,24 @@ import { expect } from 'chai';
 import mock from 'mock-fs';
 
 import {
-  getHotloaderPlugins,
-  getEntriesMulti,
+  getNestedEntries,
   getEntries
   } from '../src/utils/getEntries';
 
 let host = 'http://localhost:4001';
 
 describe('utils/getEntries', () => {
-  describe('getHotloaderPlugins', () => {
-    it('returns a known array', () => {
-      let plugins = [
-        'webpack-dev-server/client?http://localhost:4001',
-        'webpack/hot/dev-server'
-      ];
-
-      expect(getHotloaderPlugins(host)).to.have.members(plugins);
-    });
-  });
+  //TODO: Restore to client module
+  //describe('getHotloaderPlugins', () => {
+  //  it('returns a known array', () => {
+  //    let plugins = [
+  //      'webpack-dev-server/client?http://localhost:4001',
+  //      'webpack/hot/dev-server'
+  //    ];
+  //
+  //    expect(getHotloaderPlugins(host)).to.have.members(plugins);
+  //  });
+  //});
 
   // Multiple entrypoints from directory contents
   //-----------------------------------------------
@@ -53,7 +53,7 @@ describe('utils/getEntries', () => {
       it('Rejects invalid paths', () => {
         let badRoot = 'src/apps/bogus';
         mock(fakeTree);
-        expect(() => getEntriesMulti(badRoot)).to.throw(Error);
+        expect(() => getNestedEntries(badRoot)).to.throw(Error);
         mock.restore();
       });
     });
@@ -61,22 +61,23 @@ describe('utils/getEntries', () => {
     describe('No host specified', () => {
       it('returns a map of nested directories', () => {
         mock(fakeTree);
-        expect(getEntriesMulti(fakeRoot)).to.deep.equal(baseOutput);
+        expect(getNestedEntries(fakeRoot)).to.deep.equal(baseOutput);
         mock.restore();
       });
     });
 
-    describe('Host specified', () => {
-      it('returns an additional `dev` key containing hot loader components', () => {
-        let output = Object.assign(JSON.parse(JSON.stringify(baseOutput)), {
-          dev: getHotloaderPlugins(host)
-        });
-
-        mock(fakeTree);
-        expect(getEntriesMulti(fakeRoot, {host:host})).to.deep.equal(output);
-        mock.restore();
-      });
-    });
+    //TODO: Restore to client module
+    //describe('Host specified', () => {
+    //  it('returns an additional `dev` key containing hot loader components', () => {
+    //    let output = Object.assign(JSON.parse(JSON.stringify(baseOutput)), {
+    //      dev: getHotloaderPlugins(host)
+    //    });
+    //
+    //    mock(fakeTree);
+    //    expect(getNestedEntries(fakeRoot, {host:host})).to.deep.equal(output);
+    //    mock.restore();
+    //  });
+    //});
 
     describe('Custom entry file', () => {
       it('Allows a custom entry file to be specified', () => {
@@ -104,7 +105,7 @@ describe('utils/getEntries', () => {
         };
 
         mock(customTree);
-        expect(getEntriesMulti(customRoot, {entry:customEntry})).to.deep.equal(customOutput);
+        expect(getNestedEntries(customRoot, customEntry)).to.deep.equal(customOutput);
         mock.restore();
       });
     });
@@ -154,10 +155,8 @@ describe('utils/getEntries', () => {
       it('Adds hot loader plugins when a host is specified', () => {
         mock(fakeTree);
 
-        let entries = getEntries(fakeRoot, {host:host});
+        let entries = getEntries(fakeRoot, '.js', 'main');
         let output  = JSON.parse(JSON.stringify(baseOutput));
-
-        output.main = output.main.concat(getHotloaderPlugins(host));
 
         expect(entries).to.deep.equal(output);
         mock.restore();
@@ -184,7 +183,7 @@ describe('utils/getEntries', () => {
         };
 
         mock(customTree);
-        expect(getEntries(fakeRoot, {ext:'.jsx'})).to.deep.equal(customOutput);
+        expect(getEntries(fakeRoot, '.jsx')).to.deep.equal(customOutput);
         mock.restore();
       });
     });
@@ -200,7 +199,7 @@ describe('utils/getEntries', () => {
         };
 
         mock(fakeTree);
-        expect(getEntries(fakeRoot, {key: 'foo'})).to.deep.equal(customOutput);
+        expect(getEntries(fakeRoot, '.js', 'foo')).to.deep.equal(customOutput);
         mock.restore();
       });
     });

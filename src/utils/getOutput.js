@@ -1,12 +1,14 @@
+import assert from 'assert';
+
 // Fill unsupplied values for output key
 /**
+ * @param {string} jsUrl
  * @param output {{
  *   path:          string,
  *   publicPath:    string,
  *   filename:      string,
  *   chunkFilename: string
  * }}
- * @param {string} jsUrl
  *
  * @returns {{
  *   path:          string,
@@ -15,7 +17,7 @@
  *   chunkFilename: string
  * }}
  */
-function updateOutput (output, jsUrl) {
+function getOutput (jsUrl, output) {
   let defaultOutputs = {
     path:          null,
     publicPath:    `/${jsUrl}/`,
@@ -26,12 +28,10 @@ function updateOutput (output, jsUrl) {
   return Object.keys(defaultOutputs).reduce((output, key) => {
     output[key] = output[key] || defaultOutputs[key];
 
-    if (output[key] === null) {
-      throw new Error(`output.${key} may not be omitted`);
-    }
+    assert(output[key], `output.${key} may not be omitted`);
 
     return output;
   }, output);
 }
 
-export default updateOutput;
+export default getOutput;

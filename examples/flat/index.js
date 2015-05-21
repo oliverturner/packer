@@ -1,8 +1,8 @@
-var WebPacker = require('../../dist').default;
+var packer = require('../../dist');
 var getEntries = require('../../dist/utils/getEntries').getEntries;
 var getServerOpts = require('../../dist/utils/getServerOpts');
 
-var isDev = process.env.NODE_ENV !== 'production';
+var isProd = process.env.NODE_ENV === 'production';
 
 var server = getServerOpts({
   host: 'localhost',
@@ -10,7 +10,7 @@ var server = getServerOpts({
 });
 
 var serverUrl  = server.get('url');
-var publicPath = isDev ? serverUrl : '/';
+var publicPath = isProd ? '/' : serverUrl;
 
 var srcs = {
   sass: __dirname + '/src/sass',
@@ -22,13 +22,18 @@ var urls = {
   css: 'styles'
 };
 
-var config = new WebPacker({
-  entry:  getEntries(srcs.js, serverUrl, '.jsx'),
-  output: {
+var config = packer.client.create({
+  entry:  packer.client.getEntries(serverUrl, srcs.js, '.jsx'),
+  output: packer.client.getOutput(urls.js, {
     path:       __dirname + '/out',
     publicPath: publicPath
-  }
-}, urls.js, urls.css, srcs.sass);
+  }),
+  module: {
+    loaders: packer.client.getLoaders(isProd, srcs.sass)
+  },
+
+  plugins: packer.client.getPlugins(isProd, urls.js, urls.css)
+});
 
 console.log(JSON.stringify(config, null, 2));
 

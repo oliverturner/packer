@@ -11,17 +11,6 @@ function checkValidAppDir (appDir) {
   assert(stat && stat.isDirectory(), 'Not a valid directory');
 }
 
-/**
- * @param host
- * @returns {string[]}
- */
-function getHotloaderPlugins (host) {
-  return [
-    `webpack-dev-server/client?${host}`,
-    'webpack/hot/dev-server'
-  ];
-}
-
 // Loop through child modules of `appDir` to create an object used by Webpack as
 // entrypoints keyed by folder name:
 //```
@@ -46,77 +35,45 @@ function getHotloaderPlugins (host) {
 //```
 /**
  * @param {string} appDir
- * @param opts {{
- *   [host]: string
- *   [entry]: string
- * }}
+ * @param {string} [entry]
  * @returns {*}
  */
-function getEntriesMulti (appDir, opts = {}) {
+function getNestedEntries (appDir, entry = 'entry.jsx') {
   checkValidAppDir(appDir);
-
-  let defaults = {
-    host:  null,
-    entry: 'entry.jsx'
-  };
-
-  opts = Object.assign(defaults, opts);
-
-  let extras = {};
-
-  // In development mode an additional `dev` entry point is injected
-  // (includes hot code loading and development server code)
-  if (opts.host) {
-    extras.dev = getHotloaderPlugins(opts.host);
-  }
 
   return fs.readdirSync(appDir).reduce((ret, key) => {
     let dir, stat;
 
-    dir  = `${appDir}/${key}`;
+    dir = `${appDir}/${key}`;
     stat = fs.statSync(dir);
 
     if (stat.isDirectory()) {
-      ret[key] = `${dir}/${opts.entry}`;
+      ret[key] = `${dir}/${entry}`;
     }
 
     return ret;
-  }, extras);
+  }, {});
 }
 
 /**
  *
  * @param {string} appDir
- * @param opts {{
- *   [host]: string|null,
- *   [ext]:  string,
- *   [key]:  string
- * }}
+ * @param {string} ext
+ * @param {string} key
+ *
  * @returns {{}}
  */
-function getEntries (appDir, opts = {}) {
+function getEntries (appDir, ext = '.js', key = 'main') {
   checkValidAppDir(appDir);
-
-  let defaults = {
-    host: null,
-    ext:  '.js',
-    key:  'main'
-  };
-
-  opts = Object.assign(defaults, opts);
 
   let ret = {};
   let main = fs.readdirSync(appDir)
     .map(file => path.join(appDir, file))
-    .filter(file => path.extname(file) === opts.ext);
+    .filter(file => path.extname(file) === ext);
 
-  if (opts.host) {
-    main = main.concat(getHotloaderPlugins(opts.host));
-  }
-
-  ret[opts.key] = main;
+  ret[key] = main;
 
   return ret;
 }
 
-export {getHotloaderPlugins, getEntries, getEntriesMulti};
+export {getEntries, getNestedEntries};

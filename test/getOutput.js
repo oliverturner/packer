@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 
-import updateOutput from '../src/utils/updateOutput';
+import getOutput from '../src/utils/getOutput';
 
-describe('utils/updateOutput', () => {
+describe('utils/getOutput', () => {
   let jsUrl = 'scripts';
 
   describe('using defaults', () => {
@@ -15,7 +15,7 @@ describe('utils/updateOutput', () => {
     };
 
     it('should deeply equal `updated`', () => {
-      expect(updateOutput(opts, jsUrl)).to.deep.equal(updated);
+      expect(getOutput(jsUrl, opts)).to.deep.equal(updated);
     });
   });
 
@@ -33,7 +33,7 @@ describe('utils/updateOutput', () => {
     };
 
     it('should deeply equal `updated`', () => {
-      expect(updateOutput(opts, jsUrl)).to.deep.equal(updated);
+      expect(getOutput(jsUrl, opts)).to.deep.equal(updated);
     });
   });
 
@@ -41,7 +41,7 @@ describe('utils/updateOutput', () => {
     let opts = {};
 
     it('should throw an error', () => {
-      expect(() => updateOutput(opts, jsUrl)).to.throw(Error);
+      expect(() => getOutput(jsUrl, opts)).to.throw(Error);
     });
   });
 });

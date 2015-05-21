@@ -1,16 +1,14 @@
+// Auto-configures entrypoints for multi-page apps
+//
+// In conjunction with the CommonsChunkPlugin produces optimal filesizes
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-// Auto-configures entrypoints for multi-page apps
-//
-// In conjunction with the CommonsChunkPlugin produces optimal filesizes
 
 var _assert = require('assert');
 
@@ -27,14 +25,6 @@ var _fs2 = _interopRequireDefault(_fs);
 function checkValidAppDir(appDir) {
   var stat = _fs2['default'].statSync(appDir);
   (0, _assert2['default'])(stat && stat.isDirectory(), 'Not a valid directory');
-}
-
-/**
- * @param host
- * @returns {string[]}
- */
-function getHotloaderPlugins(host) {
-  return ['webpack-dev-server/client?' + host, 'webpack/hot/dev-server'];
 }
 
 // Loop through child modules of `appDir` to create an object used by Webpack as
@@ -61,31 +51,13 @@ function getHotloaderPlugins(host) {
 //```
 /**
  * @param {string} appDir
- * @param opts {{
- *   [host]: string
- *   [entry]: string
- * }}
+ * @param {string} [entry]
  * @returns {*}
  */
-function getEntriesMulti(appDir) {
-  var opts = arguments[1] === undefined ? {} : arguments[1];
+function getNestedEntries(appDir) {
+  var entry = arguments[1] === undefined ? 'entry.jsx' : arguments[1];
 
   checkValidAppDir(appDir);
-
-  var defaults = {
-    host: null,
-    entry: 'entry.jsx'
-  };
-
-  opts = _extends(defaults, opts);
-
-  var extras = {};
-
-  // In development mode an additional `dev` entry point is injected
-  // (includes hot code loading and development server code)
-  if (opts.host) {
-    extras.dev = getHotloaderPlugins(opts.host);
-  }
 
   return _fs2['default'].readdirSync(appDir).reduce(function (ret, key) {
     var dir = undefined,
@@ -95,52 +67,38 @@ function getEntriesMulti(appDir) {
     stat = _fs2['default'].statSync(dir);
 
     if (stat.isDirectory()) {
-      ret[key] = '' + dir + '/' + opts.entry;
+      ret[key] = '' + dir + '/' + entry;
     }
 
     return ret;
-  }, extras);
+  }, {});
 }
 
 /**
  *
  * @param {string} appDir
- * @param opts {{
- *   [host]: string|null,
- *   [ext]:  string,
- *   [key]:  string
- * }}
+ * @param {string} ext
+ * @param {string} key
+ *
  * @returns {{}}
  */
 function getEntries(appDir) {
-  var opts = arguments[1] === undefined ? {} : arguments[1];
+  var ext = arguments[1] === undefined ? '.js' : arguments[1];
+  var key = arguments[2] === undefined ? 'main' : arguments[2];
 
   checkValidAppDir(appDir);
-
-  var defaults = {
-    host: null,
-    ext: '.js',
-    key: 'main'
-  };
-
-  opts = _extends(defaults, opts);
 
   var ret = {};
   var main = _fs2['default'].readdirSync(appDir).map(function (file) {
     return _path2['default'].join(appDir, file);
   }).filter(function (file) {
-    return _path2['default'].extname(file) === opts.ext;
+    return _path2['default'].extname(file) === ext;
   });
 
-  if (opts.host) {
-    main = main.concat(getHotloaderPlugins(opts.host));
-  }
-
-  ret[opts.key] = main;
+  ret[key] = main;
 
   return ret;
 }
 
-exports.getHotloaderPlugins = getHotloaderPlugins;
 exports.getEntries = getEntries;
-exports.getEntriesMulti = getEntriesMulti;
+exports.getNestedEntries = getNestedEntries;
