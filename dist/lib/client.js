@@ -34,14 +34,6 @@ var _utilsGetOutput2 = _interopRequireDefault(_utilsGetOutput);
 
 var _utilsGetEntries = require('../utils/getEntries');
 
-/**
- * @param host
- * @returns {string[]}
- */
-function getHotloaderPlugins(host) {
-  return ['webpack-dev-server/client?' + host, 'webpack/hot/dev-server'];
-}
-
 var Client = (function () {
   function Client(options) {
     _classCallCheck(this, Client);
@@ -113,7 +105,6 @@ var Client = (function () {
     key: 'getEntries',
 
     /**
-     * @param host
      * @param [ext]
      * @param [key]
      */
@@ -124,7 +115,7 @@ var Client = (function () {
       // (includes hot code loading and development server code)
       if (this.options.isProd) {
         var host = this.options.devServer.url;
-        entries.dev = getHotloaderPlugins(host);
+        entries.dev = this.getHotloaderPlugins(host);
       }
 
       return entries;
@@ -155,6 +146,16 @@ var Client = (function () {
     key: 'getPlugins',
     value: function getPlugins() {
       return (0, _utilsGetPlugins2['default'])(this.options.isProd, this.options.urls);
+    }
+  }, {
+    key: 'getHotloaderPlugins',
+
+    /**
+     * @param host
+     * @returns {string[]}
+     */
+    value: function getHotloaderPlugins(host) {
+      return ['webpack-dev-server/client?' + host, 'webpack/hot/dev-server'];
     }
   }]);
 

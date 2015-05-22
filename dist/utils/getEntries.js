@@ -89,13 +89,12 @@ function getEntries(appDir) {
   checkValidAppDir(appDir);
 
   var ret = {};
-  var main = _fs2['default'].readdirSync(appDir).map(function (file) {
+
+  ret[key] = _fs2['default'].readdirSync(appDir).map(function (file) {
     return _path2['default'].join(appDir, file);
   }).filter(function (file) {
     return _path2['default'].extname(file) === ext;
   });
-
-  ret[key] = main;
 
   return ret;
 }

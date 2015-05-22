@@ -1,21 +1,13 @@
 import assert from 'assert';
 import autoprefixer from 'autoprefixer-core';
 
-import getLoaders from '../utils/getLoaders';
-import getPlugins from '../utils/getPlugins';
-import getOutput from '../utils/getOutput';
-import {getEntries, getNestedEntries} from '../utils/getEntries';
-
-/**
- * @param host
- * @returns {string[]}
- */
-function getHotloaderPlugins (host) {
-  return [
-    `webpack-dev-server/client?${host}`,
-    'webpack/hot/dev-server'
-  ];
-}
+import _getLoaders from '../utils/getLoaders';
+import _getPlugins from '../utils/getPlugins';
+import _getOutput from '../utils/getOutput';
+import {
+  getEntries as _getEntries,
+  getNestedEntries as _getNestedEntries
+  } from '../utils/getEntries';
 
 class Client {
   constructor (options) {
@@ -81,18 +73,17 @@ class Client {
   }
 
   /**
-   * @param host
    * @param [ext]
    * @param [key]
    */
   getEntries (ext, key) {
-    let entries = getEntries(this.options.srcs.js, ext, key);
+    let entries = _getEntries(this.options.srcs.js, ext, key);
 
     // In development mode an additional `dev` entry point is injected
     // (includes hot code loading and development server code)
     if (this.options.isProd) {
       let host = this.options.devServer.url;
-      entries.dev = getHotloaderPlugins(host);
+      entries.dev = this.getHotloaderPlugins(host);
     }
 
     return entries;
@@ -103,7 +94,7 @@ class Client {
    * @returns {{}}
    */
   getNestedEntries (entry) {
-    return getNestedEntries(this.options.srcs.js, entry);
+    return _getNestedEntries(this.options.srcs.js, entry);
   }
 
   getOutput (options) {
@@ -111,15 +102,26 @@ class Client {
       ? '/'
       : this.options.devServer.url + '/';
 
-    return getOutput(this.options.urls.js, options);
+    return _getOutput(this.options.urls.js, options);
   }
 
   getLoaders () {
-    return getLoaders(this.options.isProd, this.options.srcs);
+    return _getLoaders(this.options.isProd, this.options.srcs);
   }
 
   getPlugins () {
-    return getPlugins(this.options.isProd, this.options.urls);
+    return _getPlugins(this.options.isProd, this.options.urls);
+  }
+
+  /**
+   * @param host
+   * @returns {string[]}
+   */
+  getHotloaderPlugins (host) {
+    return [
+      `webpack-dev-server/client?${host}`,
+      'webpack/hot/dev-server'
+    ];
   }
 }
 

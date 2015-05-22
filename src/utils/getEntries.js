@@ -67,11 +67,10 @@ function getEntries (appDir, ext = '.js', key = 'main') {
   checkValidAppDir(appDir);
 
   let ret = {};
-  let main = fs.readdirSync(appDir)
+
+  ret[key] = fs.readdirSync(appDir)
     .map(file => path.join(appDir, file))
     .filter(file => path.extname(file) === ext);
-
-  ret[key] = main;
 
   return ret;
 }
