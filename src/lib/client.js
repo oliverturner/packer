@@ -1,10 +1,10 @@
 import assert from 'assert';
 import autoprefixer from 'autoprefixer-core';
 
-import getLoaders from './utils/getLoaders';
-import getPlugins from './utils/getPlugins';
-import getOutput from './utils/getOutput';
-import {getEntries, getNestedEntries} from './utils/getEntries';
+import getLoaders from '../utils/getLoaders';
+import getPlugins from '../utils/getPlugins';
+import getOutput from '../utils/getOutput';
+import {getEntries, getNestedEntries} from '../utils/getEntries';
 
 /**
  * @param host
@@ -18,12 +18,8 @@ function getHotloaderPlugins (host) {
 }
 
 class Client {
-  constructor (isProd) {
-    this.isProd = isProd;
-
-    this.getLoaders = getLoaders;
-    this.getPlugins = getPlugins;
-    this.getOutput  = getOutput;
+  constructor (options) {
+    this.options = options;
   }
 
   // Options:
@@ -71,8 +67,8 @@ class Client {
       entry:  [],
       output: {},
 
-      debug:   !this.isProd,
-      devtool: this.isProd ? 'sourcemap' : 'eval',
+      debug:   !this.options.isProd,
+      devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
       resolve: {
         extensions: ['', '.js', '.jsx', '.json']
@@ -86,16 +82,16 @@ class Client {
 
   /**
    * @param host
-   * @param appDir
-   * @param ext
-   * @param key
+   * @param [ext]
+   * @param [key]
    */
-  getEntries (host, appDir, ext, key) {
-    let entries = getEntries(appDir, ext, key);
+  getEntries (ext, key) {
+    let entries = getEntries(this.options.srcs.js, ext, key);
 
     // In development mode an additional `dev` entry point is injected
     // (includes hot code loading and development server code)
-    if (host) {
+    if (this.options.isProd) {
+      let host = this.options.devServer.url;
       entries.dev = getHotloaderPlugins(host);
     }
 
@@ -103,19 +99,27 @@ class Client {
   }
 
   /**
-   * @param host
-   * @param appDir
-   * @param entry
+   * @param [entry]
    * @returns {{}}
    */
-  getNestedEntries (host, appDir, entry) {
-    let entries = getNestedEntries(appDir, entry);
+  getNestedEntries (entry) {
+    return getNestedEntries(this.options.srcs.js, entry);
+  }
 
-    if (host) {
-      entries.dev = getHotloaderPlugins(host);
-    }
+  getOutput (options) {
+    options.publicPath = this.options.isProd
+      ? '/'
+      : this.options.devServer.url + '/';
 
-    return entries;
+    return getOutput(this.options.urls.js, options);
+  }
+
+  getLoaders () {
+    return getLoaders(this.options.isProd, this.options.srcs);
+  }
+
+  getPlugins () {
+    return getPlugins(this.options.isProd, this.options.urls);
   }
 }
 

@@ -27,7 +27,12 @@ var requiredKeys = ['host', 'port'];
 function getServerOpts(options) {
   (0, _assert2['default'])(options, 'options must be supplied');
 
+  var defaults = (0, _immutable.Map)({
+    host: 'localhost'
+  });
+
   options = _immutable.Map.isMap(options) ? options : (0, _immutable.Map)(options);
+  options = defaults.merge(options);
 
   requiredKeys.forEach(function (key) {
     return (0, _assert2['default'])(options.get(key), 'Missing value for options.' + key);

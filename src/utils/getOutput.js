@@ -3,7 +3,7 @@ import assert from 'assert';
 // Fill unsupplied values for output key
 /**
  * @param {string} jsUrl
- * @param output {{
+ * @param options {{
  *   path:          string,
  *   publicPath:    string,
  *   filename:      string,
@@ -17,21 +17,23 @@ import assert from 'assert';
  *   chunkFilename: string
  * }}
  */
-function getOutput (jsUrl, output) {
-  let defaultOutputs = {
+function getOutput (jsUrl, options) {
+  assert(jsUrl, `jsUrl may not be omitted`);
+
+  let defaults = {
     path:          null,
-    publicPath:    `/${jsUrl}/`,
+    publicPath:    '/',
     filename:      `${jsUrl}/[name].js`,
     chunkFilename: `${jsUrl}/[name].js`
   };
 
-  return Object.keys(defaultOutputs).reduce((output, key) => {
-    output[key] = output[key] || defaultOutputs[key];
+  return Object.keys(defaults).reduce((output, key) => {
+    output[key] = output[key] || defaults[key];
 
-    assert(output[key], `output.${key} may not be omitted`);
+    assert(output[key], `options.${key} may not be omitted`);
 
     return output;
-  }, output);
+  }, options);
 }
 
 export default getOutput;

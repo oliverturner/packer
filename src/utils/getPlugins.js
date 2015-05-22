@@ -4,18 +4,20 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 // Return an environment-specific array of plugins
 /**
  * @param {bool} isProd
- * @param {string} jsUrl
- * @param {string} cssUrl
+ * @param urls {{
+ *   css: string
+ *   js: string
+ * }}
  * @returns {Array.<T>}
  */
-function getPlugins (isProd, jsUrl, cssUrl) {
+function getPlugins (isProd, urls) {
   let defs = {
     'process.env': {
       NODE_ENV: JSON.stringify(isProd ? 'production' : 'development')
     }
   };
 
-  let commonsChunk = new webpack.optimize.CommonsChunkPlugin('commons', `${jsUrl}/commons.js`);
+  let commonsChunk = new webpack.optimize.CommonsChunkPlugin('commons', `${urls.js}/commons.js`);
 
   let defaults = [
     new webpack.DefinePlugin(defs),
@@ -29,7 +31,7 @@ function getPlugins (isProd, jsUrl, cssUrl) {
 
   let production = [
     commonsChunk,
-    new ExtractTextPlugin(`${cssUrl}/[name].css`, {
+    new ExtractTextPlugin(`${urls.css}/[name].css`, {
       allChunks: true
     }),
     new webpack.optimize.OccurenceOrderPlugin(),

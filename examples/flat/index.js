@@ -1,38 +1,33 @@
-var packer = require('../../dist');
+var Packer = require('../../dist');
 var getEntries = require('../../dist/utils/getEntries').getEntries;
 var getServerOpts = require('../../dist/utils/getServerOpts');
 
-var isProd = process.env.NODE_ENV === 'production';
+var appPort = 3000;
+var appServer = getServerOpts({port: appPort});
+var devServer = getServerOpts(appServer.set('port', appPort + 1));
 
-var server = getServerOpts({
-  host: 'localhost',
-  port: 3001
+var packer = new Packer({
+  devServer: devServer.toObject(),
+  srcs: {
+    sass: __dirname + '/src/sass',
+    js:   __dirname + '/src/apps'
+  },
+  urls: {
+    js:  'scripts',
+    css: 'styles'
+  }
 });
 
-var serverUrl  = server.get('url');
-var publicPath = isProd ? '/' : serverUrl;
-
-var srcs = {
-  sass: __dirname + '/src/sass',
-  js:   __dirname + '/src/apps'
-};
-
-var urls = {
-  js:  'scripts',
-  css: 'styles'
-};
-
 var config = packer.client.create({
-  entry:  packer.client.getEntries(serverUrl, srcs.js, '.jsx'),
-  output: packer.client.getOutput(urls.js, {
-    path:       __dirname + '/out',
-    publicPath: publicPath
+  entry:  packer.client.getEntries('.jsx'),
+  output: packer.client.getOutput({
+    path: __dirname + '/out'
   }),
   module: {
-    loaders: packer.client.getLoaders(isProd, srcs.sass)
+    loaders: packer.client.getLoaders()
   },
 
-  plugins: packer.client.getPlugins(isProd, urls.js, urls.css)
+  plugins: packer.client.getPlugins()
 });
 
 console.log(JSON.stringify(config, null, 2));

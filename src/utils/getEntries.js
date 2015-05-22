@@ -35,7 +35,7 @@ function checkValidAppDir (appDir) {
 //```
 /**
  * @param {string} appDir
- * @param {string} [entry]
+ * @param {string} entry
  * @returns {*}
  */
 function getNestedEntries (appDir, entry = 'entry.jsx') {

@@ -9,7 +9,7 @@ describe('utils/getOutput', () => {
     let opts = {path: './'};
     let updated = {
       path:          './',
-      publicPath:    '/scripts/',
+      publicPath:    '/',
       filename:      'scripts/[name].js',
       chunkFilename: 'scripts/[name].js'
     };

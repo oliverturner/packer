@@ -9,15 +9,17 @@ import getLoader from './getLoader';
 // * Swap the sass-loader for ExtractTextPlugin to emit static CSS
 /**
  * @param {bool} isProd
- * @param {string} sassPath
+ * @param srcs {{
+ *   [sass]: string
+ * }}
  *
  * @returns {Array}
  */
-function getLoaders (isProd = false, sassPath = '') {
+function getLoaders (isProd = false, srcs = {}) {
   let sassLoaders = [
     'css',
     'postcss',
-    'sass?includePaths[]=' + sassPath
+    'sass?includePaths[]=' + srcs.sass
   ].map(getLoader);
 
   let loaders = Map({

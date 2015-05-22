@@ -3,7 +3,7 @@ import path from 'path';
 import assert from 'assert';
 import webpack from 'webpack';
 
-import {getEntries, getNestedEntries} from './utils/getEntries';
+import {getEntries, getNestedEntries} from '../utils/getEntries';
 
 class SSR {
 

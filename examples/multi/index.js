@@ -1,25 +1,33 @@
-var WebPacker  = require('../../dist').default;
-var getEntries = require('../../dist/utils/getEntries');
+var Packer = require('../../dist');
+var getServerOpts = require('../../dist/utils/getServerOpts');
 
-var isDev = process.env.NODE_ENV === 'development';
-var host = isDev ? 'http://localhost:3001' : null;
+var appPort = 3000;
+var appServer = getServerOpts({port: appPort});
+var devServer = getServerOpts(appServer.set('port', appPort + 1));
 
-var srcs = {
-  sass: __dirname + '/src/sass',
-  js:   __dirname + '/src/apps'
-};
-
-var urls = {
-  js:  'scripts',
-  css: 'styles'
-};
-
-var config = new WebPacker({
-  entry:  getEntries(srcs.js, host),
-  output: {
-    path: __dirname + '/out'
+var packer = new Packer({
+  devServer: devServer.toObject(),
+  srcs: {
+    sass: __dirname + '/src/sass',
+    js:   __dirname + '/src/apps'
+  },
+  urls: {
+    js:  'scripts',
+    css: 'styles'
   }
-}, urls.js, urls.css, srcs.sass);
+});
+
+var config = packer.client.create({
+  entry:  packer.client.getNestedEntries(),
+  output: packer.client.getOutput({
+    path: __dirname + '/out'
+  }),
+  module: {
+    loaders: packer.client.getLoaders()
+  },
+
+  plugins: packer.client.getPlugins()
+});
 
 console.log(JSON.stringify(config, null, 2));
 

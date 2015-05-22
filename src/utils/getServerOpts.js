@@ -16,10 +16,15 @@ const requiredKeys = ['host', 'port'];
 function getServerOpts (options) {
   assert(options, 'options must be supplied');
 
+  let defaults = Map({
+    host: 'localhost'
+  });
+
   options = Map.isMap(options) ? options : Map(options);
+  options = defaults.merge(options);
 
   requiredKeys.forEach(key =>
-    assert(options.get(key), `Missing value for options.${key}`)
+      assert(options.get(key), `Missing value for options.${key}`)
   );
 
   options = options.set('url', `http://${options.get('host')}:${options.get('port')}`);

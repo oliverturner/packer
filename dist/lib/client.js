@@ -20,19 +20,19 @@ var _autoprefixerCore = require('autoprefixer-core');
 
 var _autoprefixerCore2 = _interopRequireDefault(_autoprefixerCore);
 
-var _utilsGetLoaders = require('./utils/getLoaders');
+var _utilsGetLoaders = require('../utils/getLoaders');
 
 var _utilsGetLoaders2 = _interopRequireDefault(_utilsGetLoaders);
 
-var _utilsGetPlugins = require('./utils/getPlugins');
+var _utilsGetPlugins = require('../utils/getPlugins');
 
 var _utilsGetPlugins2 = _interopRequireDefault(_utilsGetPlugins);
 
-var _utilsGetOutput = require('./utils/getOutput');
+var _utilsGetOutput = require('../utils/getOutput');
 
 var _utilsGetOutput2 = _interopRequireDefault(_utilsGetOutput);
 
-var _utilsGetEntries = require('./utils/getEntries');
+var _utilsGetEntries = require('../utils/getEntries');
 
 /**
  * @param host
@@ -43,14 +43,10 @@ function getHotloaderPlugins(host) {
 }
 
 var Client = (function () {
-  function Client(isProd) {
+  function Client(options) {
     _classCallCheck(this, Client);
 
-    this.isProd = isProd;
-
-    this.getLoaders = _utilsGetLoaders2['default'];
-    this.getPlugins = _utilsGetPlugins2['default'];
-    this.getOutput = _utilsGetOutput2['default'];
+    this.options = options;
   }
 
   _createClass(Client, [{
@@ -101,8 +97,8 @@ var Client = (function () {
         entry: [],
         output: {},
 
-        debug: !this.isProd,
-        devtool: this.isProd ? 'sourcemap' : 'eval',
+        debug: !this.options.isProd,
+        devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
         resolve: {
           extensions: ['', '.js', '.jsx', '.json']
@@ -118,16 +114,16 @@ var Client = (function () {
 
     /**
      * @param host
-     * @param appDir
-     * @param ext
-     * @param key
+     * @param [ext]
+     * @param [key]
      */
-    value: function getEntries(host, appDir, ext, key) {
-      var entries = (0, _utilsGetEntries.getEntries)(appDir, ext, key);
+    value: function getEntries(ext, key) {
+      var entries = (0, _utilsGetEntries.getEntries)(this.options.srcs.js, ext, key);
 
       // In development mode an additional `dev` entry point is injected
       // (includes hot code loading and development server code)
-      if (host) {
+      if (this.options.isProd) {
+        var host = this.options.devServer.url;
         entries.dev = getHotloaderPlugins(host);
       }
 
@@ -137,19 +133,28 @@ var Client = (function () {
     key: 'getNestedEntries',
 
     /**
-     * @param host
-     * @param appDir
-     * @param entry
+     * @param [entry]
      * @returns {{}}
      */
-    value: function getNestedEntries(host, appDir, entry) {
-      var entries = (0, _utilsGetEntries.getNestedEntries)(appDir, entry);
+    value: function getNestedEntries(entry) {
+      return (0, _utilsGetEntries.getNestedEntries)(this.options.srcs.js, entry);
+    }
+  }, {
+    key: 'getOutput',
+    value: function getOutput(options) {
+      options.publicPath = this.options.isProd ? '/' : this.options.devServer.url + '/';
 
-      if (host) {
-        entries.dev = getHotloaderPlugins(host);
-      }
-
-      return entries;
+      return (0, _utilsGetOutput2['default'])(this.options.urls.js, options);
+    }
+  }, {
+    key: 'getLoaders',
+    value: function getLoaders() {
+      return (0, _utilsGetLoaders2['default'])(this.options.isProd, this.options.srcs);
+    }
+  }, {
+    key: 'getPlugins',
+    value: function getPlugins() {
+      return (0, _utilsGetPlugins2['default'])(this.options.isProd, this.options.urls);
     }
   }]);
 

@@ -22,15 +22,17 @@ var _getLoader2 = _interopRequireDefault(_getLoader);
 // * Swap the sass-loader for ExtractTextPlugin to emit static CSS
 /**
  * @param {bool} isProd
- * @param {string} sassPath
+ * @param srcs {{
+ *   [sass]: string
+ * }}
  *
  * @returns {Array}
  */
 function getLoaders() {
   var isProd = arguments[0] === undefined ? false : arguments[0];
-  var sassPath = arguments[1] === undefined ? '' : arguments[1];
+  var srcs = arguments[1] === undefined ? {} : arguments[1];
 
-  var sassLoaders = ['css', 'postcss', 'sass?includePaths[]=' + sassPath].map(_getLoader2['default']);
+  var sassLoaders = ['css', 'postcss', 'sass?includePaths[]=' + srcs.sass].map(_getLoader2['default']);
 
   var loaders = (0, _immutable.Map)({
     json: {
