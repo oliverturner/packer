@@ -7,32 +7,32 @@
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
   },
   "dependencies": {
-    "babel": "^5.4.3",
+    "babel": "^5.4.7",
     "babel-plugin-object-assign": "^1.1.0",
     "find-root": "^0.1.1",
-    "immutable": "^3.7.2"
+    "immutable": "^3.7.3"
   },
   "devDependencies": {
     "autoprefixer-core": "^5.1.11",
-    "babel-core": "^5.4.3",
-    "babel-loader": "^5.1.2",
+    "babel-core": "^5.4.7",
+    "babel-loader": "^5.1.3",
     "chai": "^2.3.0",
-    "css-loader": "^0.12.1",
-    "expose-loader": "^0.6.0",
+    "css-loader": "^0.14.2",
+    "expose-loader": "^0.7.0",
     "extract-text-webpack-plugin": "^0.8.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",
     "isparta": "^3.0.3",
     "mocha": "^2.2.5",
     "mock-fs": "^2.7.0",
-    "node-sass": "^3.1.1",
+    "node-sass": "^3.1.2",
     "postcss-loader": "^0.4.3",
     "react-hot-loader": "^1.2.7",
-    "rimraf": "^2.3.3",
+    "rimraf": "^2.3.4",
     "sass-loader": "^1.0.2",
-    "style-loader": "^0.12.2",
-    "webpack": "^1.9.7",
-    "webpack-dev-server": "^1.8.2"
+    "style-loader": "^0.12.3",
+    "webpack": "^1.9.9",
+    "webpack-dev-server": "^1.9.0"
   },
   "homepage": "https://github.com/codedsignal/feei-webpacker#readme",
   "keywords": [
@@ -43,17 +43,17 @@
   "main": "dist/index.js",
   "peerDependencies": {
     "autoprefixer-core": "^5.1.11",
-    "babel-core": "^5.4.3",
-    "babel-loader": "^5.1.2",
-    "css-loader": "^0.12.1",
-    "expose-loader": "^0.6.0",
+    "babel-core": "^5.4.7",
+    "babel-loader": "^5.1.3",
+    "css-loader": "^0.14.2",
+    "expose-loader": "^0.7.0",
     "extract-text-webpack-plugin": "^0.8.0",
     "postcss-loader": "^0.4.3",
     "react-hot-loader": "^1.2.7",
     "sass-loader": "^1.0.2",
-    "style-loader": "^0.12.2",
-    "webpack": "^1.9.7",
-    "webpack-dev-server": "^1.8.2"
+    "style-loader": "^0.12.3",
+    "webpack": "^1.9.9",
+    "webpack-dev-server": "^1.9.0"
   },
   "repository": {
     "type": "git",
