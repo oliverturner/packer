@@ -111,14 +111,7 @@ var Client = (function () {
     value: function getEntries(ext, key) {
       var entries = (0, _utilsGetEntries.getEntries)(this.options.srcs.js, ext, key);
 
-      // In development mode an additional `dev` entry point is injected
-      // (includes hot code loading and development server code)
-      if (this.options.isProd) {
-        var host = this.options.devServer.url;
-        entries.dev = this.getHotloaderPlugins(host);
-      }
-
-      return entries;
+      return this.getDevEntries(entries);
     }
   }, {
     key: 'getNestedEntries',
@@ -128,7 +121,9 @@ var Client = (function () {
      * @returns {{}}
      */
     value: function getNestedEntries(entry) {
-      return (0, _utilsGetEntries.getNestedEntries)(this.options.srcs.js, entry);
+      var entries = (0, _utilsGetEntries.getNestedEntries)(this.options.srcs.js, entry);
+
+      return this.getDevEntries(entries);
     }
   }, {
     key: 'getOutput',
@@ -156,6 +151,23 @@ var Client = (function () {
      */
     value: function getHotloaderPlugins(host) {
       return ['webpack-dev-server/client?' + host, 'webpack/hot/dev-server'];
+    }
+  }, {
+    key: 'getDevEntries',
+
+    // In development mode an additional `dev` entry point is injected
+    // (includes hot code loading and development server code)
+    /**
+     * @param entries
+     * @returns {*}
+     */
+    value: function getDevEntries(entries) {
+      if (!this.options.isProd) {
+        var host = this.options.devServer.url;
+        entries.dev = this.getHotloaderPlugins(host);
+      }
+
+      return entries;
     }
   }]);
 

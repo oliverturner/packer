@@ -2,6 +2,8 @@ import Client from './lib/client';
 import SSR from './lib/ssr';
 import DevServer from './lib/ssr';
 
+import getServerOpts from './utils/getServerOpts';
+
 const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
 
@@ -16,3 +18,5 @@ class Packer {
 }
 
 export default Packer;
+
+export {getServerOpts};

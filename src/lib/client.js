@@ -79,14 +79,7 @@ class Client {
   getEntries (ext, key) {
     let entries = _getEntries(this.options.srcs.js, ext, key);
 
-    // In development mode an additional `dev` entry point is injected
-    // (includes hot code loading and development server code)
-    if (this.options.isProd) {
-      let host = this.options.devServer.url;
-      entries.dev = this.getHotloaderPlugins(host);
-    }
-
-    return entries;
+    return this.getDevEntries(entries);
   }
 
   /**
@@ -94,7 +87,9 @@ class Client {
    * @returns {{}}
    */
   getNestedEntries (entry) {
-    return _getNestedEntries(this.options.srcs.js, entry);
+    let entries = _getNestedEntries(this.options.srcs.js, entry);
+
+    return this.getDevEntries(entries);
   }
 
   getOutput (options) {
@@ -122,6 +117,21 @@ class Client {
       `webpack-dev-server/client?${host}`,
       'webpack/hot/dev-server'
     ];
+  }
+
+  // In development mode an additional `dev` entry point is injected
+  // (includes hot code loading and development server code)
+  /**
+   * @param entries
+   * @returns {*}
+   */
+  getDevEntries (entries) {
+    if (!this.options.isProd) {
+      let host = this.options.devServer.url;
+      entries.dev = this.getHotloaderPlugins(host);
+    }
+
+    return entries;
   }
 }
 

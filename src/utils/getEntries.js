@@ -11,6 +11,26 @@ function checkValidAppDir (appDir) {
   assert(stat && stat.isDirectory(), 'Not a valid directory');
 }
 
+/**
+ *
+ * @param {string} appDir
+ * @param {string} ext
+ * @param {string} key
+ *
+ * @returns {{}}
+ */
+function getEntries (appDir, ext = '.js', key = 'main') {
+  checkValidAppDir(appDir);
+
+  let ret = {};
+
+  ret[key] = fs.readdirSync(appDir)
+    .map(file => path.join(appDir, file))
+    .filter(file => path.extname(file) === ext);
+
+  return ret;
+}
+
 // Loop through child modules of `appDir` to create an object used by Webpack as
 // entrypoints keyed by folder name:
 //```
@@ -53,26 +73,6 @@ function getNestedEntries (appDir, entry = 'entry.jsx') {
 
     return ret;
   }, {});
-}
-
-/**
- *
- * @param {string} appDir
- * @param {string} ext
- * @param {string} key
- *
- * @returns {{}}
- */
-function getEntries (appDir, ext = '.js', key = 'main') {
-  checkValidAppDir(appDir);
-
-  let ret = {};
-
-  ret[key] = fs.readdirSync(appDir)
-    .map(file => path.join(appDir, file))
-    .filter(file => path.extname(file) === ext);
-
-  return ret;
 }
 
 export {getEntries, getNestedEntries};

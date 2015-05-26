@@ -20,6 +20,10 @@ var _libSsr2 = _interopRequireDefault(_libSsr);
 
 var _libSsr3 = _interopRequireDefault(_libSsr);
 
+var _utilsGetServerOpts = require('./utils/getServerOpts');
+
+var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
+
 var env = process.env.NODE_ENV || 'development';
 var isProd = env === 'production';
 
@@ -34,4 +38,4 @@ var Packer = function Packer(options) {
 };
 
 exports['default'] = Packer;
-module.exports = exports['default'];
+exports.getServerOpts = _utilsGetServerOpts2['default'];
