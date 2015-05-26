@@ -1,7 +1,7 @@
 {
   "name": "@oliverturner/feei-webpacker",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
-  "version": "1.0.76",
+  "version": "2.0.0",
   "author": "Oliver Turner, FEEI",
   "bugs": {
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
@@ -63,16 +63,12 @@
     "babel": "babel-node",
     "docs": "docco src/*.js src/**/*.js",
     "coverage": "babel-node -r node_modules/.bin/isparta cover node_modules/.bin/_mocha -- --recursive ./test",
-
     "test": "eslint ./src && mocha",
     "build": "npm test && gulp build && npm run docs",
-
     "git-commit": "git add -A . && git commit -a -m 'publish update'",
-
     "pr": "npm run build && npm run git-commit && npm version",
     "release-major": "npm run pr -- major && npm publish && git push --follow-tags",
     "release-patch": "npm run pr -- patch && npm publish && git push --follow-tags",
-
     "start": "mocha --watch --reporter dot"
   }
 }
