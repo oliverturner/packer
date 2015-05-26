@@ -66,9 +66,9 @@
     "test": "eslint ./src && mocha",
     "build": "npm test && gulp build && npm run docs",
     "git-commit": "git add -A . && git commit -a -m 'publish update'",
-    "pr": "npm run build && npm run git-commit && npm version",
-    "release-major": "npm run pr -- major && npm publish && git push --follow-tags",
-    "release-patch": "npm run pr -- patch && npm publish && git push --follow-tags",
+    "prerelease": "npm run build && npm run git-commit",
+    "release": "npm version",
+    "postrelease": "npm publish && git push --follow-tags",
     "start": "mocha --watch --reporter dot"
   }
 }
