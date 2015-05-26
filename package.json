@@ -1,7 +1,7 @@
 {
   "name": "@oliverturner/feei-webpacker",
   "description": "A webpack utility bundle for hot reloading in development and optimised in production",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Oliver Turner, FEEI",
   "bugs": {
     "url": "https://github.com/codedsignal/feei-webpacker/issues"
