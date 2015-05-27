@@ -30,10 +30,11 @@ var isProd = env === 'production';
 var Packer =
 /**
  * @param options {{
- *   devServer: string,
- *   appDir: string,
- *   srcs: {},
- *   urls: {}
+ *   resolveRoot: string,
+ *   appDir:      string,
+ *   devServer:   string,
+ *   srcs:        {},
+ *   urls:        {}
  * }}
  */
 function Packer(options) {

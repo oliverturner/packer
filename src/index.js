@@ -10,10 +10,11 @@ const isProd = env === 'production';
 class Packer {
   /**
    * @param options {{
-   *   devServer: string,
-   *   appDir: string,
-   *   srcs: {},
-   *   urls: {}
+   *   resolveRoot: string,
+   *   appDir:      string,
+   *   devServer:   string,
+   *   srcs:        {},
+   *   urls:        {}
    * }}
    */
   constructor (options) {

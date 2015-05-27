@@ -10,6 +10,15 @@ import {
 
 class SSR {
 
+  /**
+   * @param options {{
+   *   resolveRoot: string,
+   *   appDir:      string,
+   *   devServer:   string,
+   *   srcs:        {},
+   *   urls:        {}
+   * }}
+   */
   constructor (options) {
     this.options = options;
   }
@@ -23,10 +32,26 @@ class SSR {
     return nodeModules;
   }
 
+  /**
+   * @param options {{
+   *   entry:         [],
+   *   output:        {
+   *     path:          string,
+   *     filename:      string,
+   *     libraryTarget: string
+   *   },
+   *   [resolveRoot]: string
+   * }}
+   * @returns {*}
+   */
   create (options) {
     assert(options, 'options may not be omitted');
     assert(options.entry, `options.entry may not be omitted`);
     assert(options.output, `options.output may not be omitted`);
+
+    let resolveRoot = options.resolveRoot || this.options.resolveRoot;
+
+    assert(resolveRoot, `resolveRoot may not be omitted`);
 
     return Object.assign({
       target:    'node',
@@ -39,6 +64,7 @@ class SSR {
         new webpack.NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')
       ],
       resolve: {
+        root:       resolveRoot,
         extensions: ['', '.js', '.jsx', '.json']
       },
       externals: this._getNodeModules()

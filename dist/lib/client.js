@@ -35,6 +35,17 @@ var _utilsGetOutput2 = _interopRequireDefault(_utilsGetOutput);
 var _utilsGetEntries = require('../utils/getEntries');
 
 var Client = (function () {
+
+  /**
+   * @param options {{
+   *   resolveRoot: string,
+   *   appDir:      string,
+   *   devServer:   string,
+   *   srcs:        {},
+   *   urls:        {}
+   * }}
+   */
+
   function Client(options) {
     _classCallCheck(this, Client);
 
@@ -48,7 +59,6 @@ var Client = (function () {
     // * isProd: whether we're in production mode
     // * entry:  file, directory or array of entry points
     /**
-     * @param {bool} isProd
      * @param options {{
      *   entry:  string|[],
      *   output: {
@@ -84,6 +94,10 @@ var Client = (function () {
       (0, _assert2['default'])(options.entry, 'options.entry may not be omitted');
       (0, _assert2['default'])(options.output, 'options.output may not be omitted');
 
+      var resolveRoot = options.resolveRoot || this.options.resolveRoot;
+
+      (0, _assert2['default'])(resolveRoot, 'resolveRoot may not be omitted');
+
       return _extends({
         // Replaced values
         entry: [],
@@ -93,6 +107,7 @@ var Client = (function () {
         devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
         resolve: {
+          root: resolveRoot,
           extensions: ['', '.js', '.jsx', '.json']
         },
 

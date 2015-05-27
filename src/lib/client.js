@@ -10,6 +10,16 @@ import {
   } from '../utils/getEntries';
 
 class Client {
+
+  /**
+   * @param options {{
+   *   resolveRoot: string,
+   *   appDir:      string,
+   *   devServer:   string,
+   *   srcs:        {},
+   *   urls:        {}
+   * }}
+   */
   constructor (options) {
     this.options = options;
   }
@@ -18,7 +28,6 @@ class Client {
   // * isProd: whether we're in production mode
   // * entry:  file, directory or array of entry points
   /**
-   * @param {bool} isProd
    * @param options {{
    *   entry:  string|[],
    *   output: {
@@ -54,6 +63,10 @@ class Client {
     assert(options.entry, `options.entry may not be omitted`);
     assert(options.output, `options.output may not be omitted`);
 
+    let resolveRoot = options.resolveRoot || this.options.resolveRoot;
+
+    assert(resolveRoot, `resolveRoot may not be omitted`);
+
     return Object.assign({
       // Replaced values
       entry:  [],
@@ -63,6 +76,7 @@ class Client {
       devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
       resolve: {
+        root:       resolveRoot,
         extensions: ['', '.js', '.jsx', '.json']
       },
 

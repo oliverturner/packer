@@ -31,6 +31,17 @@ var _webpack2 = _interopRequireDefault(_webpack);
 var _utilsGetEntries = require('../utils/getEntries');
 
 var SSR = (function () {
+
+  /**
+   * @param options {{
+   *   resolveRoot: string,
+   *   appDir:      string,
+   *   devServer:   string,
+   *   srcs:        {},
+   *   urls:        {}
+   * }}
+   */
+
   function SSR(options) {
     _classCallCheck(this, SSR);
 
@@ -51,10 +62,27 @@ var SSR = (function () {
     }
   }, {
     key: 'create',
+
+    /**
+     * @param options {{
+     *   entry:         [],
+     *   output:        {
+     *     path:          string,
+     *     filename:      string,
+     *     libraryTarget: string
+     *   },
+     *   [resolveRoot]: string
+     * }}
+     * @returns {*}
+     */
     value: function create(options) {
       (0, _assert2['default'])(options, 'options may not be omitted');
       (0, _assert2['default'])(options.entry, 'options.entry may not be omitted');
       (0, _assert2['default'])(options.output, 'options.output may not be omitted');
+
+      var resolveRoot = options.resolveRoot || this.options.resolveRoot;
+
+      (0, _assert2['default'])(resolveRoot, 'resolveRoot may not be omitted');
 
       return _extends({
         target: 'node',
@@ -63,6 +91,7 @@ var SSR = (function () {
         },
         plugins: [new _webpack2['default'].NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')],
         resolve: {
+          root: resolveRoot,
           extensions: ['', '.js', '.jsx', '.json']
         },
         externals: this._getNodeModules()
