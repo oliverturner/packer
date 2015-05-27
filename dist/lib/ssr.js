@@ -35,9 +35,6 @@ var SSR = (function () {
     _classCallCheck(this, SSR);
 
     this.isProd = isProd;
-
-    this.getEntries = _utilsGetEntries.getEntries;
-    this.getNestedEntries = _utilsGetEntries.getNestedEntries;
   }
 
   _createClass(SSR, [{
@@ -67,6 +64,26 @@ var SSR = (function () {
         plugins: [new _webpack2['default'].NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')],
         externals: this._getNodeModules()
       }, options);
+    }
+  }, {
+    key: 'getEntries',
+
+    /**
+     * @param [ext]
+     * @param [key]
+     */
+    value: function getEntries(ext, key) {
+      return (0, _utilsGetEntries.getEntries)(this.options.srcs.js, ext, key);
+    }
+  }, {
+    key: 'getNestedEntries',
+
+    /**
+     * @param [entry]
+     * @returns {{}}
+     */
+    value: function getNestedEntries(entry) {
+      return (0, _utilsGetEntries.getNestedEntries)(this.options.srcs.js, entry);
     }
   }]);
 

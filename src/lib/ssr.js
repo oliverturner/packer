@@ -40,7 +40,7 @@ class SSR {
       ],
       externals: this._getNodeModules()
     }, options);
-  },
+  }
 
   /**
    * @param [ext]
