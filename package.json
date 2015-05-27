@@ -48,7 +48,7 @@
     "babel": "babel-node",
     "coverage": "babel-node -r node_modules/.bin/isparta cover node_modules/.bin/_mocha -- --recursive ./test",
     "build": "gulp build",
-    "postbuild": "npm run docs && npm run coverage",
+    "postbuild": "npm run docs",
     "docs": "docco src/*.js src/**/*.js",
     "git-commit": "git add -A . && git commit -a -m 'publish update'",
     "prebuild": "npm test",
