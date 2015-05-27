@@ -50,7 +50,7 @@ class SSR {
    * @param [key]
    */
   getEntries (ext, key) {
-    return _getEntries(this.options.srcs.js, ext, key);
+    return _getEntries(this.options.appDir, ext, key);
   }
 
   /**
@@ -58,7 +58,7 @@ class SSR {
    * @returns {{}}
    */
   getNestedEntries (entry) {
-    return _getNestedEntries(this.options.srcs.js, entry);
+    return _getNestedEntries(this.options.appDir, entry);
   }
 }
 

@@ -76,7 +76,7 @@ var SSR = (function () {
      * @param [key]
      */
     value: function getEntries(ext, key) {
-      return (0, _utilsGetEntries.getEntries)(this.options.srcs.js, ext, key);
+      return (0, _utilsGetEntries.getEntries)(this.options.appDir, ext, key);
     }
   }, {
     key: 'getNestedEntries',
@@ -86,7 +86,7 @@ var SSR = (function () {
      * @returns {{}}
      */
     value: function getNestedEntries(entry) {
-      return (0, _utilsGetEntries.getNestedEntries)(this.options.srcs.js, entry);
+      return (0, _utilsGetEntries.getNestedEntries)(this.options.appDir, entry);
     }
   }]);
 
