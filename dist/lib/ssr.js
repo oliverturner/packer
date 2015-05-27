@@ -31,10 +31,10 @@ var _webpack2 = _interopRequireDefault(_webpack);
 var _utilsGetEntries = require('../utils/getEntries');
 
 var SSR = (function () {
-  function SSR(isProd) {
+  function SSR(options) {
     _classCallCheck(this, SSR);
 
-    this.isProd = isProd;
+    this.options = options;
   }
 
   _createClass(SSR, [{

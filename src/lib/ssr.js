@@ -10,8 +10,8 @@ import {
 
 class SSR {
 
-  constructor (isProd) {
-    this.isProd = isProd;
+  constructor (options) {
+    this.options = options;
   }
 
   _getNodeModules () {
