@@ -27,7 +27,16 @@ var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
 var env = process.env.NODE_ENV || 'development';
 var isProd = env === 'production';
 
-var Packer = function Packer(options) {
+var Packer =
+/**
+ * @param options {{
+ *   devServer: string,
+ *   appDir: string,
+ *   srcs: {},
+ *   urls: {}
+ * }}
+ */
+function Packer(options) {
   _classCallCheck(this, Packer);
 
   this.options = _extends(options, { isProd: isProd });

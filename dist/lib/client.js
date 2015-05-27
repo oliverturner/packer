@@ -109,7 +109,7 @@ var Client = (function () {
      * @param [key]
      */
     value: function getEntries(ext, key) {
-      var entries = (0, _utilsGetEntries.getEntries)(this.options.srcs.js, ext, key);
+      var entries = (0, _utilsGetEntries.getEntries)(this.options.appDir, ext, key);
 
       return this.getDevEntries(entries);
     }
@@ -121,7 +121,7 @@ var Client = (function () {
      * @returns {{}}
      */
     value: function getNestedEntries(entry) {
-      var entries = (0, _utilsGetEntries.getNestedEntries)(this.options.srcs.js, entry);
+      var entries = (0, _utilsGetEntries.getNestedEntries)(this.options.appDir, entry);
 
       return this.getDevEntries(entries);
     }

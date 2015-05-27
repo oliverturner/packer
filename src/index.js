@@ -8,6 +8,14 @@ const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
 
 class Packer {
+  /**
+   * @param options {{
+   *   devServer: string,
+   *   appDir: string,
+   *   srcs: {},
+   *   urls: {}
+   * }}
+   */
   constructor (options) {
     this.options = Object.assign(options, {isProd});
 

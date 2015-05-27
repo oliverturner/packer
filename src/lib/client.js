@@ -77,7 +77,7 @@ class Client {
    * @param [key]
    */
   getEntries (ext, key) {
-    let entries = _getEntries(this.options.srcs.js, ext, key);
+    let entries = _getEntries(this.options.appDir, ext, key);
 
     return this.getDevEntries(entries);
   }
@@ -87,7 +87,7 @@ class Client {
    * @returns {{}}
    */
   getNestedEntries (entry) {
-    let entries = _getNestedEntries(this.options.srcs.js, entry);
+    let entries = _getNestedEntries(this.options.appDir, entry);
 
     return this.getDevEntries(entries);
   }
