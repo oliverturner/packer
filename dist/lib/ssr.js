@@ -62,6 +62,9 @@ var SSR = (function () {
           loaders: [{ test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ }]
         },
         plugins: [new _webpack2['default'].NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')],
+        resolve: {
+          extensions: ['', '.js', '.jsx', '.json']
+        },
         externals: this._getNodeModules()
       }, options);
     }

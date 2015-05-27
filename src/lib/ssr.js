@@ -38,6 +38,9 @@ class SSR {
       plugins: [
         new webpack.NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')
       ],
+      resolve: {
+        extensions: ['', '.js', '.jsx', '.json']
+      },
       externals: this._getNodeModules()
     }, options);
   }
