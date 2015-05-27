@@ -13,6 +13,6 @@ Contributors will need to run
 
 `docs` Generate the documentation
 
-`publish` Run tests, bump the version number, publish to npm
+`release -- [<newversion> | major | minor | patch | prerelease | preminor | premajor ]` Run tests, bump the version number, publish to npm
 
 `start` Watch ./src for changes and recompile to ./dist on update
