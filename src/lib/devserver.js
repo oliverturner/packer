@@ -1,7 +1,9 @@
 import getServerOpts from './utils/getServerOpts';
 
 class DevServer {
-  constructor () {
+  constructor (options) {
+    this.options = options;
+
     this.defaults = {
       hot:      true,
       noInfo:   true,

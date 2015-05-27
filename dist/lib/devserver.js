@@ -11,8 +11,10 @@ var _utilsGetServerOpts = require('./utils/getServerOpts');
 var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
 
 var DevServer = (function () {
-  function DevServer() {
+  function DevServer(options) {
     _classCallCheck(this, DevServer);
+
+    this.options = options;
 
     this.defaults = {
       hot: true,
