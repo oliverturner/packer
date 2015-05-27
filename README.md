@@ -9,10 +9,18 @@ Contributors will need to run
 
 ## Available tasks
 
-`test` Lint the source
+Run tests, lint the source
 
-`docs` Generate the documentation
+`npm test` 
 
-`release -- [<newversion> | major | minor | patch | prerelease | preminor | premajor ]` Run tests, bump the version number, publish to npm
+Generate the documentation
 
-`start` Watch ./src for changes and recompile to ./dist on update
+`npm run docs` 
+
+Lint source, run tests, update version, push tags to github, publish to npm
+
+`npm run release -- [major | minor | patch]` 
+
+Watch ./src run tests on change
+
+`npm start` 
