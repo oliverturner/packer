@@ -22,6 +22,10 @@ var _getOutput = require('./getOutput');
 
 var _getOutput2 = _interopRequireDefault(_getOutput);
 
+var _getPathUrls = require('./getPathUrls');
+
+var _getPathUrls2 = _interopRequireDefault(_getPathUrls);
+
 var _getPlugins = require('./getPlugins');
 
 var _getPlugins2 = _interopRequireDefault(_getPlugins);
@@ -34,6 +38,7 @@ exports['default'] = {
   getEntries: _getEntries2['default'],
   getLoaders: _getLoaders2['default'],
   getOutput: _getOutput2['default'],
+  getPathUrls: _getPathUrls2['default'],
   getPlugins: _getPlugins2['default'],
   getServerOpts: _getServerOpts2['default']
 };
