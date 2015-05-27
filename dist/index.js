@@ -48,7 +48,7 @@ var Packer = (function () {
 
     this.ssr = new _libSsr2['default'](this.options);
     this.client = new _libClient2['default'](this.options);
-    this.dev = new _libSsr3['default']();
+    this.dev = new _libSsr3['default'](this.options);
   }
 
   _createClass(Packer, null, [{
