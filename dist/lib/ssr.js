@@ -117,6 +117,18 @@ var SSR = (function () {
     value: function getNestedEntries(entry) {
       return (0, _utilsGetEntries.getNestedEntries)(this.options.appDir, entry);
     }
+  }, {
+    key: 'getOutput',
+    value: function getOutput(options) {
+      (0, _assert2['default'])(options.path, 'options.path may not be omitted');
+
+      var defaults = {
+        filename: '[name].js',
+        libraryTarget: 'commonjs2'
+      };
+
+      return _extends(defaults, options);
+    }
   }]);
 
   return SSR;

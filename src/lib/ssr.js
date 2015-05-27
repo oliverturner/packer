@@ -46,8 +46,8 @@ class SSR {
    */
   create (options) {
     assert(options, 'options may not be omitted');
-    assert(options.entry, `options.entry may not be omitted`);
-    assert(options.output, `options.output may not be omitted`);
+    assert(options.entry, 'options.entry may not be omitted');
+    assert(options.output, 'options.output may not be omitted');
 
     let resolveRoot = options.resolveRoot || this.options.resolveRoot;
 
@@ -85,6 +85,17 @@ class SSR {
    */
   getNestedEntries (entry) {
     return _getNestedEntries(this.options.appDir, entry);
+  }
+
+  getOutput (options) {
+    assert(options.path, 'options.path may not be omitted');
+
+    let defaults = {
+      filename:      '[name].js',
+      libraryTarget: 'commonjs2'
+    };
+
+    return Object.assign(defaults, options);
   }
 }
 
