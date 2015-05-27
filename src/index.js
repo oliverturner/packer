@@ -2,12 +2,15 @@ import Client from './lib/client';
 import SSR from './lib/ssr';
 import DevServer from './lib/ssr';
 
-import getServerOpts from './utils/getServerOpts';
+import utils from './utils';
 
 const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
 
 class Packer {
+
+  static utils = utils;
+
   /**
    * @param options {{
    *   resolveRoot: string,
@@ -27,5 +30,3 @@ class Packer {
 }
 
 export default Packer;
-
-export {getServerOpts};
