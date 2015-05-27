@@ -1,10 +1,10 @@
 {
-  "name": "@oliverturner/feei-webpacker",
-  "description": "A webpack utility bundle for hot reloading in development and optimised in production",
-  "version": "2.0.1",
-  "author": "Oliver Turner, FEEI",
+  "name": "@oliverturner/packer",
+  "description": "A webpack utility bundle for development and production",
+  "version": "1.0.0",
+  "author": "Oliver Turner, FECore",
   "bugs": {
-    "url": "https://github.com/codedsignal/feei-webpacker/issues"
+    "url": "https://github.com/codedsignal/packer/issues"
   },
   "dependencies": {
     "babel": "^5.4.7",
@@ -34,7 +34,7 @@
     "webpack": "^1.9.10",
     "webpack-dev-server": "^1.9.0"
   },
-  "homepage": "https://github.com/codedsignal/feei-webpacker#readme",
+  "homepage": "https://github.com/codedsignal/packer#readme",
   "keywords": [
     "hot reload",
     "webpack"
@@ -57,7 +57,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codedsignal/feei-webpacker.git"
+    "url": "git+https://github.com/codedsignal/packer.git"
   },
   "scripts": {
     "babel": "babel-node",
