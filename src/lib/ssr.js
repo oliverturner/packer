@@ -3,15 +3,15 @@ import path from 'path';
 import assert from 'assert';
 import webpack from 'webpack';
 
-import {getEntries, getNestedEntries} from '../utils/getEntries';
+import {
+  getEntries as _getEntries,
+  getNestedEntries as _getNestedEntries
+  } from '../utils/getEntries';
 
 class SSR {
 
   constructor (isProd) {
     this.isProd = isProd;
-
-    this.getEntries = getEntries;
-    this.getNestedEntries = getNestedEntries;
   }
 
   _getNodeModules () {
@@ -40,6 +40,22 @@ class SSR {
       ],
       externals: this._getNodeModules()
     }, options);
+  },
+
+  /**
+   * @param [ext]
+   * @param [key]
+   */
+  getEntries (ext, key) {
+    return _getEntries(this.options.srcs.js, ext, key);
+  }
+
+  /**
+   * @param [entry]
+   * @returns {{}}
+   */
+  getNestedEntries (entry) {
+    return _getNestedEntries(this.options.srcs.js, entry);
   }
 }
 
