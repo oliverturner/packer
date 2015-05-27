@@ -7,7 +7,7 @@ import utils from './utils';
 const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
 
-class Packer {
+export default class Packer {
 
   static utils = utils;
 
@@ -28,5 +28,3 @@ class Packer {
     this.dev    = new DevServer();
   }
 }
-
-export default Packer;

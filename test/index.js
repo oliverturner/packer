@@ -1,6 +1,12 @@
 import { expect } from 'chai';
 
-import WebPacker from '../src';
+import Packer from '../src';
+
+describe('WebPacker', () => {
+  it('exports a statically accessible property utils', () => {
+    expect(Packer.utils.getServerOpts).to.be.an.instanceof(Function);
+  });
+});
 
 //describe('WebPacker', () => {
 //
