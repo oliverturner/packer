@@ -1,6 +1,6 @@
 import Client from './lib/client';
 import SSR from './lib/ssr';
-import DevServer from './lib/ssr';
+import DevServer from './lib/devServer';
 
 import utils from './utils';
 

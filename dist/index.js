@@ -20,7 +20,9 @@ var _libSsr = require('./lib/ssr');
 
 var _libSsr2 = _interopRequireDefault(_libSsr);
 
-var _libSsr3 = _interopRequireDefault(_libSsr);
+var _libDevServer = require('./lib/devServer');
+
+var _libDevServer2 = _interopRequireDefault(_libDevServer);
 
 var _utils = require('./utils');
 
@@ -48,7 +50,7 @@ var Packer = (function () {
 
     this.ssr = new _libSsr2['default'](this.options);
     this.client = new _libClient2['default'](this.options);
-    this.dev = new _libSsr3['default'](this.options);
+    this.dev = new _libDevServer2['default'](this.options);
   }
 
   _createClass(Packer, null, [{
