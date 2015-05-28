@@ -1,8 +1,12 @@
 import {Map} from 'immutable';
 
 class DevServer {
-  constructor (options = {}) {
-    this._server = options.devServer;
+
+  /**
+   * @param {Map} devServer
+   */
+  constructor (devServer) {
+    this._server = devServer;
 
     this._options = Map({});
 

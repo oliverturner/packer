@@ -3,13 +3,12 @@ import { Map } from 'immutable';
 
 import DevServer from '../../src/lib/devServer';
 
-const devServer = new DevServer({
-  devServer: Map({
+const devServer = new DevServer(Map({
     host: 'localhost',
     port: '3001',
     url:  'http://localhost:3001'
   })
-});
+);
 
 describe('lib/devServer', () => {
   it('exposes a server object', () => {

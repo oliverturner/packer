@@ -50,7 +50,7 @@ var Packer = (function () {
 
     this.ssr = new _libSsr2['default'](this.options);
     this.client = new _libClient2['default'](this.options);
-    this.dev = new _libDevServer2['default'](this.options);
+    this.dev = new _libDevServer2['default'](this.options.devServer);
   }
 
   _createClass(Packer, null, [{

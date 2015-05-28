@@ -25,6 +25,6 @@ export default class Packer {
 
     this.ssr    = new SSR(this.options);
     this.client = new Client(this.options);
-    this.dev    = new DevServer(this.options);
+    this.dev    = new DevServer(this.options.devServer);
   }
 }

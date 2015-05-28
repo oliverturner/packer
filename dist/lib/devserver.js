@@ -11,12 +11,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var _immutable = require('immutable');
 
 var DevServer = (function () {
-  function DevServer() {
-    var options = arguments[0] === undefined ? {} : arguments[0];
 
+  /**
+   * @param {Map} devServer
+   */
+
+  function DevServer(devServer) {
     _classCallCheck(this, DevServer);
 
-    this._server = options.devServer;
+    this._server = devServer;
 
     this._options = (0, _immutable.Map)({});
 
