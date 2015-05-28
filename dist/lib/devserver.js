@@ -13,13 +13,13 @@ var _immutable = require('immutable');
 var DevServer = (function () {
 
   /**
-   * @param {Map} devServer
+   * @param {Map} server
    */
 
-  function DevServer(devServer) {
+  function DevServer(server) {
     _classCallCheck(this, DevServer);
 
-    this._server = devServer;
+    this._server = _immutable.Map.isMap(server) ? server : (0, _immutable.Map)(server);
 
     this._options = (0, _immutable.Map)({});
 

@@ -3,10 +3,10 @@ import {Map} from 'immutable';
 class DevServer {
 
   /**
-   * @param {Map} devServer
+   * @param {Map} server
    */
-  constructor (devServer) {
-    this._server = devServer;
+  constructor (server) {
+    this._server = Map.isMap(server) ? server : Map(server);
 
     this._options = Map({});
 

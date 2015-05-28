@@ -15,7 +15,7 @@ export default class Packer {
    * @param options {{
    *   resolveRoot: string,
    *   appDir:      string,
-   *   devServer:   string,
+   *   devServer:   Map,
    *   srcs:        {},
    *   urls:        {}
    * }}

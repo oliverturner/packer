@@ -37,7 +37,7 @@ var Packer = (function () {
    * @param options {{
    *   resolveRoot: string,
    *   appDir:      string,
-   *   devServer:   string,
+   *   devServer:   Map,
    *   srcs:        {},
    *   urls:        {}
    * }}
