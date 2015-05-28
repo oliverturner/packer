@@ -47,16 +47,16 @@ var DevServer = (function () {
         publicPath: clientOutput.publicPath
       });
 
-      return this.options;
+      return this.getOptions();
     }
   }, {
-    key: 'options',
-    get: function () {
+    key: 'getOptions',
+    value: function getOptions() {
       return this._options.toObject();
     }
   }, {
-    key: 'server',
-    get: function () {
+    key: 'getServer',
+    value: function getServer() {
       return this._server.toObject();
     }
   }]);

@@ -15,7 +15,7 @@ describe('lib/devServer', () => {
   });
 
   it('exposes a server object', () => {
-    expect(devServer.server).to.deep.equal({
+    expect(devServer.getServer()).to.deep.equal({
       host: 'localhost',
       port: '3001',
       url:  'http://localhost:3001'

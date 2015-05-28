@@ -31,14 +31,14 @@ class DevServer {
       publicPath:  clientOutput.publicPath
     });
 
-    return this.options;
+    return this.getOptions();
   }
 
-  get options () {
+  getOptions () {
     return this._options.toObject();
   }
 
-  get server () {
+  getServer () {
     return this._server.toObject();
   }
 }
