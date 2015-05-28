@@ -1,35 +1,65 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _utilsGetServerOpts = require('./utils/getServerOpts');
-
-var _utilsGetServerOpts2 = _interopRequireDefault(_utilsGetServerOpts);
+var _immutable = require('immutable');
 
 var DevServer = (function () {
-  function DevServer(options) {
+  function DevServer() {
+    var options = arguments[0] === undefined ? {} : arguments[0];
+
     _classCallCheck(this, DevServer);
 
-    this.options = options;
+    this._server = options.devServer;
 
-    this._defaults = {
+    this._options = (0, _immutable.Map)({});
+
+    this._defaults = (0, _immutable.Map)({
       hot: true,
       noInfo: true,
       progress: true,
       stats: { colors: true }
-    };
+    });
   }
 
   _createClass(DevServer, [{
-    key: 'getServerOpts',
-    value: function getServerOpts() {
-      return (0, _utilsGetServerOpts2['default'])();
+    key: 'create',
+
+    /**
+     * @param clientOutput {{
+     *   path:       string,
+     *   publicPath: string,
+     * }}
+     * @returns {{}|*}
+     */
+    value: function create(clientOutput) {
+      this._options = this._defaults.merge({
+        contentBase: clientOutput.path,
+        publicPath: clientOutput.publicPath
+      });
+
+      return this.options;
+    }
+  }, {
+    key: 'options',
+    get: function () {
+      return this._options.toObject();
+    }
+  }, {
+    key: 'server',
+    get: function () {
+      return this._server.toObject();
     }
   }]);
 
   return DevServer;
 })();
+
+exports['default'] = DevServer;
+module.exports = exports['default'];
