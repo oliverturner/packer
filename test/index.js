@@ -2,30 +2,33 @@ import { expect } from 'chai';
 
 import Packer from '../src';
 
+const mockDevServer = {
+  host: 'localhost',
+  port: '3001',
+  url:  'http://localhost:3001'
+};
+
+const mockPackerOpts = {
+  devServer:   mockDevServer,
+  resolveRoot: '/web_modules',
+  appDir:      '/web_modules/js/apps',
+  srcs:        {
+    js:   '/web_modules/js',
+    sass: '/web_modules/sass'
+  },
+  urls:        {
+    js: 'js'
+  }
+};
+
 describe('WebPacker', () => {
   it('exports a statically accessible property utils', () => {
     expect(Packer.utils.getServerOpts).to.be.an.instanceof(Function);
   });
 
   describe('dev', () => {
-    let packer = new Packer({
-      devServer:   {host: 'localhost', port: 3001, url: 'http://localhost:3001'},
-      resolveRoot: '/web_modules',
-      appDir:      '/web_modules/js/apps',
-      srcs:        {js: '/web_modules/js', sass: '/web_modules/sass'},
-      urls:        {js: 'js'}
-    });
-
-    it('exposes a dev.server object', () => {
-      expect(packer.dev.getServer()).to.deep.equal({
-        host: 'localhost',
-        port: 3001,
-        url: 'http://localhost:3001'
-      });
-    });
+    let packer = new Packer(mockPackerOpts);
   });
-
-
 });
 
 //describe('WebPacker', () => {

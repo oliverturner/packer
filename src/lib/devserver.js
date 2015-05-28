@@ -23,7 +23,10 @@ class DevServer {
    *   path:       string,
    *   publicPath: string,
    * }}
-   * @returns {{}|*}
+   * @returns {{
+   *   options: {},
+   *   server:  {}
+   * }}
    */
   create (clientOutput) {
     this._options = this._defaults.merge({
@@ -31,15 +34,10 @@ class DevServer {
       publicPath:  clientOutput.publicPath
     });
 
-    return this.getOptions();
-  }
-
-  getOptions () {
-    return this._options.toObject();
-  }
-
-  getServer () {
-    return this._server.toObject();
+    return {
+      options: this._options.toObject(),
+      server:  this._server.toObject()
+    };
   }
 }
 

@@ -39,7 +39,10 @@ var DevServer = (function () {
      *   path:       string,
      *   publicPath: string,
      * }}
-     * @returns {{}|*}
+     * @returns {{
+     *   options: {},
+     *   server:  {}
+     * }}
      */
     value: function create(clientOutput) {
       this._options = this._defaults.merge({
@@ -47,17 +50,10 @@ var DevServer = (function () {
         publicPath: clientOutput.publicPath
       });
 
-      return this.getOptions();
-    }
-  }, {
-    key: 'getOptions',
-    value: function getOptions() {
-      return this._options.toObject();
-    }
-  }, {
-    key: 'getServer',
-    value: function getServer() {
-      return this._server.toObject();
+      return {
+        options: this._options.toObject(),
+        server: this._server.toObject()
+      };
     }
   }]);
 
