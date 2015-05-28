@@ -141,7 +141,7 @@ class Client {
    */
   getDevEntries (entries) {
     if (!this.options.isProd) {
-      let host = this.options.devServer.url;
+      let host = this.options.devServer.get('url');
       entries.dev = this.getHotloaderPlugins(host);
     }
 

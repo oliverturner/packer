@@ -178,7 +178,7 @@ var Client = (function () {
      */
     value: function getDevEntries(entries) {
       if (!this.options.isProd) {
-        var host = this.options.devServer.url;
+        var host = this.options.devServer.get('url');
         entries.dev = this.getHotloaderPlugins(host);
       }
 
