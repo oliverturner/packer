@@ -16,7 +16,7 @@ var DevServer = (function () {
 
     this.options = options;
 
-    this.defaults = {
+    this._defaults = {
       hot: true,
       noInfo: true,
       progress: true,

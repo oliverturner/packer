@@ -1,18 +1,42 @@
-import getServerOpts from './utils/getServerOpts';
+import {Map} from 'immutable';
 
 class DevServer {
-  constructor (options) {
-    this.options = options;
+  constructor (options = {}) {
+    this._server = options.devServer;
 
-    this.defaults = {
+    this._options = Map({});
+
+    this._defaults = Map({
       hot:      true,
       noInfo:   true,
       progress: true,
       stats:    {colors: true}
-    };
+    });
   }
 
-  getServerOpts () {
-    return getServerOpts();
+  /**
+   * @param clientOutput {{
+   *   path:       string,
+   *   publicPath: string,
+   * }}
+   * @returns {{}|*}
+   */
+  create (clientOutput) {
+    this._options = this._defaults.merge({
+      contentBase: clientOutput.path,
+      publicPath:  clientOutput.publicPath
+    });
+
+    return this.options;
+  }
+
+  get options () {
+    return this._options.toObject();
+  }
+
+  get server () {
+    return this._server.toObject();
   }
 }
+
+export default DevServer;

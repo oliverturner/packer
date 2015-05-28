@@ -4,7 +4,7 @@ import mock from 'mock-fs';
 import {
   getNestedEntries,
   getEntries
-  } from '../src/utils/getEntries';
+  } from '../../src/utils/getEntries';
 
 let host = 'http://localhost:4001';
 
