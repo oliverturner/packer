@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import getLoader from '../src/utils/getLoader';
+import getLoader from '../../src/utils/getLoader';
 
 describe('utils/getloader', () => {
 

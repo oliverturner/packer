@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import getOutput from '../src/utils/getOutput';
+import getOutput from '../../src/utils/getOutput';
 
 describe('utils/getOutput', () => {
   let jsUrl = 'scripts';

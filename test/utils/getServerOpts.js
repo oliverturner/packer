@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { Map } from 'immutable';
 
-import getServerOpts from '../src/utils/getServerOpts';
+import getServerOpts from '../../src/utils/getServerOpts';
 
 describe('utils/getServerOpts', () => {
   describe('Configuration', () => {

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import mock from 'mock-fs';
 
-import getPlugins from '../src/utils/getPlugins';
+import getPlugins from '../../src/utils/getPlugins';
 
 describe('utils/getPlugins', () => {
   describe('Output', () => {
