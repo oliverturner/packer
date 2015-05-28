@@ -143,7 +143,7 @@ var Client = (function () {
   }, {
     key: 'getOutput',
     value: function getOutput(options) {
-      options.publicPath = this.options.isProd ? '/' : this.options.devServer.url + '/';
+      options.publicPath = this.options.isProd ? '/' : this.options.devServer.get('url') + '/';
 
       return (0, _utilsGetOutput2['default'])(this.options.urls.js, options);
     }

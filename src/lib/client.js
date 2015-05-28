@@ -109,7 +109,7 @@ class Client {
   getOutput (options) {
     options.publicPath = this.options.isProd
       ? '/'
-      : this.options.devServer.url + '/';
+      : this.options.devServer.get('url') + '/';
 
     return _getOutput(this.options.urls.js, options);
   }
