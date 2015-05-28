@@ -1,7 +1,7 @@
 {
   "name": "@oliverturner/packer",
   "description": "A webpack utility bundle for development and production",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "author": "Oliver Turner, FECore",
   "bugs": {
     "url": "https://github.com/codedsignal/packer/issues"
