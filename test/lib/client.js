@@ -59,5 +59,28 @@ describe('lib/client', () => {
         expect(config).to.contain.all.keys('debug', 'devtool', 'entry', 'output', 'module', 'plugins', 'resolve');
       });
     });
+
+    //describe('getHotloaderPlugins', () => {
+    //  it('returns a known array', () => {
+    //    let plugins = [
+    //      'webpack-dev-server/client?http://localhost:4001',
+    //      'webpack/hot/dev-server'
+    //    ];
+    //
+    //    expect(getHotloaderPlugins(host)).to.have.members(plugins);
+    //  });
+    //});
+
+    //describe('Host specified', () => {
+    //  it('returns an additional `dev` key containing hot loader components', () => {
+    //    let output = Object.assign(JSON.parse(JSON.stringify(baseOutput)), {
+    //      dev: getHotloaderPlugins(host)
+    //    });
+    //
+    //    mock(fakeTree);
+    //    expect(getNestedEntries(fakeRoot, {host:host})).to.deep.equal(output);
+    //    mock.restore();
+    //  });
+    //});
   });
 });

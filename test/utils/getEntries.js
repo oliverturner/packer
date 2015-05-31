@@ -9,17 +9,6 @@ import {
 let host = 'http://localhost:4001';
 
 describe('utils/getEntries', () => {
-  //TODO: Restore to client module
-  //describe('getHotloaderPlugins', () => {
-  //  it('returns a known array', () => {
-  //    let plugins = [
-  //      'webpack-dev-server/client?http://localhost:4001',
-  //      'webpack/hot/dev-server'
-  //    ];
-  //
-  //    expect(getHotloaderPlugins(host)).to.have.members(plugins);
-  //  });
-  //});
 
   // Multiple entrypoints from directory contents
   //-----------------------------------------------
@@ -65,19 +54,6 @@ describe('utils/getEntries', () => {
         mockFS.restore();
       });
     });
-
-    //TODO: Restore to client module
-    //describe('Host specified', () => {
-    //  it('returns an additional `dev` key containing hot loader components', () => {
-    //    let output = Object.assign(JSON.parse(JSON.stringify(baseOutput)), {
-    //      dev: getHotloaderPlugins(host)
-    //    });
-    //
-    //    mock(fakeTree);
-    //    expect(getNestedEntries(fakeRoot, {host:host})).to.deep.equal(output);
-    //    mock.restore();
-    //  });
-    //});
 
     describe('Custom entry file', () => {
       it('Allows a custom entry file to be specified', () => {
