@@ -12,13 +12,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _assert = require('assert');
-
-var _assert2 = _interopRequireDefault(_assert);
-
 var _autoprefixerCore = require('autoprefixer-core');
 
 var _autoprefixerCore2 = _interopRequireDefault(_autoprefixerCore);
+
+var _utilsValidateOpts = require('../utils/validateOpts');
+
+var _utilsValidateOpts2 = _interopRequireDefault(_utilsValidateOpts);
+
+var _utilsGetOutput = require('../utils/getOutput');
+
+var _utilsGetOutput2 = _interopRequireDefault(_utilsGetOutput);
 
 var _utilsGetLoaders = require('../utils/getLoaders');
 
@@ -28,16 +32,13 @@ var _utilsGetPlugins = require('../utils/getPlugins');
 
 var _utilsGetPlugins2 = _interopRequireDefault(_utilsGetPlugins);
 
-var _utilsGetOutput = require('../utils/getOutput');
-
-var _utilsGetOutput2 = _interopRequireDefault(_utilsGetOutput);
-
 var _utilsGetEntries = require('../utils/getEntries');
 
 var Client = (function () {
 
   /**
    * @param options {{
+   *   isProd:      bool,
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   string,
@@ -48,6 +49,8 @@ var Client = (function () {
 
   function Client(options) {
     _classCallCheck(this, Client);
+
+    (0, _utilsValidateOpts2['default'])(Client.reqs, options);
 
     this.options = options;
   }
@@ -60,21 +63,22 @@ var Client = (function () {
     // * entry:  file, directory or array of entry points
     /**
      * @param options {{
-     *   entry:  string|[],
+     *   entry:  {}|[],
      *   output: {
-     *     path:          string
-     *     publicPath:    string
-     *     filename:      string
-     *     chunkFilename: string
+     *     path:            string
+     *     [publicPath]:    string
+     *     [filename]:      string
+     *     [chunkFilename]: string
      *   },
-     *   [plugins]: [],
-     *   [debug]:  bool,
-     *   [externals]: {},
-     *   [postcss]: {}
+     *   [resolveRoot]: string,
+     *   [plugins]:     [],
+     *   [debug]:       bool,
+     *   [externals]:   {},
+     *   [postcss]:     {}
      * }}
      *
      * @returns {{
-     *  entry:  string|[],
+     *  entry:  {}|[],
      *  debug:  bool,
      *  output: {
      *     publicPath: string
@@ -90,24 +94,23 @@ var Client = (function () {
      * }}
      */
     value: function create(options) {
-      (0, _assert2['default'])(options, 'options may not be omitted');
-      (0, _assert2['default'])(options.entry, 'options.entry may not be omitted');
-      (0, _assert2['default'])(options.output, 'options.output may not be omitted');
-
-      var resolveRoot = options.resolveRoot || this.options.resolveRoot;
-
-      (0, _assert2['default'])(resolveRoot, 'resolveRoot may not be omitted');
+      (0, _utilsValidateOpts2['default'])({
+        entry: {},
+        output: { type: 'object', props: ['path'] }
+      }, options);
 
       return _extends({
-        // Replaced values
-        entry: [],
-        output: {},
-
         debug: !this.options.isProd,
         devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
+        module: {
+          loaders: this.getLoaders()
+        },
+
+        plugins: this.getPlugins(),
+
         resolve: {
-          root: resolveRoot,
+          root: this.options.resolveRoot,
           extensions: ['', '.js', '.jsx', '.json']
         },
 
@@ -143,17 +146,21 @@ var Client = (function () {
   }, {
     key: 'getOutput',
     value: function getOutput(options) {
-      options.publicPath = this.options.isProd ? '/' : this.options.devServer.get('url') + '/';
+      options.publicPath = this.options.isProd ? '/' : this.options.devServer.get('url');
 
       return (0, _utilsGetOutput2['default'])(this.options.urls.js, options);
     }
   }, {
     key: 'getLoaders',
+
+    // TODO: make customisable
     value: function getLoaders() {
       return (0, _utilsGetLoaders2['default'])(this.options.isProd, this.options.srcs);
     }
   }, {
     key: 'getPlugins',
+
+    // TODO: make customisable
     value: function getPlugins() {
       return (0, _utilsGetPlugins2['default'])(this.options.isProd, this.options.urls);
     }
@@ -184,6 +191,17 @@ var Client = (function () {
 
       return entries;
     }
+  }], [{
+    key: 'reqs',
+    value: {
+      isProd: { type: 'boolean' },
+      resolveRoot: { type: 'string', path: true },
+      appDir: { type: 'string', path: true },
+      devServer: { type: 'object', props: ['host', 'port', 'url'] },
+      srcs: { type: 'object' },
+      urls: { type: 'object' }
+    },
+    enumerable: true
   }]);
 
   return Client;

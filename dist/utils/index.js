@@ -34,12 +34,17 @@ var _getServerOpts = require('./getServerOpts');
 
 var _getServerOpts2 = _interopRequireDefault(_getServerOpts);
 
+var _validateOpts = require('./validateOpts');
+
+var _validateOpts2 = _interopRequireDefault(_validateOpts);
+
 exports['default'] = {
   getEntries: _getEntries2['default'],
   getLoaders: _getLoaders2['default'],
   getOutput: _getOutput2['default'],
   getPathUrls: _getPathUrls2['default'],
   getPlugins: _getPlugins2['default'],
-  getServerOpts: _getServerOpts2['default']
+  getServerOpts: _getServerOpts2['default'],
+  validateOpts: _validateOpts2['default']
 };
 module.exports = exports['default'];

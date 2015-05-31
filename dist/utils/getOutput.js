@@ -37,6 +37,7 @@ function getOutput(jsUrl, options) {
     chunkFilename: '' + jsUrl + '/[name].js'
   };
 
+  // TODO: use Map.merge
   return Object.keys(defaults).reduce(function (output, key) {
     output[key] = output[key] || defaults[key];
 

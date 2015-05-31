@@ -20,13 +20,13 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
-var _assert = require('assert');
-
-var _assert2 = _interopRequireDefault(_assert);
-
 var _webpack = require('webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
+
+var _utilsValidateOpts = require('../utils/validateOpts');
+
+var _utilsValidateOpts2 = _interopRequireDefault(_utilsValidateOpts);
 
 var _utilsGetEntries = require('../utils/getEntries');
 
@@ -34,6 +34,7 @@ var SSR = (function () {
 
   /**
    * @param options {{
+   *   isProd:      bool,
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   string,
@@ -44,6 +45,8 @@ var SSR = (function () {
 
   function SSR(options) {
     _classCallCheck(this, SSR);
+
+    (0, _utilsValidateOpts2['default'])(SSR.reqs, options);
 
     this.options = options;
   }
@@ -76,13 +79,10 @@ var SSR = (function () {
      * @returns {*}
      */
     value: function create(options) {
-      (0, _assert2['default'])(options, 'options may not be omitted');
-      (0, _assert2['default'])(options.entry, 'options.entry may not be omitted');
-      (0, _assert2['default'])(options.output, 'options.output may not be omitted');
-
-      var resolveRoot = options.resolveRoot || this.options.resolveRoot;
-
-      (0, _assert2['default'])(resolveRoot, 'resolveRoot may not be omitted');
+      (0, _utilsValidateOpts2['default'])({
+        entry: {},
+        output: { type: 'object', props: ['path'] }
+      }, options);
 
       return _extends({
         target: 'node',
@@ -91,7 +91,7 @@ var SSR = (function () {
         },
         plugins: [new _webpack2['default'].NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')],
         resolve: {
-          root: resolveRoot,
+          root: this.options.resolveRoot,
           extensions: ['', '.js', '.jsx', '.json']
         },
         externals: this._getNodeModules()
@@ -120,7 +120,7 @@ var SSR = (function () {
   }, {
     key: 'getOutput',
     value: function getOutput(options) {
-      (0, _assert2['default'])(options.path, 'options.path may not be omitted');
+      (0, _utilsValidateOpts2['default'])({ path: { type: 'string', path: true } }, options);
 
       var defaults = {
         filename: '[name].js',
@@ -129,6 +129,13 @@ var SSR = (function () {
 
       return _extends(defaults, options);
     }
+  }], [{
+    key: 'reqs',
+    value: {
+      resolveRoot: { type: 'string', path: true },
+      appDir: { type: 'string', path: true }
+    },
+    enumerable: true
   }]);
 
   return SSR;

@@ -30,7 +30,7 @@ describe('utils/getServerOpts', () => {
     });
 
     it('Creates the correct value for `url`', () => {
-      expect(getServerOpts(options).get('url')).to.equal('http://localhost:4001');
+      expect(getServerOpts(options).get('url')).to.equal('http://localhost:4001/');
     });
   });
 });

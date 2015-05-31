@@ -6,24 +6,31 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _immutable = require('immutable');
 
+var _utilsValidateOpts = require('../utils/validateOpts');
+
+var _utilsValidateOpts2 = _interopRequireDefault(_utilsValidateOpts);
+
 var DevServer = (function () {
 
   /**
-   * @param {Map} server
+   * @param {Map} devServer
    */
 
-  function DevServer(server) {
+  function DevServer(devServer) {
     _classCallCheck(this, DevServer);
 
-    this._server = _immutable.Map.isMap(server) ? server : (0, _immutable.Map)(server);
+    (0, _utilsValidateOpts2['default'])(DevServer.reqs, { devServer: devServer });
 
-    this._options = (0, _immutable.Map)({});
+    this._server = _immutable.Map.isMap(devServer) ? devServer : (0, _immutable.Map)(devServer);
 
     this._defaults = (0, _immutable.Map)({
+      publicPath: this._server.get('url'),
       hot: true,
       noInfo: true,
       progress: true,
@@ -35,26 +42,28 @@ var DevServer = (function () {
     key: 'create',
 
     /**
-     * @param clientOutput {{
-     *   path:       string,
-     *   publicPath: string,
-     * }}
+     * @param {string} outputPath
      * @returns {{
      *   options: {},
      *   server:  {}
      * }}
      */
-    value: function create(clientOutput) {
-      this._options = this._defaults.merge({
-        contentBase: clientOutput.path,
-        publicPath: clientOutput.publicPath
-      });
+    value: function create(outputPath) {
+      (0, _utilsValidateOpts2['default'])({ outputPath: { type: 'string', path: true } }, { outputPath: outputPath });
+
+      this._options = this._defaults.set('contentBase', outputPath);
 
       return {
         options: this._options.toObject(),
         server: this._server.toObject()
       };
     }
+  }], [{
+    key: 'reqs',
+    value: {
+      devServer: { type: 'object', props: ['host', 'port', 'url'] }
+    },
+    enumerable: true
   }]);
 
   return DevServer;

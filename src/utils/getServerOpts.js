@@ -27,7 +27,7 @@ function getServerOpts (options) {
       assert(options.get(key), `Missing value for options.${key}`)
   );
 
-  options = options.set('url', `http://${options.get('host')}:${options.get('port')}`);
+  options = options.set('url', `http://${options.get('host')}:${options.get('port')}/`);
 
   return options;
 }

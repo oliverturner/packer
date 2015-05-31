@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import mock from 'mock-fs';
+import mockFS from 'mock-fs';
 
 import {
   getNestedEntries,
@@ -52,17 +52,17 @@ describe('utils/getEntries', () => {
     describe('Config checks', () => {
       it('Rejects invalid paths', () => {
         let badRoot = 'src/apps/bogus';
-        mock(fakeTree);
+        mockFS(fakeTree);
         expect(() => getNestedEntries(badRoot)).to.throw(Error);
-        mock.restore();
+        mockFS.restore();
       });
     });
 
     describe('No host specified', () => {
       it('returns a map of nested directories', () => {
-        mock(fakeTree);
+        mockFS(fakeTree);
         expect(getNestedEntries(fakeRoot)).to.deep.equal(baseOutput);
-        mock.restore();
+        mockFS.restore();
       });
     });
 
@@ -104,9 +104,9 @@ describe('utils/getEntries', () => {
           page3: `src/apps/page3/${customEntry}`
         };
 
-        mock(customTree);
+        mockFS(customTree);
         expect(getNestedEntries(customRoot, customEntry)).to.deep.equal(customOutput);
-        mock.restore();
+        mockFS.restore();
       });
     });
   });
@@ -137,29 +137,29 @@ describe('utils/getEntries', () => {
     describe('Config checks', () => {
       it('Rejects invalid paths', () => {
         let badRoot = 'src/bogus';
-        mock(fakeTree);
+        mockFS(fakeTree);
         expect(() => getEntries(badRoot)).to.throw(Error);
-        mock.restore();
+        mockFS.restore();
       });
     });
 
     describe('No host specified', () => {
       it('Returns an object with a single key `main`', () => {
-        mock(fakeTree);
+        mockFS(fakeTree);
         expect(getEntries(fakeRoot)).to.deep.equal(baseOutput);
-        mock.restore();
+        mockFS.restore();
       });
     });
 
     describe('Host specified', () => {
       it('Adds hot loader plugins when a host is specified', () => {
-        mock(fakeTree);
+        mockFS(fakeTree);
 
         let entries = getEntries(fakeRoot, '.js', 'main');
         let output  = JSON.parse(JSON.stringify(baseOutput));
 
         expect(entries).to.deep.equal(output);
-        mock.restore();
+        mockFS.restore();
       });
     });
 
@@ -182,9 +182,9 @@ describe('utils/getEntries', () => {
           ]
         };
 
-        mock(customTree);
+        mockFS(customTree);
         expect(getEntries(fakeRoot, '.jsx')).to.deep.equal(customOutput);
-        mock.restore();
+        mockFS.restore();
       });
     });
 
@@ -198,9 +198,9 @@ describe('utils/getEntries', () => {
           ]
         };
 
-        mock(fakeTree);
+        mockFS(fakeTree);
         expect(getEntries(fakeRoot, '.js', 'foo')).to.deep.equal(customOutput);
-        mock.restore();
+        mockFS.restore();
       });
     });
   });

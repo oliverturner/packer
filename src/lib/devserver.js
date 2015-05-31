@@ -1,38 +1,41 @@
 import {Map} from 'immutable';
 
+import validateOpts from '../utils/validateOpts';
+
 class DevServer {
 
-  /**
-   * @param {Map} server
-   */
-  constructor (server) {
-    this._server = Map.isMap(server) ? server : Map(server);
+  static reqs = {
+    devServer: {type: 'object', props: ['host', 'port', 'url']}
+  };
 
-    this._options = Map({});
+  /**
+   * @param {Map} devServer
+   */
+  constructor (devServer) {
+    validateOpts(DevServer.reqs, {devServer});
+
+    this._server = Map.isMap(devServer) ? devServer : Map(devServer);
 
     this._defaults = Map({
-      hot:      true,
-      noInfo:   true,
-      progress: true,
-      stats:    {colors: true}
+      publicPath: this._server.get('url'),
+      hot:        true,
+      noInfo:     true,
+      progress:   true,
+      stats:      {colors: true}
     });
   }
 
   /**
-   * @param clientOutput {{
-   *   path:       string,
-   *   publicPath: string,
-   * }}
+   * @param {string} outputPath
    * @returns {{
    *   options: {},
    *   server:  {}
    * }}
    */
-  create (clientOutput) {
-    this._options = this._defaults.merge({
-      contentBase: clientOutput.path,
-      publicPath:  clientOutput.publicPath
-    });
+  create (outputPath) {
+    validateOpts({outputPath: {type: 'string', path: true}}, {outputPath});
+
+    this._options = this._defaults.set('contentBase', outputPath);
 
     return {
       options: this._options.toObject(),

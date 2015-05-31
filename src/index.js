@@ -4,15 +4,15 @@ import DevServer from './lib/devServer';
 
 import utils from './utils';
 
-const env = process.env.NODE_ENV || 'development';
-const isProd = env === 'production';
+class Packer {
 
-export default class Packer {
-
+  // expose utils on Packer prototype
+  // e.g. Packer.utils.getEntries
   static utils = utils;
 
   /**
    * @param options {{
+   *   isProd:      bool,
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   Map,
@@ -21,10 +21,10 @@ export default class Packer {
    * }}
    */
   constructor (options) {
-    this.options = Object.assign(options, {isProd});
-
-    this.ssr    = new SSR(this.options);
-    this.client = new Client(this.options);
-    this.dev    = new DevServer(this.options.devServer);
+    this.ssr    = new SSR(options);
+    this.client = new Client(options);
+    this.dev    = new DevServer(options.devServer);
   }
 }
+
+export default Packer;

@@ -1,18 +1,29 @@
-import assert from 'assert';
 import autoprefixer from 'autoprefixer-core';
 
+import validateOpts from '../utils/validateOpts';
+import _getOutput from '../utils/getOutput';
 import _getLoaders from '../utils/getLoaders';
 import _getPlugins from '../utils/getPlugins';
-import _getOutput from '../utils/getOutput';
 import {
   getEntries as _getEntries,
   getNestedEntries as _getNestedEntries
-  } from '../utils/getEntries';
+  }
+  from '../utils/getEntries';
 
 class Client {
 
+  static reqs = {
+    isProd:      {type: 'boolean'},
+    resolveRoot: {type: 'string', path: true},
+    appDir:      {type: 'string', path: true},
+    devServer:   {type: 'object', props: ['host', 'port', 'url']},
+    srcs:        {type: 'object'},
+    urls:        {type: 'object'}
+  };
+
   /**
    * @param options {{
+   *   isProd:      bool,
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   string,
@@ -21,6 +32,8 @@ class Client {
    * }}
    */
   constructor (options) {
+    validateOpts(Client.reqs, options);
+
     this.options = options;
   }
 
@@ -29,21 +42,22 @@ class Client {
   // * entry:  file, directory or array of entry points
   /**
    * @param options {{
-   *   entry:  string|[],
+   *   entry:  {}|[],
    *   output: {
-   *     path:          string
-   *     publicPath:    string
-   *     filename:      string
-   *     chunkFilename: string
+   *     path:            string
+   *     [publicPath]:    string
+   *     [filename]:      string
+   *     [chunkFilename]: string
    *   },
-   *   [plugins]: [],
-   *   [debug]:  bool,
-   *   [externals]: {},
-   *   [postcss]: {}
+   *   [resolveRoot]: string,
+   *   [plugins]:     [],
+   *   [debug]:       bool,
+   *   [externals]:   {},
+   *   [postcss]:     {}
    * }}
    *
    * @returns {{
-   *  entry:  string|[],
+   *  entry:  {}|[],
    *  debug:  bool,
    *  output: {
    *     publicPath: string
@@ -59,24 +73,23 @@ class Client {
    * }}
    */
   create (options) {
-    assert(options, 'options may not be omitted');
-    assert(options.entry, `options.entry may not be omitted`);
-    assert(options.output, `options.output may not be omitted`);
-
-    let resolveRoot = options.resolveRoot || this.options.resolveRoot;
-
-    assert(resolveRoot, `resolveRoot may not be omitted`);
+    validateOpts({
+      entry:  {},
+      output: {type: 'object', props: ['path']}
+    }, options);
 
     return Object.assign({
-      // Replaced values
-      entry:  [],
-      output: {},
-
       debug:   !this.options.isProd,
       devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
+      module: {
+        loaders: this.getLoaders()
+      },
+
+      plugins: this.getPlugins(),
+
       resolve: {
-        root:       resolveRoot,
+        root:       this.options.resolveRoot,
         extensions: ['', '.js', '.jsx', '.json']
       },
 
@@ -109,15 +122,17 @@ class Client {
   getOutput (options) {
     options.publicPath = this.options.isProd
       ? '/'
-      : this.options.devServer.get('url') + '/';
+      : this.options.devServer.get('url');
 
     return _getOutput(this.options.urls.js, options);
   }
 
+  // TODO: make customisable
   getLoaders () {
     return _getLoaders(this.options.isProd, this.options.srcs);
   }
 
+  // TODO: make customisable
   getPlugins () {
     return _getPlugins(this.options.isProd, this.options.urls);
   }

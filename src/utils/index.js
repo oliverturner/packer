@@ -8,6 +8,7 @@ import getOutput from './getOutput';
 import getPathUrls from './getPathUrls';
 import getPlugins from './getPlugins';
 import getServerOpts from './getServerOpts';
+import validateOpts from './validateOpts';
 
 export default {
   getEntries,
@@ -15,5 +16,6 @@ export default {
   getOutput,
   getPathUrls,
   getPlugins,
-  getServerOpts
+  getServerOpts,
+  validateOpts
   };

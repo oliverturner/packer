@@ -1,17 +1,24 @@
 import fs from 'fs';
 import path from 'path';
-import assert from 'assert';
 import webpack from 'webpack';
 
+import validateOpts from '../utils/validateOpts';
 import {
   getEntries as _getEntries,
   getNestedEntries as _getNestedEntries
-  } from '../utils/getEntries';
+  }
+  from '../utils/getEntries';
 
 class SSR {
 
+  static reqs = {
+    resolveRoot: {type: 'string', path: true},
+    appDir:      {type: 'string', path: true}
+  };
+
   /**
    * @param options {{
+   *   isProd:      bool,
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   string,
@@ -20,6 +27,8 @@ class SSR {
    * }}
    */
   constructor (options) {
+    validateOpts(SSR.reqs, options);
+
     this.options = options;
   }
 
@@ -45,13 +54,10 @@ class SSR {
    * @returns {*}
    */
   create (options) {
-    assert(options, 'options may not be omitted');
-    assert(options.entry, 'options.entry may not be omitted');
-    assert(options.output, 'options.output may not be omitted');
-
-    let resolveRoot = options.resolveRoot || this.options.resolveRoot;
-
-    assert(resolveRoot, `resolveRoot may not be omitted`);
+    validateOpts({
+      entry:  {},
+      output: {type: 'object', props: ['path']}
+    }, options);
 
     return Object.assign({
       target:    'node',
@@ -64,7 +70,7 @@ class SSR {
         new webpack.NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')
       ],
       resolve: {
-        root:       resolveRoot,
+        root:       this.options.resolveRoot,
         extensions: ['', '.js', '.jsx', '.json']
       },
       externals: this._getNodeModules()
@@ -88,7 +94,7 @@ class SSR {
   }
 
   getOutput (options) {
-    assert(options.path, 'options.path may not be omitted');
+    validateOpts({path: {type: 'string', path: true}}, options);
 
     let defaults = {
       filename:      '[name].js',
