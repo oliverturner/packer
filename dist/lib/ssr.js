@@ -38,6 +38,7 @@ var SSR = (function () {
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   string,
+   *   definitions: {},
    *   srcs:        {},
    *   urls:        {}
    * }}
@@ -89,7 +90,7 @@ var SSR = (function () {
         module: {
           loaders: [{ test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ }]
         },
-        plugins: [new _webpack2['default'].NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')],
+        plugins: [new _webpack2['default'].DefinePlugin(this.options.definitions), new _webpack2['default'].NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')],
         resolve: {
           root: this.options.resolveRoot,
           extensions: ['', '.js', '.jsx', '.json']
@@ -132,8 +133,10 @@ var SSR = (function () {
   }], [{
     key: 'reqs',
     value: {
+      isProd: { type: 'boolean' },
       resolveRoot: { type: 'string', path: true },
-      appDir: { type: 'string', path: true }
+      appDir: { type: 'string', path: true },
+      definitions: { type: 'object', props: ['process.env'] }
     },
     enumerable: true
   }]);
