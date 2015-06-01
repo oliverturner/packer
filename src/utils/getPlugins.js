@@ -4,6 +4,11 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 // Return an environment-specific array of plugins
 /**
  * @param {bool} isProd
+ * @param definitions {{
+ *   process[env]: {
+ *     NODE_ENV: string
+ *   }
+ * }}
  * @param urls {{
  *   css: string
  *   js: string

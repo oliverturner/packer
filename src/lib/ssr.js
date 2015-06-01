@@ -71,7 +71,8 @@ class SSR {
       },
       plugins: [
         new webpack.DefinePlugin(this.options.definitions),
-        new webpack.NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')
+        new webpack.NormalModuleReplacementPlugin(/\.scss$/, 'node-noop'),
+        new webpack.NoErrorsPlugin()
       ],
       resolve: {
         root:       this.options.resolveRoot,

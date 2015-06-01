@@ -1,4 +1,4 @@
-# feei-webpacker
+# Packer
 A webpack utility bundle for hot reloading in development and optimised in production
 
 ## Development dependencies

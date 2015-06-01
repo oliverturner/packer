@@ -65,6 +65,7 @@ describe('lib/client', () => {
       });
     });
 
+    // TODO: restore
     //describe('getHotloaderPlugins', () => {
     //  it('returns a known array', () => {
     //    let plugins = [
@@ -76,6 +77,7 @@ describe('lib/client', () => {
     //  });
     //});
 
+    // TODO: restore
     //describe('Host specified', () => {
     //  it('returns an additional `dev` key containing hot loader components', () => {
     //    let output = Object.assign(JSON.parse(JSON.stringify(baseOutput)), {
