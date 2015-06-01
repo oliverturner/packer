@@ -23,7 +23,6 @@ function getPlugins (isProd, definitions, urls) {
   ];
 
   let development = [
-    commonsChunk,
     new webpack.HotModuleReplacementPlugin()
   ];
 

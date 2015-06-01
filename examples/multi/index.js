@@ -23,8 +23,6 @@ var packer = new Packer({
 });
 
 var config = packer.client.create({
-  entry:  packer.client.getNestedEntries(),
-  //entry:  [__dirname + '/src/apps/home/entry.jsx'],
   output: packer.client.getOutput({
     path: __dirname + '/out'
   })

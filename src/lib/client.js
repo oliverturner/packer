@@ -1,4 +1,5 @@
 import autoprefixer from 'autoprefixer-core';
+import {Map} from 'immutable';
 
 import validateOpts from '../utils/validateOpts';
 import _getOutput from '../utils/getOutput';
@@ -36,15 +37,19 @@ class Client {
   constructor (options) {
     validateOpts(Client.reqs, options);
 
+    if (!Map.isMap(options.devServer)) {
+      options.devServer = Map(options.devServer);
+    }
+
     this.options = options;
   }
 
   // Options:
   // * isProd: whether we're in production mode
-  // * entry:  file, directory or array of entry points
+  // * entry:  file, directory or array of entry points; defaults to getNestedEntries
   /**
    * @param options {{
-   *   entry:  {}|[],
+   *   [entry]:  {}|[],
    *   output: {
    *     path:            string
    *     [publicPath]:    string
@@ -76,13 +81,14 @@ class Client {
    */
   create (options) {
     validateOpts({
-      entry:  {},
       output: {type: 'object', props: ['path']}
     }, options);
 
     return Object.assign({
       debug:   !this.options.isProd,
       devtool: this.options.isProd ? 'sourcemap' : 'eval',
+
+      entry: this.getNestedEntries(),
 
       module: {
         loaders: this.getLoaders()

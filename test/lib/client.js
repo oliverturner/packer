@@ -10,18 +10,18 @@ const mockDevServer = {
   url:  'http://localhost:3001/'
 };
 
-const mockOpts = Map({
+const mockOptsDev = Map({
   isProd:      false,
   devServer:   mockDevServer,
   resolveRoot: './examples/multi/src',
-  appDir:      './examples/multi/src/apps',
+  appDir:      './examples/multi/src/js/apps',
   definitions: {
     'process.env': {
       NODE_ENV: JSON.stringify('development')
     }
   },
   srcs:        {
-    js:   './examples/multi/src/apps',
+    js:   './examples/multi/src/js',
     sass: './examples/multi/src/sass'
   },
   urls:        {
@@ -29,65 +29,38 @@ const mockOpts = Map({
   }
 });
 
-const mockTree = {
-  '/path/to/web_modules': {
-    sass: {},
-    js:   {
-      apps: {}
+const mockOptsProd = mockOptsDev.set('isProd', true);
+
+function checkMissingOpts (opts) {
+  Object.keys(Client.reqs).forEach(key => {
+    expect(() => new Client(opts.delete(key).toObject())).to.throw(Error);
+  })
+}
+
+function clientCreate (opts) {
+  let client = new Client(opts);
+  let config = client.create({
+    output: {
+      path: './examples/multi/out'
     }
-  }
-};
+  });
+  return expect(config).to.contain.all.keys('debug', 'devtool', 'entry', 'output', 'module', 'plugins', 'resolve');
+}
 
+// TODO: Check other valid / invalid variants of mockOpts
+// TODO: check that child methods - getLoaders, getPlugins, etc - work as expected
 describe('lib/client', () => {
-  describe('Configuration', () => {
-    it('checks for missing config values', () => {
-      mockFS(mockTree);
-      Object.keys(Client.reqs).forEach(key => {
-        expect(() => new Client(mockOpts.delete(key).toObject())).to.throw(Error);
-      });
-      mockFS.restore();
+  describe('Constructor', () => {
+    describe('Missing config values', () => {
+      it('warns in development', checkMissingOpts.bind(null, mockOptsDev));
+      it('warns in production', checkMissingOpts.bind(null, mockOptsProd));
     });
   });
 
-  describe('Output', () => {
-    describe('Supplied with valid parameters', () => {
-      it('should return an object with expected keys', () => {
-
-        let client = new Client(mockOpts.toObject());
-        let config = client.create({
-          entry:   [],
-          output:  {
-            path: './examples/multi/src'
-          }
-        });
-
-        expect(config).to.contain.all.keys('debug', 'devtool', 'entry', 'output', 'module', 'plugins', 'resolve');
-      });
+  describe('create method', () => {
+    describe('Valid config returns with expected keys', () => {
+      it('in development', clientCreate.bind(null, mockOptsDev.toObject()));
+      it('in production', clientCreate.bind(null, mockOptsProd.toObject()));
     });
-
-    // TODO: restore
-    //describe('getHotloaderPlugins', () => {
-    //  it('returns a known array', () => {
-    //    let plugins = [
-    //      'webpack-dev-server/client?http://localhost:4001',
-    //      'webpack/hot/dev-server'
-    //    ];
-    //
-    //    expect(getHotloaderPlugins(host)).to.have.members(plugins);
-    //  });
-    //});
-
-    // TODO: restore
-    //describe('Host specified', () => {
-    //  it('returns an additional `dev` key containing hot loader components', () => {
-    //    let output = Object.assign(JSON.parse(JSON.stringify(baseOutput)), {
-    //      dev: getHotloaderPlugins(host)
-    //    });
-    //
-    //    mock(fakeTree);
-    //    expect(getNestedEntries(fakeRoot, {host:host})).to.deep.equal(output);
-    //    mock.restore();
-    //  });
-    //});
-  });
+  })
 });
