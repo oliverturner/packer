@@ -15,6 +15,11 @@ const mockOpts = Map({
   devServer:   mockDevServer,
   resolveRoot: './examples/multi/src',
   appDir:      './examples/multi/src/apps',
+  definitions: {
+    'process.env': {
+      NODE_ENV: JSON.stringify('development')
+    }
+  },
   srcs:        {
     js:   './examples/multi/src/apps',
     sass: './examples/multi/src/sass'

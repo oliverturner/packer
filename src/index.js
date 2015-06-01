@@ -6,6 +6,11 @@ import utils from './utils';
 
 class Packer {
 
+  static reqs = {
+    isProd:      {type: 'boolean'},
+    devServer:   {type: 'object', props: ['host', 'port', 'url']}
+  };
+
   // expose utils on Packer prototype
   // e.g. Packer.utils.getEntries
   static utils = utils;
@@ -21,9 +26,21 @@ class Packer {
    * }}
    */
   constructor (options) {
-    this.ssr    = new SSR(options);
-    this.client = new Client(options);
-    this.dev    = new DevServer(options.devServer);
+    Packer.utils.validateOpts(Packer.reqs, options);
+
+    let defaults = {
+      definitions: {
+        'process.env': {
+          NODE_ENV: JSON.stringify(options.isProd ? 'production' : 'development')
+        }
+      }
+    };
+
+    let opts = Object.assign(defaults, options);
+
+    this.ssr    = new SSR(opts);
+    this.client = new Client(opts);
+    this.dev    = new DevServer(opts.devServer);
   }
 }
 

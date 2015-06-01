@@ -17,6 +17,7 @@ class Client {
     resolveRoot: {type: 'string', path: true},
     appDir:      {type: 'string', path: true},
     devServer:   {type: 'object', props: ['host', 'port', 'url']},
+    definitions: {type: 'object', props: ['process.env']},
     srcs:        {type: 'object'},
     urls:        {type: 'object'}
   };
@@ -27,6 +28,7 @@ class Client {
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   string,
+   *   definitions: object,
    *   srcs:        {},
    *   urls:        {}
    * }}
@@ -134,7 +136,7 @@ class Client {
 
   // TODO: make customisable
   getPlugins () {
-    return _getPlugins(this.options.isProd, this.options.urls);
+    return _getPlugins(this.options.isProd, this.options.definitions, this.options.urls);
   }
 
   /**

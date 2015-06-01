@@ -10,18 +10,11 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
  * }}
  * @returns {Array.<T>}
  */
-function getPlugins (isProd, urls) {
-  let defs = {
-    'process.env': {
-      NODE_ENV: JSON.stringify(isProd ? 'production' : 'development')
-    }
-  };
-
+function getPlugins (isProd, definitions, urls) {
   let commonsChunk = new webpack.optimize.CommonsChunkPlugin('commons', `${urls.js}/commons.js`);
 
   let defaults = [
-    new webpack.DefinePlugin(defs),
-    new webpack.NoErrorsPlugin()
+    new webpack.DefinePlugin(definitions)
   ];
 
   let development = [
@@ -31,6 +24,7 @@ function getPlugins (isProd, urls) {
 
   let production = [
     commonsChunk,
+    new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin(`${urls.css}/[name].css`, {
       allChunks: true
     }),

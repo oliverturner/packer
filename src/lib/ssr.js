@@ -12,8 +12,10 @@ import {
 class SSR {
 
   static reqs = {
+    isProd:      {type: 'boolean'},
     resolveRoot: {type: 'string', path: true},
-    appDir:      {type: 'string', path: true}
+    appDir:      {type: 'string', path: true},
+    definitions: {type: 'object', props: ['process.env']}
   };
 
   /**
@@ -22,6 +24,7 @@ class SSR {
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   string,
+   *   definitions: {},
    *   srcs:        {},
    *   urls:        {}
    * }}
@@ -67,6 +70,7 @@ class SSR {
         ]
       },
       plugins: [
+        new webpack.DefinePlugin(this.options.definitions),
         new webpack.NormalModuleReplacementPlugin(/\.scss$/, 'node-noop')
       ],
       resolve: {
