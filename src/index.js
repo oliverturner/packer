@@ -1,6 +1,7 @@
 import Client from './lib/client';
 import SSR from './lib/ssr';
 import DevServer from './lib/devServer';
+import validateOpts from './utils/validateOpts';
 
 import utils from './utils';
 
@@ -21,13 +22,15 @@ class Packer {
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   Map,
+   *   definitions: {},
    *   srcs:        {},
    *   urls:        {}
    * }}
    */
   constructor (options) {
-    Packer.utils.validateOpts(Packer.reqs, options);
+    validateOpts(Packer.reqs, options);
 
+    // TODO: use map and deepMerge to keep default vals?
     let defaults = {
       definitions: {
         'process.env': {

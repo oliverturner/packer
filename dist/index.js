@@ -24,6 +24,10 @@ var _libDevServer = require('./lib/devServer');
 
 var _libDevServer2 = _interopRequireDefault(_libDevServer);
 
+var _utilsValidateOpts = require('./utils/validateOpts');
+
+var _utilsValidateOpts2 = _interopRequireDefault(_utilsValidateOpts);
+
 var _utils = require('./utils');
 
 var _utils2 = _interopRequireDefault(_utils);
@@ -36,6 +40,7 @@ var Packer = (function () {
    *   resolveRoot: string,
    *   appDir:      string,
    *   devServer:   Map,
+   *   definitions: {},
    *   srcs:        {},
    *   urls:        {}
    * }}
@@ -44,8 +49,9 @@ var Packer = (function () {
   function Packer(options) {
     _classCallCheck(this, Packer);
 
-    Packer.utils.validateOpts(Packer.reqs, options);
+    (0, _utilsValidateOpts2['default'])(Packer.reqs, options);
 
+    // TODO: use map and deepMerge to keep default vals?
     var defaults = {
       definitions: {
         'process.env': {
