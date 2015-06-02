@@ -36,7 +36,7 @@ function checkValidAppDir(appDir) {
  * @returns {{}}
  */
 function getEntries(appDir) {
-  var ext = arguments[1] === undefined ? '.js' : arguments[1];
+  var ext = arguments[1] === undefined ? '.jsx' : arguments[1];
   var key = arguments[2] === undefined ? 'main' : arguments[2];
 
   checkValidAppDir(appDir);

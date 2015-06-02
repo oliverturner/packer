@@ -16,6 +16,8 @@ var _autoprefixerCore = require('autoprefixer-core');
 
 var _autoprefixerCore2 = _interopRequireDefault(_autoprefixerCore);
 
+var _immutable = require('immutable');
+
 var _utilsValidateOpts = require('../utils/validateOpts');
 
 var _utilsValidateOpts2 = _interopRequireDefault(_utilsValidateOpts);
@@ -53,6 +55,10 @@ var Client = (function () {
 
     (0, _utilsValidateOpts2['default'])(Client.reqs, options);
 
+    if (!_immutable.Map.isMap(options.devServer)) {
+      options.devServer = (0, _immutable.Map)(options.devServer);
+    }
+
     this.options = options;
   }
 
@@ -61,10 +67,10 @@ var Client = (function () {
 
     // Options:
     // * isProd: whether we're in production mode
-    // * entry:  file, directory or array of entry points
+    // * entry:  file, directory or array of entry points; defaults to getNestedEntries
     /**
      * @param options {{
-     *   entry:  {}|[],
+     *   [entry]:  {}|[],
      *   output: {
      *     path:            string
      *     [publicPath]:    string
@@ -96,13 +102,14 @@ var Client = (function () {
      */
     value: function create(options) {
       (0, _utilsValidateOpts2['default'])({
-        entry: {},
         output: { type: 'object', props: ['path'] }
       }, options);
 
       return _extends({
         debug: !this.options.isProd,
         devtool: this.options.isProd ? 'sourcemap' : 'eval',
+
+        entry: this.getNestedEntries(),
 
         module: {
           loaders: this.getLoaders()

@@ -94,21 +94,39 @@ describe('utils/getEntries', () => {
     const fakeTree = {
       'src/apps': {
         '.DS_Store': 'stuff',
+        'page1.jsx': '',
+        'page2.jsx': '',
+        'page3.jsx': ''
+      }
+    };
+
+    let fakeOutput = {
+      main: [
+        'src/apps/page1.jsx',
+        'src/apps/page2.jsx',
+        'src/apps/page3.jsx'
+      ]
+    };
+
+    let customTree = {
+      'src/apps': {
+        '.DS_Store': 'stuff',
         'page1.js': '',
         'page2.js': '',
         'page3.js': ''
       }
     };
 
-    const fakeRoot = Object.keys(fakeTree)[0];
-
-    let baseOutput = {
+    let customOutput = {
       main: [
         'src/apps/page1.js',
         'src/apps/page2.js',
         'src/apps/page3.js'
       ]
     };
+
+    const fakeRoot = Object.keys(fakeTree)[0];
+    const customRoot = Object.keys(customTree)[0];
 
     describe('Config checks', () => {
       it('Rejects invalid paths', () => {
@@ -122,17 +140,17 @@ describe('utils/getEntries', () => {
     describe('No host specified', () => {
       it('Returns an object with a single key `main`', () => {
         mockFS(fakeTree);
-        expect(getEntries(fakeRoot)).to.deep.equal(baseOutput);
+        expect(getEntries(fakeRoot)).to.deep.equal(fakeOutput);
         mockFS.restore();
       });
     });
 
     describe('Host specified', () => {
       it('Adds hot loader plugins when a host is specified', () => {
-        mockFS(fakeTree);
+        mockFS(customTree);
 
-        let entries = getEntries(fakeRoot, '.js', 'main');
-        let output  = JSON.parse(JSON.stringify(baseOutput));
+        let entries = getEntries(customRoot, '.js', 'main');
+        let output  = JSON.parse(JSON.stringify(customOutput));
 
         expect(entries).to.deep.equal(output);
         mockFS.restore();
@@ -141,25 +159,8 @@ describe('utils/getEntries', () => {
 
     describe('Custom extension', () => {
       it('Finds files', () => {
-        let customTree = {
-          'src/apps': {
-            '.DS_Store': 'stuff',
-            'page1.jsx': '',
-            'page2.jsx': '',
-            'page3.jsx': ''
-          }
-        };
-
-        let customOutput = {
-          main: [
-            'src/apps/page1.jsx',
-            'src/apps/page2.jsx',
-            'src/apps/page3.jsx'
-          ]
-        };
-
         mockFS(customTree);
-        expect(getEntries(fakeRoot, '.jsx')).to.deep.equal(customOutput);
+        expect(getEntries(customRoot, '.js')).to.deep.equal(customOutput);
         mockFS.restore();
       });
     });
@@ -174,8 +175,8 @@ describe('utils/getEntries', () => {
           ]
         };
 
-        mockFS(fakeTree);
-        expect(getEntries(fakeRoot, '.js', 'foo')).to.deep.equal(customOutput);
+        mockFS(customTree);
+        expect(getEntries(customRoot, '.js', 'foo')).to.deep.equal(customOutput);
         mockFS.restore();
       });
     });

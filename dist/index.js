@@ -32,6 +32,8 @@ var _utils = require('./utils');
 
 var _utils2 = _interopRequireDefault(_utils);
 
+// Parent class
+
 var Packer = (function () {
 
   /**
@@ -39,7 +41,7 @@ var Packer = (function () {
    *   isProd:      bool,
    *   resolveRoot: string,
    *   appDir:      string,
-   *   devServer:   Map,
+   *   devServer:   Map|{},
    *   definitions: {},
    *   srcs:        {},
    *   urls:        {}
@@ -69,6 +71,8 @@ var Packer = (function () {
 
   _createClass(Packer, null, [{
     key: 'reqs',
+
+    // Required params
     value: {
       isProd: { type: 'boolean' },
       devServer: { type: 'object', props: ['host', 'port', 'url'] }

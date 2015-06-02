@@ -5,8 +5,10 @@ import validateOpts from './utils/validateOpts';
 
 import utils from './utils';
 
+// Parent class
 class Packer {
 
+  // Required params
   static reqs = {
     isProd:      {type: 'boolean'},
     devServer:   {type: 'object', props: ['host', 'port', 'url']}
@@ -21,7 +23,7 @@ class Packer {
    *   isProd:      bool,
    *   resolveRoot: string,
    *   appDir:      string,
-   *   devServer:   Map,
+   *   devServer:   Map|{},
    *   definitions: {},
    *   srcs:        {},
    *   urls:        {}

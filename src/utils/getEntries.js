@@ -19,7 +19,7 @@ function checkValidAppDir (appDir) {
  *
  * @returns {{}}
  */
-function getEntries (appDir, ext = '.js', key = 'main') {
+function getEntries (appDir, ext = '.jsx', key = 'main') {
   checkValidAppDir(appDir);
 
   let ret = {};

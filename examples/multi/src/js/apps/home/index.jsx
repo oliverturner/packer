@@ -1,4 +1,4 @@
-require('../../sass/components/_list.scss');
+require('sass/components/_list.scss');
 require('./index.scss');
 
 module.exports = function () {

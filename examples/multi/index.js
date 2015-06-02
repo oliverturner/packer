@@ -11,10 +11,10 @@ var packer = new Packer({
   isProd:      isProd,
   devServer:   devServer,
   resolveRoot: __dirname + '/src',
-  appDir:      __dirname + '/src/apps',
+  appDir:      __dirname + '/src/js/apps',
   srcs:        {
-    sass: __dirname + '/src/sass',
-    js:   __dirname + '/src/apps'
+    js:   __dirname + '/src/js',
+    sass: __dirname + '/src/sass'
   },
   urls:        {
     js:  'scripts',
@@ -23,6 +23,7 @@ var packer = new Packer({
 });
 
 var config = packer.client.create({
+  // Omitting entry to use default `client.getNestedEntries`
   output: packer.client.getOutput({
     path: __dirname + '/out'
   })

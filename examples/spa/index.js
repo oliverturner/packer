@@ -1,34 +1,30 @@
-var Immutable = require('immutable');
+var Packer = require('../../dist');
 
-var WebPacker = require('../../dist').default;
-var getServerOpts = require('../../dist/utils/getServerOpts');
+var env = process.env.NODE_ENV || 'development';
+var isProd = env === 'production';
+var devServer = Packer.utils.getServerOpts({port: 3001});
 
-var isDev = process.env.NODE_ENV !== 'production';
-
-var server = getServerOpts(Immutable.Map({
-  host: 'localhost',
-  port: 3001
-}));
-
-var publicPath = isDev ? server.get('url') + '/' : '/';
-
-var srcs = {
-  sass: __dirname + '/src/sass',
-  js:   __dirname + '/src/apps'
-};
-
-var urls = {
-  js:  'scripts',
-  css: 'styles'
-};
-
-var config = new WebPacker({
-  entry:  srcs.js,
-  output: {
-    path:       __dirname + '/out',
-    publicPath: publicPath
+var packer = new Packer({
+  isProd:      isProd,
+  devServer:   devServer,
+  resolveRoot: __dirname + '/src',
+  appDir:      __dirname + '/src/js/apps',
+  srcs:        {
+    js:   __dirname + '/src/js',
+    sass: __dirname + '/src/sass'
+  },
+  urls:        {
+    js:  'scripts',
+    css: 'styles'
   }
-}, urls.js, urls.css, srcs.sass);
+});
+
+var config = packer.client.create({
+  entry:  packer.client.getEntries('.js'),
+  output: packer.client.getOutput({
+    path: __dirname + '/out'
+  })
+});
 
 console.log(JSON.stringify(config, null, 2));
 
