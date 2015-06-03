@@ -1,3 +1,5 @@
+import {Map} from 'immutable';
+
 import Client from './lib/client';
 import SSR from './lib/ssr';
 import DevServer from './lib/devServer';
@@ -41,7 +43,7 @@ class Packer {
       }
     };
 
-    let opts = Object.assign(defaults, options);
+    let opts = defaults.mergeDeep(options);
 
     this.ssr    = new SSR(opts);
     this.client = new Client(opts);
