@@ -84,8 +84,7 @@ class Client {
       output: {type: 'object', props: ['path']}
     }, options);
 
-    // TODO: IMPORTANT!!! apply validateOpts to _output_
-    return Object.assign({
+    let opts = Object.assign({
       debug:   !this.options.isProd,
       devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
@@ -106,6 +105,8 @@ class Client {
         defaults: [autoprefixer]
       }
     }, options);
+
+    return opts;
   }
 
   /**
