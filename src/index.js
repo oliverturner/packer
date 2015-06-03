@@ -34,20 +34,19 @@ class Packer {
   constructor (options) {
     validateOpts(Packer.reqs, options);
 
-    // TODO: use map and deepMerge to keep default vals?
-    let defaults = {
+    let defaults = Map({
       definitions: {
         'process.env': {
           NODE_ENV: JSON.stringify(options.isProd ? 'production' : 'development')
         }
       }
-    };
+    });
 
     let opts = defaults.mergeDeep(options);
 
-    this.ssr    = new SSR(opts);
-    this.client = new Client(opts);
-    this.dev    = new DevServer(opts.devServer);
+    this.ssr    = new SSR(opts.toObject());
+    this.client = new Client(opts.toObject());
+    this.dev    = new DevServer(opts.get('devServer'));
   }
 }
 
