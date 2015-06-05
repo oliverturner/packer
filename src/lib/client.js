@@ -106,6 +106,11 @@ class Client {
       }
     }, options);
 
+    // TODO: validate output for conformance
+    //validateOpts({
+    //  output: {type: 'object', props: ['path']}
+    //}, options);
+
     return opts;
   }
 
