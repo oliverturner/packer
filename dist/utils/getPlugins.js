@@ -33,7 +33,7 @@ function getPlugins(isProd, definitions, urls) {
 
   var defaults = [new _webpack2['default'].DefinePlugin(definitions)];
 
-  var development = [new _webpack2['default'].HotModuleReplacementPlugin()];
+  var development = [commonsChunk, new _webpack2['default'].HotModuleReplacementPlugin()];
 
   var production = [commonsChunk, new _webpack2['default'].NoErrorsPlugin(), new _extractTextWebpackPlugin2['default']('' + urls.css + '/[name].css', {
     allChunks: true

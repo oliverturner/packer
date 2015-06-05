@@ -105,7 +105,7 @@ var Client = (function () {
         output: { type: 'object', props: ['path'] }
       }, options);
 
-      return _extends({
+      var opts = _extends({
         debug: !this.options.isProd,
         devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
@@ -126,6 +126,13 @@ var Client = (function () {
           defaults: [_autoprefixerCore2['default']]
         }
       }, options);
+
+      // TODO: validate output for conformance
+      //validateOpts({
+      //  output: {type: 'object', props: ['path']}
+      //}, options);
+
+      return opts;
     }
   }, {
     key: 'getEntries',
