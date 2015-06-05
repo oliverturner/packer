@@ -105,6 +105,7 @@ var Client = (function () {
         output: { type: 'object', props: ['path'] }
       }, options);
 
+      // TODO: IMPORTANT!!! apply validateOpts to _output_
       return _extends({
         debug: !this.options.isProd,
         devtool: this.options.isProd ? 'sourcemap' : 'eval',
