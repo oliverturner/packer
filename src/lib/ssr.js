@@ -6,7 +6,7 @@ import validateOpts from '../utils/validateOpts';
 import {
   getEntries as _getEntries,
   getNestedEntries as _getNestedEntries
-  }
+}
   from '../utils/getEntries';
 
 class SSR {
@@ -36,12 +36,16 @@ class SSR {
   }
 
   _getNodeModules () {
-    let nodeModules = {};
-    fs.readdirSync(path.resolve(`${process.cwd()}/node_modules`))
+    return fs.readdirSync(path.resolve(`${process.cwd()}/node_modules`))
       .filter(x => ['.bin'].indexOf(x) === -1)
-      .forEach(mod => nodeModules[mod] = 'commonjs ' + mod);
+      .reduce((nodeModules, mod) => {
+        nodeModules[mod] = {
+          commonjs:  mod,
+          commonjs2: mod
+        };
 
-    return nodeModules;
+        return nodeModules;
+      }, {});
   }
 
   /**
@@ -64,17 +68,17 @@ class SSR {
 
     return Object.assign({
       target:    'node',
-      module: {
+      module:    {
         loaders: [
           {test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/}
         ]
       },
-      plugins: [
+      plugins:   [
         new webpack.DefinePlugin(this.options.definitions),
         new webpack.NormalModuleReplacementPlugin(/\.scss$/, 'node-noop'),
         new webpack.NoErrorsPlugin()
       ],
-      resolve: {
+      resolve:   {
         root:       this.options.resolveRoot,
         extensions: ['', '.js', '.jsx', '.json']
       },
