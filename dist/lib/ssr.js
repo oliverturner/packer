@@ -55,14 +55,16 @@ var SSR = (function () {
   _createClass(SSR, [{
     key: '_getNodeModules',
     value: function _getNodeModules() {
-      var nodeModules = {};
-      _fs2['default'].readdirSync(_path2['default'].resolve('' + process.cwd() + '/node_modules')).filter(function (x) {
+      return _fs2['default'].readdirSync(_path2['default'].resolve('' + process.cwd() + '/node_modules')).filter(function (x) {
         return ['.bin'].indexOf(x) === -1;
-      }).forEach(function (mod) {
-        return nodeModules[mod] = 'commonjs ' + mod;
-      });
+      }).reduce(function (nodeModules, mod) {
+        nodeModules[mod] = {
+          commonjs: mod,
+          commonjs2: mod
+        };
 
-      return nodeModules;
+        return nodeModules;
+      }, {});
     }
   }, {
     key: 'create',
