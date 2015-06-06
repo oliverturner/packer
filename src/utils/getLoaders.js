@@ -47,10 +47,14 @@ function getLoaders (isProd = false, srcs = {}) {
       test:   /\.scss$/,
       loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!'))
     },
-    jsx:  {
+    jsx: {
       test:    /\.jsx?$/,
       exclude: /node_modules/,
-      loaders: ['babel']
+      loader:  'babel',
+      query:   {
+        optional: ['runtime'],
+        stage:    0
+      }
     }
   });
 
