@@ -105,7 +105,7 @@ class SSR {
   getOutput (options) {
     let defaults = {
       filename:      '[name].js',
-      libraryTarget: 'commonjs'
+      libraryTarget: 'commonjs2'
     };
 
     let opts = Object.assign(defaults, options);

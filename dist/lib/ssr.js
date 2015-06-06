@@ -125,7 +125,7 @@ var SSR = (function () {
     value: function getOutput(options) {
       var defaults = {
         filename: '[name].js',
-        libraryTarget: 'commonjs'
+        libraryTarget: 'commonjs2'
       };
 
       var opts = _extends(defaults, options);
