@@ -92,7 +92,11 @@ var SSR = (function () {
           root: this.options.resolveRoot,
           extensions: ['', '.js', '.jsx', '.json']
         },
-        externals: this._getNodeModules()
+        externals: this._getNodeModules(),
+        node: {
+          __dirname: true,
+          __filename: true
+        }
       }, options);
 
       return (0, _utilsValidateOpts2['default'])({

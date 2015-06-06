@@ -77,7 +77,11 @@ class SSR {
         root:       this.options.resolveRoot,
         extensions: ['', '.js', '.jsx', '.json']
       },
-      externals: this._getNodeModules()
+      externals: this._getNodeModules(),
+      node: {
+        __dirname:  true,
+        __filename: true
+      }
     }, options);
 
     return validateOpts({
