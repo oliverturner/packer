@@ -62,7 +62,11 @@ function getLoaders() {
     jsx: {
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loaders: ['babel']
+      loader: 'babel',
+      query: {
+        optional: ['runtime'],
+        stage: 0
+      }
     }
   });
 
