@@ -19,8 +19,8 @@ class Client {
     appDir:      {type: 'string', path: true},
     devServer:   {type: 'object', props: ['host', 'port', 'url']},
     definitions: {type: 'object', props: ['process.env']},
-    srcs:        {type: 'object'},
-    urls:        {type: 'object'}
+    srcs:        {type: 'object', props: ['js', 'sass']},
+    urls:        {type: 'object', props: ['js', 'css']}
   };
 
   /**
@@ -35,13 +35,11 @@ class Client {
    * }}
    */
   constructor (options) {
-    validateOpts(Client.reqs, options);
-
     if (!Map.isMap(options.devServer)) {
       options.devServer = Map(options.devServer);
     }
 
-    this.options = options;
+    this.options = validateOpts(Client.reqs, options);
   }
 
   // Options:
@@ -84,8 +82,7 @@ class Client {
       output: {type: 'object', props: ['path']}
     }, options);
 
-    // TODO: IMPORTANT!!! apply validateOpts to _output_
-    return Object.assign({
+    let opts = Object.assign({
       debug:   !this.options.isProd,
       devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
@@ -106,6 +103,10 @@ class Client {
         defaults: [autoprefixer]
       }
     }, options);
+
+    return validateOpts({
+      output: {type: 'object', props: ['path']}
+    }, opts);
   }
 
   /**

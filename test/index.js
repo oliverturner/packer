@@ -20,7 +20,8 @@ const mockPackerOpts = Map({
     sass: '/path/to/web_modules/sass'
   },
   urls:        {
-    js: 'js'
+    js:  'js',
+    css: 'css'
   }
 });
 

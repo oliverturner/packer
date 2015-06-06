@@ -61,12 +61,7 @@ class SSR {
    * @returns {*}
    */
   create (options) {
-    validateOpts({
-      entry:  {},
-      output: {type: 'object', props: ['path']}
-    }, options);
-
-    return Object.assign({
+    let opts = Object.assign({
       target:    'node',
       module:    {
         loaders: [
@@ -84,6 +79,11 @@ class SSR {
       },
       externals: this._getNodeModules()
     }, options);
+
+    return validateOpts({
+      entry:  {},
+      output: {type: 'object', props: ['path']}
+    }, opts);
   }
 
   /**
@@ -103,14 +103,14 @@ class SSR {
   }
 
   getOutput (options) {
-    validateOpts({path: {type: 'string', path: true}}, options);
-
     let defaults = {
       filename:      '[name].js',
-      libraryTarget: 'commonjs2'
+      libraryTarget: 'commonjs'
     };
 
-    return Object.assign(defaults, options);
+    let opts = Object.assign(defaults, options);
+
+    return validateOpts({path: {type: 'string', path: true}}, opts);
   }
 }
 

@@ -25,7 +25,8 @@ const mockOptsDev = Map({
     sass: './examples/multi/src/sass'
   },
   urls:        {
-    js: 'js'
+    js:  'js',
+    css: 'css'
   }
 });
 

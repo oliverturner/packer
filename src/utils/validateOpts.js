@@ -8,7 +8,7 @@ function validateOpts (reqs, options) {
 
   // Loop over the reqs object and apply constraints: type, valid path, etc.
   Object.keys(reqs).forEach(key => {
-    let option = options[key];
+    let option = Map.isMap(options) ? options.get(key) : options[key];
     let req    = reqs[key];
 
     assert(typeof option !== 'undefined', `${key} must be supplied`);
@@ -30,6 +30,8 @@ function validateOpts (reqs, options) {
       assert(fs.statSync(option).isDirectory(), `${key} must be a valid directory`);
     }
   });
+
+  return options;
 }
 
 export default validateOpts;
