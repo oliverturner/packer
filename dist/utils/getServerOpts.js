@@ -6,13 +6,17 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _assert = require('assert');
-
-var _assert2 = _interopRequireDefault(_assert);
-
 var _immutable = require('immutable');
 
-var requiredKeys = ['host', 'port'];
+var _utilsValidateOpts = require('../utils/validateOpts');
+
+var _utilsValidateOpts2 = _interopRequireDefault(_utilsValidateOpts);
+
+var requiredKeys = {
+  host: { type: 'string' },
+  port: { type: 'number' },
+  url: { type: 'string' }
+};
 
 // `options` is coverted to an immutable map
 // See [ImmutableJS](https://facebook.github.io/immutable-js/) for details
@@ -25,22 +29,15 @@ var requiredKeys = ['host', 'port'];
  * @returns {Map}
  */
 function getServerOpts(options) {
-  (0, _assert2['default'])(options, 'options must be supplied');
-
   var defaults = (0, _immutable.Map)({
     host: 'localhost'
   });
 
   options = _immutable.Map.isMap(options) ? options : (0, _immutable.Map)(options);
   options = defaults.merge(options);
-
-  requiredKeys.forEach(function (key) {
-    return (0, _assert2['default'])(options.get(key), 'Missing value for options.' + key);
-  });
-
   options = options.set('url', 'http://' + options.get('host') + ':' + options.get('port') + '/');
 
-  return options;
+  return (0, _utilsValidateOpts2['default'])(requiredKeys, options);
 }
 
 exports['default'] = getServerOpts;

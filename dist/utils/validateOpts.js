@@ -22,7 +22,7 @@ function validateOpts(reqs, options) {
 
   // Loop over the reqs object and apply constraints: type, valid path, etc.
   Object.keys(reqs).forEach(function (key) {
-    var option = options[key];
+    var option = _immutable.Map.isMap(options) ? options.get(key) : options[key];
     var req = reqs[key];
 
     (0, _assert2['default'])(typeof option !== 'undefined', '' + key + ' must be supplied');
@@ -47,6 +47,8 @@ function validateOpts(reqs, options) {
       (0, _assert2['default'])(_fs2['default'].statSync(option).isDirectory(), '' + key + ' must be a valid directory');
     }
   });
+
+  return options;
 }
 
 exports['default'] = validateOpts;

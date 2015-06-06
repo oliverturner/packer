@@ -53,13 +53,11 @@ var Client = (function () {
   function Client(options) {
     _classCallCheck(this, Client);
 
-    (0, _utilsValidateOpts2['default'])(Client.reqs, options);
-
     if (!_immutable.Map.isMap(options.devServer)) {
       options.devServer = (0, _immutable.Map)(options.devServer);
     }
 
-    this.options = options;
+    this.options = (0, _utilsValidateOpts2['default'])(Client.reqs, options);
   }
 
   _createClass(Client, [{
@@ -105,8 +103,7 @@ var Client = (function () {
         output: { type: 'object', props: ['path'] }
       }, options);
 
-      // TODO: IMPORTANT!!! apply validateOpts to _output_
-      return _extends({
+      var opts = _extends({
         debug: !this.options.isProd,
         devtool: this.options.isProd ? 'sourcemap' : 'eval',
 
@@ -127,6 +124,10 @@ var Client = (function () {
           defaults: [_autoprefixerCore2['default']]
         }
       }, options);
+
+      return (0, _utilsValidateOpts2['default'])({
+        output: { type: 'object', props: ['path'] }
+      }, opts);
     }
   }, {
     key: 'getEntries',
@@ -208,8 +209,8 @@ var Client = (function () {
       appDir: { type: 'string', path: true },
       devServer: { type: 'object', props: ['host', 'port', 'url'] },
       definitions: { type: 'object', props: ['process.env'] },
-      srcs: { type: 'object' },
-      urls: { type: 'object' }
+      srcs: { type: 'object', props: ['js', 'sass'] },
+      urls: { type: 'object', props: ['js', 'css'] }
     },
     enumerable: true
   }]);

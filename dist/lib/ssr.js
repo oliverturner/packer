@@ -82,12 +82,7 @@ var SSR = (function () {
      * @returns {*}
      */
     value: function create(options) {
-      (0, _utilsValidateOpts2['default'])({
-        entry: {},
-        output: { type: 'object', props: ['path'] }
-      }, options);
-
-      return _extends({
+      var opts = _extends({
         target: 'node',
         module: {
           loaders: [{ test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ }]
@@ -99,6 +94,11 @@ var SSR = (function () {
         },
         externals: this._getNodeModules()
       }, options);
+
+      return (0, _utilsValidateOpts2['default'])({
+        entry: {},
+        output: { type: 'object', props: ['path'] }
+      }, opts);
     }
   }, {
     key: 'getEntries',
@@ -123,14 +123,14 @@ var SSR = (function () {
   }, {
     key: 'getOutput',
     value: function getOutput(options) {
-      (0, _utilsValidateOpts2['default'])({ path: { type: 'string', path: true } }, options);
-
       var defaults = {
         filename: '[name].js',
-        libraryTarget: 'commonjs2'
+        libraryTarget: 'commonjs'
       };
 
-      return _extends(defaults, options);
+      var opts = _extends(defaults, options);
+
+      return (0, _utilsValidateOpts2['default'])({ path: { type: 'string', path: true } }, opts);
     }
   }], [{
     key: 'reqs',
