@@ -57,7 +57,7 @@ var Client = (function () {
       options.devServer = (0, _immutable.Map)(options.devServer);
     }
 
-    options.definitions['process.env'].BROWSER = true;
+    options.definitions['process.env'].APP_RUNTIME = 'browser';
 
     this.options = (0, _utilsValidateOpts2['default'])(Client.reqs, options);
   }

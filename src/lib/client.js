@@ -39,7 +39,7 @@ class Client {
       options.devServer = Map(options.devServer);
     }
 
-    options.definitions['process.env'].BROWSER = true;
+    options.definitions['process.env'].APP_RUNTIME = 'browser';
 
     this.options = validateOpts(Client.reqs, options);
   }
