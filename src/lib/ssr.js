@@ -22,7 +22,7 @@ class SSR {
    * @param options {{
    *   isProd:      bool,
    *   resolveRoot: string,
-   *   appDir:      string,
+   *   appDir:      string, TODO: remove and relocate to getEntries
    *   devServer:   string,
    *   definitions: {},
    *   srcs:        {},
@@ -84,6 +84,7 @@ class SSR {
       }
     }, options);
 
+    // TODO: make more complete: combine with SSR.reqs
     return validateOpts({
       entry:  {},
       output: {type: 'object', props: ['path']}

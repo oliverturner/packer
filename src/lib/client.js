@@ -39,6 +39,8 @@ class Client {
       options.devServer = Map(options.devServer);
     }
 
+    options.definitions['process.env'].BROWSER = true;
+
     this.options = validateOpts(Client.reqs, options);
   }
 
