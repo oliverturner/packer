@@ -57,6 +57,8 @@ var Client = (function () {
       options.devServer = (0, _immutable.Map)(options.devServer);
     }
 
+    options.definitions['process.env'].BROWSER = true;
+
     this.options = (0, _utilsValidateOpts2['default'])(Client.reqs, options);
   }
 

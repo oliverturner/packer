@@ -36,7 +36,7 @@ var SSR = (function () {
    * @param options {{
    *   isProd:      bool,
    *   resolveRoot: string,
-   *   appDir:      string,
+   *   appDir:      string, TODO: remove and relocate to getEntries
    *   devServer:   string,
    *   definitions: {},
    *   srcs:        {},
@@ -99,6 +99,7 @@ var SSR = (function () {
         }
       }, options);
 
+      // TODO: make more complete: combine with SSR.reqs
       return (0, _utilsValidateOpts2['default'])({
         entry: {},
         output: { type: 'object', props: ['path'] }
