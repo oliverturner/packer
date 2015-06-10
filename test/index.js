@@ -47,7 +47,7 @@ describe('Packer', () => {
     it('produces the expected members with a valid config', () => {
       mockFS(mockTree);
       let p = new Packer(devOpts.toObject());
-      expect(p).to.have.all.keys(['ssr', 'client', 'dev']);
+      expect(p).to.have.all.keys(['client', 'dev']);
       mockFS.restore();
     });
   });

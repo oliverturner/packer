@@ -15,11 +15,6 @@ const mockOptsDev = Map({
   devServer:   mockDevServer,
   resolveRoot: './examples/multi/src',
   appDir:      './examples/multi/src/js/apps',
-  definitions: {
-    'process.env': {
-      NODE_ENV: JSON.stringify('development')
-    }
-  },
   srcs:        {
     js:   './examples/multi/src/js',
     sass: './examples/multi/src/sass'
@@ -34,8 +29,14 @@ const mockOptsProd = mockOptsDev.set('isProd', true);
 
 function checkMissingOpts (opts) {
   Object.keys(Client.reqs).forEach(key => {
-    expect(() => new Client(opts.delete(key).toObject())).to.throw(Error);
-  })
+    switch (key) {
+      case 'definitions':
+        break;
+
+      default:
+        expect(() => new Client(opts.delete(key).toObject())).to.throw(Error);
+    }
+  });
 }
 
 function clientCreate (opts) {

@@ -16,10 +16,6 @@ var _libClient = require('./lib/client');
 
 var _libClient2 = _interopRequireDefault(_libClient);
 
-var _libSsr = require('./lib/ssr');
-
-var _libSsr2 = _interopRequireDefault(_libSsr);
-
 var _libDevServer = require('./lib/devServer');
 
 var _libDevServer2 = _interopRequireDefault(_libDevServer);
@@ -53,18 +49,8 @@ var Packer = (function () {
 
     (0, _utilsValidateOpts2['default'])(Packer.reqs, options);
 
-    // TODO: use map and deepMerge to keep default vals?
-    var defaults = {
-      definitions: {
-        'process.env': {
-          NODE_ENV: JSON.stringify(options.isProd ? 'production' : 'development')
-        }
-      }
-    };
+    var opts = _extends(options);
 
-    var opts = _extends(defaults, options);
-
-    this.ssr = new _libSsr2['default'](opts);
     this.client = new _libClient2['default'](opts);
     this.dev = new _libDevServer2['default'](opts.devServer);
   }

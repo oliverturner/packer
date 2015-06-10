@@ -39,7 +39,16 @@ class Client {
       options.devServer = Map(options.devServer);
     }
 
-    options.definitions['process.env'].APP_RUNTIME = 'browser';
+    let defaults = {
+      definitions: {
+        'process.env': {
+          NODE_ENV: JSON.stringify(options.isProd ? 'production' : 'development'),
+          APP_ENV:  JSON.stringify('browser')
+        }
+      }
+    };
+
+    options = Object.assign(defaults, options);
 
     this.options = validateOpts(Client.reqs, options);
   }

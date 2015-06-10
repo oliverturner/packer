@@ -57,7 +57,16 @@ var Client = (function () {
       options.devServer = (0, _immutable.Map)(options.devServer);
     }
 
-    options.definitions['process.env'].APP_RUNTIME = 'browser';
+    var defaults = {
+      definitions: {
+        'process.env': {
+          NODE_ENV: JSON.stringify(options.isProd ? 'production' : 'development'),
+          APP_ENV: JSON.stringify('browser')
+        }
+      }
+    };
+
+    options = _extends(defaults, options);
 
     this.options = (0, _utilsValidateOpts2['default'])(Client.reqs, options);
   }
