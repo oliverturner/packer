@@ -9,8 +9,8 @@ class Packer {
 
   // Required params
   static reqs = {
-    isProd:      {type: 'boolean'},
-    devServer:   {type: 'object', props: ['host', 'port', 'url']}
+    isProd:    {type: 'boolean'},
+    devServer: {type: 'object', props: ['host', 'port', 'url']}
   };
 
   // expose utils on Packer prototype

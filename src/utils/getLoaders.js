@@ -23,7 +23,7 @@ function getLoaders (isProd = false, srcs = {}) {
   ].map(getLoader);
 
   let loaders = Map({
-    json:   {
+    json: {
       test:    /\.json$/,
       loaders: ['json']
     },
@@ -31,11 +31,11 @@ function getLoaders (isProd = false, srcs = {}) {
       test:   require.resolve('react'),
       loader: 'expose?React'
     },
-    sass:   {
+    sass: {
       test:   /\.scss$/,
       loader: ['style-loader'].concat(sassLoaders).join('!')
     },
-    jsx:    {
+    jsx: {
       test:    /\.jsx?$/,
       exclude: /node_modules/,
       loaders: ['react-hot', 'babel']

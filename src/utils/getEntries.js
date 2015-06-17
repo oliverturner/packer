@@ -33,7 +33,7 @@ function getEntries (appDir, ext = '.jsx', key = 'main') {
 
 // Loop through child modules of `appDir` to create an object used by Webpack as
 // entrypoints keyed by folder name:
-//```
+// ```
 // ./apps
 // ├── about
 // │   ├── entry.jsx
@@ -41,9 +41,9 @@ function getEntries (appDir, ext = '.jsx', key = 'main') {
 // └── home
 //     ├── entry.jsx
 //     └── index.jsx
-//```
+// ```
 // becomes...
-//```
+// ```
 // {
 //   about:   apps/about/entry.jsx,
 //   home:    apps/home/entry.jsx,
@@ -52,7 +52,7 @@ function getEntries (appDir, ext = '.jsx', key = 'main') {
 //     'webpack/hot/dev-server'
 //   ],
 // }
-//```
+// ```
 /**
  * @param {string} appDir
  * @param {string} entry
